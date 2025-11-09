@@ -29,6 +29,7 @@ const createTodo = async (req, res) => {
     });
 
     // get the `id` of the newly created TODO item
+    // INFO: the `.first` function / method is going to only get the "first" data
     const newTodo = await db("todo").where({ id: todoId }).first();
 
     // if user has been able to successfully create / 'POST' TODO item on server
@@ -48,7 +49,7 @@ const createTodo = async (req, res) => {
   }
 };
 
-// get all the TODO items for the logged-in user
+// function to get all the TODO items for the logged-in user
 const getTodos = async (req, res) => {
   try {
     // get the `userId` from the authentication token
@@ -75,7 +76,6 @@ const getTodos = async (req, res) => {
   }
 };
 
-// Update a todo
 // edit / update a TODO item
 const updateTodo = async (req, res) => {
   try {
@@ -116,7 +116,7 @@ const updateTodo = async (req, res) => {
       todo: updatedTodo,
     });
 
-    // if the TODO item could not be inserted
+    // if the TODO item could not be updated
     // NOTE: status code = '500' ==> internal server error
   } catch (error) {
     console.error("Update todo error:", error);
@@ -126,30 +126,37 @@ const updateTodo = async (req, res) => {
   }
 };
 
-// Delete a todo
+// function to be able to delete a TODO item
 const deleteTodo = async (req, res) => {
   try {
+    // get the `userId` from the authentication token
     const userId = req.user.userId;
+    // get the TODO item's id from the parameters
     const todoId = req.params.id;
 
-    // Check if todo exists and belongs to user
+    // check if the TODO item exists and also belongs to that user
     const todo = await db("todo")
       .where({ id: todoId, user_id: userId })
       .first();
 
+    // if the TODO item has not been found ==> "Invoke" the famous famous '404' status code
     if (!todo) {
       return res.status(404).json({
         error: "Todo not found or does not belong to you",
       });
     }
 
-    // Delete todo
+    // delete the TODO item from the database
     await db("todo").where({ id: todoId }).delete();
 
+    // simply return a little success message
     res.json({
       message: "Todo deleted successfully",
       deletedTodo: todo,
     });
+
+    // if the TODO item could not be updated
+    // NOTE: status code = '500' ==> internal server error
   } catch (error) {
     console.error("Delete todo error:", error);
     res.status(500).json({
