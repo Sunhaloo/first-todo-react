@@ -5,6 +5,9 @@ const cors = require("cors");
 // simply import the data found in our `.env` file
 require("dotenv").config();
 
+// import our routers
+const authRouter = require("./routers/authRouters");
+
 // create the actual 'express' application / server
 const app = express();
 // define the port ( default to environment variable or '5000' )
@@ -26,6 +29,9 @@ app.get("/", (req, res) => {
     status: "success",
   });
 });
+
+// authentication routes
+app.use("/api/auth", authRouter);
 
 // start the server
 app.listen(PORT, () => {

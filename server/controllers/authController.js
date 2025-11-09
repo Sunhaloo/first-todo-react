@@ -134,7 +134,7 @@ const login = async (req, res) => {
   }
 };
 
-// export the routing for `/register` / `login`
+// export the function for `/register` and `/login`
 module.exports = {
   register,
   login,
