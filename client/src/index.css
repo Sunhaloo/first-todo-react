@@ -26,7 +26,7 @@
   --secondary: #3f37c9;
   --accent: #4cc9f0;
   --light-bg: #f9f9f9;
-  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   --card-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
   --border-radius: 12px;
   --transition: all 0.3s ease;
@@ -79,4 +79,21 @@
     Ubuntu,
     Cantarell,
     sans-serif;
+}
+
+/* create the custom hue property */
+@property --hue {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* define the custom animation called 'rgb-cycle' */
+@keyframes rgb-cycle {
+  from {
+    --hue: 0deg;
+  }
+  to {
+    --hue: 360deg;
+  }
 }

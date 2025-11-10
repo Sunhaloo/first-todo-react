@@ -31,6 +31,7 @@
 }
 
 .greetings h2 {
+  font-family: "PT Sans";
   font-size: 2rem;
   font-weight: 600;
   color: var(--foreground);
@@ -38,10 +39,11 @@
 }
 
 .greetings h3 {
+  font-family: "PT Sans";
   font-size: 1.2rem;
   font-weight: 400;
   color: var(--dark-grey);
-  margin-right: 10.2rem;
+  margin-right: 9.9rem;
 }
 
 .whole-form {
