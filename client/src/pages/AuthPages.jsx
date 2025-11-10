@@ -4,7 +4,7 @@ import { useState } from "react";
 // import components from 'antd'
 import { Button, Form, Input, Select } from "antd";
 
-// import icons from 'react-icons' library
+// import icons from 'react-icons' ( "ri" ) library
 import { RiTodoLine } from "react-icons/ri";
 
 // import the styling the for our authentication page component
@@ -29,119 +29,126 @@ function AuthPages() {
         <h3>A new way to write TODOs.</h3>
       </div>
 
-      {/* // ternary operation --> either for login / registration */}
-      {isLoginPage ? (
-        // login page
-        <>
-          <h2>Login</h2>
+      <div className="whole-form">
+        {/* // ternary operation --> either for login / registration */}
+        {isLoginPage ? (
+          // login page
+          <>
+            <div className="login-form">
+              <Form layout="vetical">
+                {/* username input */}
+                <Form.Item
+                  name="username"
+                  rules={[
+                    { required: true, message: "Please enter your username." },
+                  ]}
+                >
+                  <Input placeholder="John Doe" size="large" />
+                </Form.Item>
 
-          <div className="login-form">
-            <Form layout="vetical">
-              {/* username input */}
-              <Form.Item
-                name="username"
-                rules={[
-                  { required: true, message: "Please enter your username." },
-                ]}
-              >
-                <Input placeholder="John Doe" size="large" />
-              </Form.Item>
+                {/* password input */}
+                <Form.Item
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter you your password.",
+                    },
+                  ]}
+                >
+                  <Input.Password placeholder="Password" size="large" />
+                </Form.Item>
 
-              {/* password input */}
-              <Form.Item
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter you your password.",
-                  },
-                ]}
-              >
-                <Input.Password placeholder="Password" size="large" />
-              </Form.Item>
+                {/* NOTE: `block` makes it take the whole width */}
+                <Button type="primary" htmlType="submit" block size="large">
+                  Login
+                </Button>
+              </Form>
 
-              {/* NOTE: `block` makes it take the whole width */}
-              <Button type="primary" htmlType="submit" block size="large">
-                Login
-              </Button>
-            </Form>
+              {/* if the user does not have an account */}
+              <p className="auth-switch">
+                Don't have an account?{" "}
+                <span
+                  className="auth-link"
+                  onClick={() => setToLoginPage(false)}
+                >
+                  Sign Up Here!
+                </span>
+              </p>
+            </div>
+          </>
+        ) : (
+          // registration page
+          <>
+            <div className="register-form">
+              <Form layout="vetical">
+                {/* username input */}
+                <Form.Item
+                  name="username"
+                  rules={[
+                    { required: true, message: "Please enter your username." },
+                  ]}
+                >
+                  <Input placeholder="John Doe" size="large" />
+                </Form.Item>
 
-            {/* if the user does not have an account */}
-            <p className="auth-switch">
-              Don't have an account?{" "}
-              <span className="auth-link" onClick={() => setToLoginPage(false)}>
-                Sign Up Here!
-              </span>
-            </p>
-          </div>
-        </>
-      ) : (
-        // registration page
-        <>
-          <h2>Register</h2>
+                {/* email input */}
+                <Form.Item
+                  name="email"
+                  rules={[
+                    { required: true, message: "Please enter your email." },
+                    { type: "email", message: "Please enter a valid email." },
+                  ]}
+                >
+                  <Input placeholder="johndoe@email.com" size="large" />
+                </Form.Item>
 
-          <div className="register-form">
-            <Form layout="vetical">
-              {/* username input */}
-              <Form.Item
-                name="username"
-                rules={[
-                  { required: true, message: "Please enter your username." },
-                ]}
-              >
-                <Input placeholder="John Doe" size="large" />
-              </Form.Item>
+                {/* gender input / selection */}
+                <Form.Item
+                  name="gender"
+                  rules={[
+                    { required: true, message: "Please enter your gender." },
+                  ]}
+                >
+                  <Select placeholder="Select Gender" size="large">
+                    <Select.Option value="male">Male</Select.Option>
+                    <Select.Option value="female">Female</Select.Option>
+                  </Select>
+                </Form.Item>
 
-              {/* email input */}
-              <Form.Item
-                name="email"
-                rules={[
-                  { required: true, message: "Please enter your email." },
-                  { type: "email", message: "Please enter a valid email." },
-                ]}
-              >
-                <Input placeholder="johndoe@email.com" size="large" />
-              </Form.Item>
+                {/* password input */}
+                <Form.Item
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Enter You Your Password",
+                    },
+                  ]}
+                >
+                  <Input.Password placeholder="Password" size="large" />
+                </Form.Item>
 
-              {/* gender input / selection */}
-              <Form.Item
-                name="gender"
-                rules={[
-                  { required: true, message: "Please enter your gender." },
-                ]}
-              >
-                <Select placeholder="Select Gender" size="large">
-                  <Select.Option value="male">Male</Select.Option>
-                  <Select.Option value="female">Female</Select.Option>
-                </Select>
-              </Form.Item>
+                {/* NOTE: `block` makes it take the whole width */}
+                <Button type="primary" htmlType="submit" block size="large">
+                  Sign Up
+                </Button>
+              </Form>
 
-              {/* password input */}
-              <Form.Item
-                name="password"
-                rules={[
-                  { required: true, message: "Please Enter You Your Password" },
-                ]}
-              >
-                <Input.Password placeholder="Password" size="large" />
-              </Form.Item>
-
-              {/* NOTE: `block` makes it take the whole width */}
-              <Button type="primary" htmlType="submit" block size="large">
-                Sign Up
-              </Button>
-            </Form>
-
-            {/* if the user does not have an account */}
-            <p className="auth-switch">
-              Already have an account?{" "}
-              <span className="auth-link" onClick={() => setToLoginPage(true)}>
-                Login Here!
-              </span>
-            </p>
-          </div>
-        </>
-      )}
+              {/* if the user does not have an account */}
+              <p className="auth-switch">
+                Already have an account?{" "}
+                <span
+                  className="auth-link"
+                  onClick={() => setToLoginPage(true)}
+                >
+                  Login Here!
+                </span>
+              </p>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }
