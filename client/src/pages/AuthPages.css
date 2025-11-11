@@ -17,6 +17,11 @@
   font-family: "Stack Sans Notch";
 }
 
+.auth-navbar:hover,
+.auth-navbar:focus-visible {
+  animation: move-up-down 1s ease-in-out infinite;
+}
+
 .auth-logo {
   width: 2rem;
   height: 2rem;

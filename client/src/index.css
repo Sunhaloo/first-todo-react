@@ -97,3 +97,16 @@
     --hue: 360deg;
   }
 }
+
+/* define the custom animation called 'move-up-down' */
+@keyframes move-up-down {
+  0% {
+    transform: translateY(2px);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+  100% {
+    transform: translateY(2px);
+  }
+}
