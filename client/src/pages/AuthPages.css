@@ -50,11 +50,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5rem;
+  padding: 2rem;
   margin: auto;
-  min-height: 500px;
   width: 100%;
-  max-width: 500px;
+  min-height: 450px;
+  max-width: 380px;
   background-color: var(--white);
   border-radius: var(--border-radius);
   box-shadow: var(--card-shadow);
@@ -76,4 +76,88 @@
 .auth-link:hover {
   color: var(--secondary);
   text-decoration: underline;
+}
+
+/* screen resolution that's '768px' or below */
+@media (max-width: 768px) {
+  .greetings {
+    margin-top: 2.5rem;
+  }
+
+  .greetings h2 {
+    font-size: 1.75rem;
+  }
+
+  .greetings h3 {
+    font-size: 1.1rem;
+    margin-right: 8rem;
+  }
+
+  .whole-form {
+    padding: 1.5rem;
+    margin: 1rem auto;
+    min-height: 400px;
+    max-width: 50%;
+  }
+}
+
+/* screen resolution that's '480px' or below */
+@media (max-width: 480px) {
+  .auth-navbar {
+    margin-left: 0.75rem;
+  }
+
+  .auth-navbar h3 {
+    font-size: 1rem;
+  }
+
+  .auth-logo {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .greetings {
+    margin-top: 2rem;
+  }
+
+  .greetings h2 {
+    font-size: 1.5rem;
+  }
+
+  .greetings h3 {
+    font-size: 1rem;
+    margin-right: 6rem;
+  }
+
+  .whole-form {
+    max-width: 95%;
+    padding: 1.25rem;
+    min-height: 350px;
+    margin: 0.75rem auto;
+  }
+
+  .auth-switch {
+    font-size: 0.9rem;
+  }
+}
+
+/* screen resolution that's '360px' or below */
+@media (max-width: 360px) {
+  .auth-navbar h3 {
+    font-size: 0.9rem;
+  }
+
+  .greetings h2 {
+    font-size: 1.3rem;
+  }
+
+  .greetings h3 {
+    font-size: 0.9rem;
+    margin-right: 5rem;
+  }
+
+  .whole-form {
+    padding: 1rem;
+    min-height: 320px;
+  }
 }
