@@ -10,6 +10,9 @@ import { RiTodoLine } from "react-icons/ri";
 // import the API function that will talk to back-end
 import { register, login } from "../services/api";
 
+// import the `useNavigate` component from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
+
 // import the styling the for our authentication page component
 import "./AuthPages.css";
 
@@ -23,6 +26,9 @@ function AuthPages() {
 
   // declare "variable" to show error messages
   const [errorMessage, setErrorMessage] = useState("");
+
+  // declare variable to be able to use the `useNavigate` function
+  const navigate = useNavigate();
 
   // function to handle the registration of users
   const handleRegister = async (values) => {
@@ -39,8 +45,8 @@ function AuthPages() {
       // display a little 'success' message to the user
       console.log("Registered user:", response.user);
 
-      // BUG: still need to redirect the user
-      // TODO: Redirect to dashboard (we'll add this later)
+      // navigate to the dashboard route
+      navigate("/homepage");
     } catch (error) {
       // if any errors occur during the registration process
       if (error.response) {
@@ -88,8 +94,8 @@ function AuthPages() {
       // display a little 'success' message to the user
       console.log("Logged in user:", response.user);
 
-      // BUG: still need to redirect the user
-      // TODO: Redirect to dashboard (we'll add this later)
+      // navigate to the dashboard route
+      navigate("/homepage");
     } catch (error) {
       // if any errors occur during the registration process
       if (error.response) {
