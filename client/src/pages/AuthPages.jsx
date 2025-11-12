@@ -21,10 +21,15 @@ function AuthPages() {
   // declare "variable" to show 'loading' state
   const [loading, setLoading] = useState(false);
 
+  // declare "variable" to show error messages
+  const [errorMessage, setErrorMessage] = useState("");
+
   // function to handle the registration of users
   const handleRegister = async (values) => {
     // change the 'loading' state to true
     setLoading(true);
+    // clear any previous error message
+    setErrorMessage("");
     try {
       const response = await register(values);
 
@@ -37,8 +42,32 @@ function AuthPages() {
       // BUG: still need to redirect the user
       // TODO: Redirect to dashboard (we'll add this later)
     } catch (error) {
+      // if any errors occur during the registration process
+      if (error.response) {
+        // server side errors
+        if (error.response.status === 400) {
+          setErrorMessage(
+            error.response.data.error ||
+              "Registration failed - Please check your information",
+          );
+        } else {
+          setErrorMessage("An error occurred during registration");
+        }
+
+        // requests sent but no response
+      } else if (error.request) {
+        setErrorMessage("Network error - please check your connection");
+
+        // if anything else happened
+      } else {
+        setErrorMessage("An unexpected error occurred");
+        setErrorMessage("Test");
+      }
+
+      // log the error to the console
       console.error("Registration error:", error);
     } finally {
+      // change the loading status back to `false`
       setLoading(false);
     }
   };
@@ -47,6 +76,8 @@ function AuthPages() {
   const handleLogin = async (values) => {
     // change the 'loading' state to true
     setLoading(true);
+    // clear any previous error message
+    setErrorMessage("");
     try {
       const response = await login(values);
 
@@ -60,7 +91,26 @@ function AuthPages() {
       // BUG: still need to redirect the user
       // TODO: Redirect to dashboard (we'll add this later)
     } catch (error) {
-      alert(`Login error: ${error}`);
+      // if any errors occur during the registration process
+      if (error.response) {
+        // server side errors
+        if (error.response.status === 401) {
+          setErrorMessage("Invalid credentials");
+          // if user did not fill the form correctly
+        } else if (error.response.status === 400) {
+          setErrorMessage("Please fill in all required fields");
+        } else {
+          // if anything else happened
+          setErrorMessage("An error occurred during login");
+        }
+
+        // requests sent but no response
+      } else if (error.request) {
+        setErrorMessage("Network error - please check your connection");
+        // if anything else happened
+      } else {
+        setErrorMessage("Invalid Credentials");
+      }
       console.error("Login error:", error);
     } finally {
       setLoading(false);
@@ -88,6 +138,19 @@ function AuthPages() {
           <>
             <div className="login-form">
               <Form layout="vetical" onFinish={handleLogin}>
+                {/* display a little error message */}
+                {errorMessage && (
+                  <div
+                    className="error-message"
+                    style={{
+                      color: "red",
+                      marginBottom: "15px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {errorMessage}
+                  </div>
+                )}
                 {/* username input */}
                 <Form.Item
                   name="username"
@@ -139,6 +202,19 @@ function AuthPages() {
           <>
             <div className="register-form">
               <Form layout="vetical" onFinish={handleRegister}>
+                {/* Error message display */}
+                {errorMessage && (
+                  <div
+                    className="error-message"
+                    style={{
+                      color: "red",
+                      marginBottom: "15px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {errorMessage}
+                  </div>
+                )}
                 {/* username input */}
                 <Form.Item
                   name="username"
