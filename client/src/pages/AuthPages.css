@@ -83,6 +83,14 @@
   text-decoration: underline;
 }
 
+.login-button,
+.register-button {
+  transition: var(--transition);
+  box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+  border-radius: var(--border-radius);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
 /* screen resolution that's '768px' or below */
 @media (max-width: 768px) {
   .greetings {

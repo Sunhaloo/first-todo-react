@@ -17,5 +17,5 @@ router.put("/:id", authenticateToken, todoController.updateTodo);
 // delete TODO item for logged-in and authenticated user ( 'DELETE method on `/api/todos`' )
 router.delete("/:id", authenticateToken, todoController.deleteTodo);
 
-// export the acutal routes ( `/api/todos` )
+// export the actual routes ( `/api/todos` )
 module.exports = router;
