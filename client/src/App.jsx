@@ -10,7 +10,7 @@ import "./App.css";
 
 function App() {
   // check if the user has been logged in
-  const isAuthenticated = !localStorage.getItem("token");
+  const isAuthenticated = !!localStorage.getItem("token");
   return (
     <BrowserRouter>
       {/* create the individual routes */}

@@ -96,6 +96,9 @@ function AuthPages() {
 
       // navigate to the dashboard route
       navigate("/homepage");
+
+      // BUG: this solution works but is it optimal?
+      window.location.reload();
     } catch (error) {
       // if any errors occur during the registration process
       if (error.response) {
@@ -143,7 +146,7 @@ function AuthPages() {
           // login page
           <>
             <div className="login-form">
-              <Form layout="vetical" onFinish={handleLogin}>
+              <Form layout="vertical" onFinish={handleLogin}>
                 {/* display a little error message */}
                 {errorMessage && (
                   <div
@@ -207,7 +210,7 @@ function AuthPages() {
           // registration page
           <>
             <div className="register-form">
-              <Form layout="vetical" onFinish={handleRegister}>
+              <Form layout="vertical" onFinish={handleRegister}>
                 {/* Error message display */}
                 {errorMessage && (
                   <div
@@ -286,7 +289,10 @@ function AuthPages() {
                 Already have an account?{" "}
                 <span
                   className="auth-link"
-                  onClick={() => setToLoginPage(true)}
+                  onClick={() => {
+                    setToLoginPage(true);
+                    setErrorMessage("");
+                  }}
                 >
                   Login Here!
                 </span>
