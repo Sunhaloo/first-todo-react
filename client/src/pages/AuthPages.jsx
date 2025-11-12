@@ -8,10 +8,13 @@ import { Button, Form, Input, Select } from "antd";
 import { RiTodoLine } from "react-icons/ri";
 
 // import the API function that will talk to back-end
-import { register, login } from "../services/api";
+import { register, login as apiLogin } from "../services/api";
 
 // import the `useNavigate` component from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
+
+// import the AuthContext
+import { useAuth } from "../contexts/AuthContext";
 
 // import the styling the for our authentication page component
 import "./AuthPages.css";
@@ -30,6 +33,9 @@ function AuthPages() {
   // declare variable to be able to use the `useNavigate` function
   const navigate = useNavigate();
 
+  // get authentication functions from context
+  const { login } = useAuth();
+
   // function to handle the registration of users
   const handleRegister = async (values) => {
     // change the 'loading' state to true
@@ -39,8 +45,8 @@ function AuthPages() {
     try {
       const response = await register(values);
 
-      // once 'crendentials' of user "appeared" ==> save the token for user in local storage
-      localStorage.setItem("token", response.token);
+      // Use context method to set authentication state
+      login(response.token);
 
       // display a little 'success' message to the user
       console.log("Registered user:", response.user);
@@ -85,10 +91,10 @@ function AuthPages() {
     // clear any previous error message
     setErrorMessage("");
     try {
-      const response = await login(values);
+      const response = await apiLogin(values);
 
-      // once 'crendentials' of user "appeared" ==> save the token for user in local storage
-      localStorage.setItem("token", response.token);
+      // Use context method to set authentication state
+      login(response.token);
       console.log(`Values = ${values}`);
 
       // display a little 'success' message to the user
@@ -96,9 +102,6 @@ function AuthPages() {
 
       // navigate to the dashboard route
       navigate("/homepage");
-
-      // BUG: this solution works but is it optimal?
-      window.location.reload();
     } catch (error) {
       // if any errors occur during the registration process
       if (error.response) {
