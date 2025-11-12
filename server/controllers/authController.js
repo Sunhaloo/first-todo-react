@@ -124,7 +124,7 @@ const login = async (req, res) => {
       },
     });
 
-    // if the user could not be logged int
+    // if the user could not be logged in
     // NOTE: status code = '500' ==> internal server error
   } catch (error) {
     console.error("Login error:", error);

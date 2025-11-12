@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 // import components from 'antd'
-import { Button, Form, Input, Select, message } from "antd";
+import { Button, Form, Input, Select } from "antd";
 
 // import icons from 'react-icons' ( "ri" ) library
 import { RiTodoLine } from "react-icons/ri";
@@ -32,13 +32,11 @@ function AuthPages() {
       localStorage.setItem("token", response.token);
 
       // display a little 'success' message to the user
-      message.success("Registration successful!");
       console.log("Registered user:", response.user);
 
       // BUG: still need to redirect the user
       // TODO: Redirect to dashboard (we'll add this later)
     } catch (error) {
-      message.error(error.error || "Registration failed. Please try again.");
       console.error("Registration error:", error);
     } finally {
       setLoading(false);
@@ -54,15 +52,15 @@ function AuthPages() {
 
       // once 'crendentials' of user "appeared" ==> save the token for user in local storage
       localStorage.setItem("token", response.token);
+      console.log(`Values = ${values}`);
 
       // display a little 'success' message to the user
-      message.success("Login successful!");
       console.log("Logged in user:", response.user);
 
       // BUG: still need to redirect the user
       // TODO: Redirect to dashboard (we'll add this later)
     } catch (error) {
-      message.error(error.error || "Login failed. Please try again.");
+      alert(`Login error: ${error}`);
       console.error("Login error:", error);
     } finally {
       setLoading(false);
