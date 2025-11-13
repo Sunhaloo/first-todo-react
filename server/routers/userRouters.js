@@ -8,7 +8,6 @@ const { authenticateToken } = require("../middleware/authMiddleware");
 
 // get the user profile details
 router.get("/", authenticateToken, userController.getUserProfile);
-router.get("/", authenticateToken, userController.getUserProfile);
 
 // export the actual routes ( `/api/user/{functionName}` )
 module.exports = router;

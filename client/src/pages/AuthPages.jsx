@@ -1,4 +1,4 @@
-// import the 'useState' function from 'react' library
+// import the `useState` function from 'react' library
 import { useState } from "react";
 
 // import components from 'antd'

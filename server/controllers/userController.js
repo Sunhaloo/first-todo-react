@@ -14,7 +14,7 @@ const getUserProfile = async (req, res) => {
       .first();
 
     // if the user has not been found ( on the database )
-    if (!user) {
+    if (!userProfile) {
       // send the famous, famous '404' error
       return res.status(404).json({
         error: "User not found",
@@ -25,10 +25,10 @@ const getUserProfile = async (req, res) => {
     res.json({
       message: "User profile successfully retrieved",
       user: {
-        id: user.id,
-        username: user.username,
-        gender: user.gender,
-        createdAt: user.created_at,
+        id: userProfile.id,
+        username: userProfile.username,
+        gender: userProfile.gender,
+        createdAt: userProfile.created_at,
       },
     });
 

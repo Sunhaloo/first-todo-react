@@ -1,6 +1,46 @@
-function Username({ className, placeholder }) {
-  // `input` tag that can be used to enter data
-  return <input className={className} type="text" placeholder={placeholder} />;
+// import the `useState` and `useEffect` function from 'react' library
+import { useEffect, useState } from "react";
+
+// import the API function that will talk to back-end
+import { getUserProfile } from "../services/api";
+
+function Username({ className }) {
+  // declare variable that is going to hold the username
+  const [username, setUsername] = useState("");
+
+  // declare variable to keep track of "loading"
+  const [userFetchLoading, setUserFetchLoading] = useState(true);
+
+  // function that is going to fetch / get user details from the database
+  const fetchProfile = async () => {
+    try {
+      const response = await getUserProfile();
+
+      setUsername(response.user.username);
+
+      // if the user profile / username could not be fetch from database
+    } catch (error) {
+      console.error(`Failed to fetch user's username: ${error}`);
+
+      // if the data could not be retrieved
+    } finally {
+      setUserFetchLoading(false);
+    }
+  };
+
+  // fetch the TODOs when the components loads up ( from the database )
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  // conditional way to display the username
+  if (userFetchLoading) {
+    // if the username has been NOT retrieved
+    return <span className={className}>Loading...</span>;
+  }
+
+  // else if the username HAS been retrieved from the database
+  return <span className={className}>{username}</span>;
 }
 
 // export as reusable component

@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Card, Checkbox, Form, Input, List, Select } from "antd";
 
 // WARNING: testing
-import UsernameInput from "../components/Username";
+import Username from "../components/Username";
 import ProfileMenu from "../components/ProfileMenu";
 
 // import the styling the for our homepage component
@@ -132,7 +132,7 @@ function Homepage() {
       <header className="homepage-header">
         <nav className="homepage-navbar">
           <h1>
-            <UsernameInput className="username-input" placeholder="Username" />
+            <Username />
           </h1>
           <ProfileMenu />
         </nav>

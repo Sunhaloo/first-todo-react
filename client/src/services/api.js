@@ -88,5 +88,17 @@ export const deleteTodo = async (todoId) => {
   }
 };
 
+// get the user's profile detail
+export const getUserProfile = async () => {
+  try {
+    const response = await api.get("/user");
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data || { error: "Failed to fetch user profile data" }
+    );
+  }
+};
+
 // export the actual connection
 export default api;
