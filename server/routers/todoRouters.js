@@ -1,7 +1,8 @@
-// import the 'express' library and the endpoint's function for 'register' and 'login'
+// import the 'express' library and function for TODOs at each endpoint
 const express = require("express");
 const router = express.Router();
 const todoController = require("../controllers/todoController");
+
 // NOTE: get the 'Authentication Token' as 'TODO' items are "private" to each user
 const { authenticateToken } = require("../middleware/authMiddleware");
 
@@ -17,5 +18,5 @@ router.put("/:id", authenticateToken, todoController.updateTodo);
 // delete TODO item for logged-in and authenticated user ( 'DELETE method on `/api/todos`' )
 router.delete("/:id", authenticateToken, todoController.deleteTodo);
 
-// export the actual routes ( `/api/todos` )
+// export the actual routes ( `/api/todos/{functionName}` )
 module.exports = router;

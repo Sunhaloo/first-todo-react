@@ -6,8 +6,9 @@ const cors = require("cors");
 require("dotenv").config();
 
 // import our routers
-const authRouter = require("./routers/authRouters");
+const authRouter = require("./routers/authRouters.js");
 const todoRouter = require("./routers/todoRouters.js");
+const userRouter = require("./routers/userRouters.js");
 
 // create the actual 'express' application / server
 const app = express();
@@ -36,6 +37,9 @@ app.use("/api/auth", authRouter);
 
 // todo routers
 app.use("/api/todos", todoRouter);
+
+// user routers
+app.use("/api/user", userRouter);
 
 // start the server
 app.listen(PORT, () => {
