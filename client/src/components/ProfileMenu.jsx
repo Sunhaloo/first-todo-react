@@ -4,9 +4,12 @@ import profilePicture from "../assets/images/profile-picture-icon.jpg";
 // add the required styling to profile menu styling
 import "./ProfileMenu.css";
 
-function ProfileMenu() {
+function ProfileMenu({ className, ...props }) {
+  // declare variable that is going to handle the "custom" `className`
+  const customClassName = `profile-menu-component ${className || ""}`.trim();
+
   return (
-    <div className="profile-menu-component">
+    <div className={customClassName} {...props}>
       <img className="profile-picture" src={profilePicture} />
     </div>
   );
