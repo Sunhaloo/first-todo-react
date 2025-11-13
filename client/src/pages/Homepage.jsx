@@ -15,6 +15,7 @@ import { Button, Card, Checkbox, Form, Input, List, Select } from "antd";
 
 // WARNING: testing
 import UsernameInput from "../components/Username";
+import ProfileMenu from "../components/ProfileMenu";
 
 // import the styling the for our homepage component
 import "./Homepage.css";
@@ -133,6 +134,7 @@ function Homepage() {
           <h1>
             <UsernameInput className="username-input" placeholder="Username" />
           </h1>
+          <ProfileMenu />
         </nav>
       </header>
 
