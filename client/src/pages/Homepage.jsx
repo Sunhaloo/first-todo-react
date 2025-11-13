@@ -4,14 +4,17 @@ import { useEffect, useState } from "react";
 // import the `useAuth` function from `AuthContext.jsx`
 import { useAuth } from "../contexts/AuthContext";
 
-// import the following components from 'antd'
-import { Button, Card, Checkbox, Form, Input, List, Select } from "antd";
-
 // import the API function that will talk to back-end
 import { createTodo, getTodos, updateTodo, deleteTodo } from "../services/api";
 
 // import the `useNavigate` component from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
+
+// import the following components from 'antd'
+import { Button, Card, Checkbox, Form, Input, List, Select } from "antd";
+
+// WARNING: testing
+import UsernameInput from "../components/Username";
 
 // import the styling the for our homepage component
 import "./Homepage.css";
@@ -125,113 +128,17 @@ function Homepage() {
 
   return (
     <div className="homepage-container">
-      {/* Simple header with logout */}
-      <div className="homepage-header">
-        <h1>My TODOs</h1>
-        <Button onClick={handleLogout}>Logout</Button>
-      </div>
+      <header className="homepage-header">
+        <nav className="homepage-navbar">
+          <h1>
+            <UsernameInput className="username-input" placeholder="Username" />
+          </h1>
+        </nav>
+      </header>
 
-      {/* Create TODO Form */}
-      <Card title="Create New TODO" style={{ marginBottom: "20px" }}>
-        <Form form={form} layout="vertical" onFinish={handleCreateTodo}>
-          <Form.Item
-            name="description"
-            label="What do you need to do?"
-            rules={[{ required: true, message: "Please enter a description" }]}
-          >
-            <Input.TextArea placeholder="E.g., Fix the login bug..." rows={3} />
-          </Form.Item>
-
-          <Form.Item
-            name="category"
-            label="Category"
-            rules={[{ required: true, message: "Please select a category" }]}
-          >
-            <Select placeholder="Select category">
-              <Select.Option value="Code Review">Code Review</Select.Option>
-              <Select.Option value="Coding">Coding</Select.Option>
-              <Select.Option value="Debugging">Debugging</Select.Option>
-              <Select.Option value="Deployment">Deployment</Select.Option>
-              <Select.Option value="Documentation">Documentation</Select.Option>
-              <Select.Option value="Learning">Learning</Select.Option>
-              <Select.Option value="Meeting">Meeting</Select.Option>
-              <Select.Option value="Miscellaneous">Miscellaneous</Select.Option>
-              <Select.Option value="Planning">Planning</Select.Option>
-              <Select.Option value="Refactoring">Refactoring</Select.Option>
-              <Select.Option value="Testing">Testing</Select.Option>
-            </Select>
-          </Form.Item>
-
-          <Button type="primary" htmlType="submit" block>
-            Add TODO
-          </Button>
-        </Form>
-      </Card>
-
-      {/* TODO List */}
-      <Card title={`My TODOs (${todos.length})`}>
-        {todoFetchLoading ? (
-          <p>Loading todos...</p>
-        ) : todos.length === 0 ? (
-          <p style={{ textAlign: "center", color: "#999" }}>
-            No todos yet. Create your first one above! 📝
-          </p>
-        ) : (
-          <List
-            dataSource={todos}
-            renderItem={(todo) => (
-              <List.Item
-                actions={[
-                  <Button
-                    danger
-                    size="small"
-                    onClick={() => handleDeleteTodo(todo.id)}
-                  >
-                    Delete
-                  </Button>,
-                ]}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    width: "100%",
-                  }}
-                >
-                  <Checkbox
-                    checked={todo.completed}
-                    onChange={() =>
-                      handleToggleComplete(todo.id, todo.completed)
-                    }
-                    style={{ marginRight: "12px" }}
-                  />
-                  <div style={{ flex: 1 }}>
-                    <div
-                      style={{
-                        textDecoration: todo.completed
-                          ? "line-through"
-                          : "none",
-                        color: todo.completed ? "#999" : "#000",
-                      }}
-                    >
-                      {todo.description}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "12px",
-                        color: "#666",
-                        marginTop: "4px",
-                      }}
-                    >
-                      Category: {todo.category}
-                    </div>
-                  </div>
-                </div>
-              </List.Item>
-            )}
-          />
-        )}
-      </Card>
+      <Button onClick={handleLogout} danger>
+        Logout
+      </Button>
     </div>
   );
 }

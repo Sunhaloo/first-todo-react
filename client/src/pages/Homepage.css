@@ -1,19 +1,3 @@
-.homepage-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  min-height: 100vh;
-  background-color: var(--background);
-}
-
-.homepage-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-}
-
-.homepage-header h1 {
-  margin: 0;
-  color: var(--foreground);
+.username-input {
+  border: none;
 }
