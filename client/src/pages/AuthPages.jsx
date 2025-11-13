@@ -78,8 +78,9 @@ function AuthPages() {
 
       // log the error to the console
       console.error("Registration error:", error);
-    } finally {
+
       // change the loading status back to `false`
+    } finally {
       setLoading(false);
     }
   };
@@ -124,6 +125,8 @@ function AuthPages() {
         setErrorMessage("Invalid Credentials");
       }
       console.error("Login error:", error);
+
+      // change the loading status back to `false`
     } finally {
       setLoading(false);
     }
