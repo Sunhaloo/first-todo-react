@@ -128,9 +128,7 @@ function Homepage() {
       {/* Simple header with logout */}
       <div className="homepage-header">
         <h1>My TODOs</h1>
-        <Button onClick={handleLogout} danger>
-          Logout
-        </Button>
+        <Button onClick={handleLogout}>Logout</Button>
       </div>
 
       {/* Create TODO Form */}
