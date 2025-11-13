@@ -23,9 +23,6 @@ function Homepage() {
   // variable that is going to allow us to navigate to other pages
   const navigate = useNavigate();
 
-  // declare "variable" to show error messages
-  const [errorMessage, setErrorMessage] = useState("");
-
   // states for our TODO items
   const [todos, setTodos] = useState([]);
   const [todoFetchLoading, setTodoFetchLoading] = useState(false);
@@ -45,8 +42,6 @@ function Homepage() {
       // if some error while fetching TODOs occurs
     } catch (error) {
       console.error(`Error while fetching TODOs: ${error}`);
-
-      setErrorMessage("Failed to load TODOs");
 
       // change the loading status back to `false`
     } finally {
@@ -76,7 +71,6 @@ function Homepage() {
       // if there was any errors while creation of TODO item
     } catch (error) {
       console.error(`Error while creating TODOs: ${error}`);
-      setErrorMessage("Failed to created TODO");
     }
   };
 
@@ -99,7 +93,6 @@ function Homepage() {
       // if any error happends when "checking-off" a TODO item
     } catch (error) {
       console.error(`Error updating todo: ${error}`);
-      setErrorMessage("Failed to update todo");
     }
   };
 
@@ -118,7 +111,6 @@ function Homepage() {
       // if there are any errors that occurs during deletion
     } catch (error) {
       console.error(`Error deleting todo: ${error}`);
-      setErrorMessage("Failed to delete todo");
     }
   };
 
