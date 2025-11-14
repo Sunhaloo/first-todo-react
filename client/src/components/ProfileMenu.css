@@ -1,4 +1,73 @@
+/* Container for the entire profile menu component */
+.profile-menu-component {
+  position: relative; /* ← This makes the dropdown position relative to this container */
+  display: inline-block; /* ← Prevents it from taking full width */
+}
+
+/* Profile picture styling */
 .profile-picture {
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0.12rem solid var(--selection-foreground);
+  border-radius: 50%; /* ← Better circle (was 1.75rem which is larger than size) */
+  cursor: pointer; /* ← Show it's clickable */
+  transition: var(--transition);
+}
+
+.profile-picture:hover {
+  transform: scale(1.05); /* ← Nice hover effect */
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2); /* ← Subtle glow */
+}
+
+/* Dropdown menu card */
+.profile-menu-card {
+  position: absolute; /* ← Positions relative to .profile-menu-component */
+  top: calc(100% + 0.5rem); /* ← Places it just below the profile picture */
+  right: 0; /* ← Aligns to the right edge of parent */
+  min-width: 150px; /* ← Ensures dropdown isn't too narrow */
+  padding: 0.5rem;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  z-index: 1000; /* ← Ensures it appears above other content */
+  animation: slideDown 0.2s ease-out; /* ← Smooth animation */
+}
+
+/* Animation for dropdown */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Menu items list */
+.profile-menu-card ul {
+  margin: 0;
+  padding: 0;
+}
+
+/* Individual menu items */
+.profile-menu-card li {
+  padding: 0.5rem;
+  border-radius: calc(var(--border-radius) / 2);
+  list-style: none;
+  transition: var(--transition);
+}
+
+.profile-menu-items {
+  cursor: pointer;
+}
+
+.profile-menu-card li:hover {
+  background-color: var(--selection-background);
+}
+
+/* Make buttons in dropdown full width */
+.profile-menu-card button {
+  width: 100%;
 }
