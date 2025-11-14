@@ -111,9 +111,9 @@ function Homepage() {
       <header className="homepage-header">
         <nav className="homepage-navbar">
           <h1>
-            <Username />
+            <Username className="username" />
           </h1>
-          <ProfileMenu />
+          <ProfileMenu className="custom-profile-menu" />
         </nav>
       </header>
     </div>

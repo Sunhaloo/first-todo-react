@@ -81,6 +81,12 @@
     sans-serif;
 }
 
+/* style the whole HTML tag */
+html {
+  max-width: 100%;
+  margin: auto;
+}
+
 /* create the custom hue property */
 @property --hue {
   syntax: "<angle>";
@@ -108,5 +114,17 @@
   }
   100% {
     transform: translateY(2px);
+  }
+}
+
+/* define the custom animation called 'slide-down' */
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
