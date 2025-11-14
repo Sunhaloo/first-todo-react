@@ -41,8 +41,6 @@ function ProfileMenu({ className, ...props }) {
 
   // declare variable that is going to handle the "custom" `className`
   const customClassName = `profile-menu-component ${className || ""}`.trim();
-
-  // variable to check if profile is opened
   const [open, setOpen] = useState(false);
 
   // create "reference" to the DOM for the whole menu and image
@@ -61,7 +59,9 @@ function ProfileMenu({ className, ...props }) {
     }
   };
 
+  // talk to the browser / external resources
   useEffect(() => {
+    // close the profile "card" if already open
     document.addEventListener("click", handleOutsideClick);
 
     return () => {
@@ -76,6 +76,7 @@ function ProfileMenu({ className, ...props }) {
         className="profile-picture"
         src={profilePicture}
         onClick={() => setOpen(!open)}
+        onMouseOver={() => setOpen(!open)}
       />
 
       {open && (
