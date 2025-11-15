@@ -33,7 +33,7 @@
 }
 
 /* dark theme colourscheme */
-:root.dark-mode {
+:root.dark {
   --background: #121212;
   --foreground: #e9ecef;
   --selection-background: #495057;

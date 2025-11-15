@@ -1,8 +1,8 @@
-// import the required "routing" component from the 'react' library
-import React, { createContext, useContext, useState, useEffect } from "react";
+// import the required components from the 'react' library
+import { createContext, useContext, useState, useEffect } from "react";
 
 // create the context for the authentication
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 // Custom hook to use the AuthContext
 // own custom 'hook' that is going to use the `AuthContext` context
@@ -92,4 +92,3 @@ export const AuthProvider = ({ children }) => {
   // setup `AuthProvider` so that all components are able to use context
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-
