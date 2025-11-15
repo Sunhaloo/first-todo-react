@@ -4,20 +4,21 @@ import { createContext, useContext, useState, useEffect } from "react";
 // create the context for the authentication
 const AuthContext = createContext(null);
 
-// Custom hook to use the AuthContext
 // own custom 'hook' that is going to use the `AuthContext` context
 export const useAuth = () => {
-  // create another context inside of `useAuth`
+  // use the context inside of `useAuth`
   const context = useContext(AuthContext);
 
   // if not found within and 'AuthProvider'
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
+
+  // return the context globally
   return context;
 };
 
-// the actual 'AuthProvider' resuable component
+// the actual `AuthProvider` resuable component
 export const AuthProvider = ({ children }) => {
   // declare variables that is going to check if `token` key exists in local storage
   const [isAuthenticated, setIsAuthenticated] = useState(

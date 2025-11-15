@@ -25,7 +25,7 @@ function ProfileMenu({ className, ...props }) {
 
   // function to be able to logout the user
   const handleLogout = () => {
-    // call the logout function
+    // call the `logout` function
     logout();
 
     // go back to the login - register page
