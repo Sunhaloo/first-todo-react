@@ -10,6 +10,7 @@ import { Button, Card, Checkbox, Form, Input, List, Select } from "antd";
 // WARNING: testing
 import Username from "../components/Username";
 import ProfileMenu from "../components/ProfileMenu";
+import ToggleThemeBtn from "../components/ToggleTheme";
 
 // import the styling the for our homepage component
 import "./Homepage.css";
@@ -113,6 +114,7 @@ function Homepage() {
           <h1>
             <Username className="username" />
           </h1>
+          <ToggleThemeBtn />
           <ProfileMenu className="custom-profile-menu" />
         </nav>
       </header>

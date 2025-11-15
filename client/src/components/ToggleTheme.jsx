@@ -7,9 +7,12 @@ import { useTheme } from "../contexts/ThemeContext";
 // import icons from 'react-icons' ( "ai" ) library
 import { AiFillMoon, AiFillSun } from "react-icons/ai";
 
+// add the required styling to toggle theme button
+import "./ToggleTheme.css";
+
 function ToggleTheme({ className }) {
-  // get the `toggleTheme` function
-  const { toggleTheme } = useTheme();
+  // get the `theme` and `toggleTheme` function
+  const { theme, toggleTheme } = useTheme();
 
   // function to be able to toggle the theme
   const handleToggleTheme = () => {
@@ -17,7 +20,18 @@ function ToggleTheme({ className }) {
     toggleTheme();
   };
 
-  return <Button className={className}></Button>;
+  return (
+    <Button
+      className={`theme-toggle-button ${className} || ""`.trim()}
+      onClick={handleToggleTheme}
+      icon={theme === "light" ? <AiFillSun /> : <AiFillMoon />}
+      type="primary"
+      size="large"
+    >
+      {theme === "light" ? "Light" : "Dark"}
+    </Button>
+  );
 }
 
+// export as reusable component
 export default ToggleTheme;

@@ -13,7 +13,7 @@ import { useAuth } from "../contexts/AuthContext";
 // import the `useNavigate` component from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
 
-// add the required styling to profile menu styling
+// add the required styling to profile menu
 import "./ProfileMenu.css";
 
 function ProfileMenu({ className, ...props }) {

@@ -39,7 +39,7 @@
   font-family: "PT Sans";
   font-size: 2rem;
   font-weight: 600;
-  color: var(--foreground);
+  color: #212529;
   margin-bottom: 0.5rem;
 }
 
@@ -60,7 +60,7 @@
   width: 100%;
   min-height: 450px;
   max-width: 380px;
-  background-color: var(--white);
+  background-color: #ffffff;
   border-radius: var(--border-radius);
   box-shadow: var(--card-shadow);
 }
