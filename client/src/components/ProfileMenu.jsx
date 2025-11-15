@@ -4,9 +4,6 @@ import { useEffect, useRef, useState } from "react";
 // import the required image from the `assets` folder
 import profilePicture from "../assets/images/profile-picture-icon.jpg";
 
-// import the `Button` component from 'antd'
-import { Button } from "antd";
-
 // import the `useAuth` function from `AuthContext.jsx`
 import { useAuth } from "../contexts/AuthContext";
 
@@ -33,11 +30,7 @@ function ProfileMenu({ className, ...props }) {
   };
 
   // declare the menus that are going to be present upon hover / click
-  const profileMenus = [
-    <Button onClick={handleLogout} danger>
-      Logout
-    </Button>,
-  ];
+  const profileMenus = [<p onClick={handleLogout}>Logout</p>];
 
   // declare variable that is going to handle the "custom" `className`
   const customClassName = `profile-menu-component ${className || ""}`.trim();

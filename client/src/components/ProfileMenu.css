@@ -44,12 +44,17 @@
 
 .profile-menu-items {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.profile-menu-items p {
+  margin: 0;
+  cursor: pointer;
 }
 
 .profile-menu-card li:hover {
   background-color: var(--selection-background);
-}
-
-.profile-menu-card button {
-  width: 100%;
 }

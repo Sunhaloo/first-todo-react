@@ -22,7 +22,7 @@ function ToggleTheme({ className }) {
 
   return (
     <Button
-      className={`theme-toggle-button ${className} || ""`.trim()}
+      className={`theme-toggle-button ${className || ""}`.trim()}
       onClick={handleToggleTheme}
       icon={theme === "light" ? <AiFillSun /> : <AiFillMoon />}
       type="primary"

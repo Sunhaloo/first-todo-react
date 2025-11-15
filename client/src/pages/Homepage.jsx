@@ -111,11 +111,15 @@ function Homepage() {
     <div className="homepage-container">
       <header className="homepage-header">
         <nav className="homepage-navbar">
-          <h1>
-            <Username className="username" />
-          </h1>
-          <ToggleThemeBtn />
-          <ProfileMenu className="custom-profile-menu" />
+          <div className="left-section">
+            <h1>
+              <Username className="username" />
+            </h1>
+          </div>
+          <div className="right-section">
+            <ToggleThemeBtn />
+            <ProfileMenu className="custom-profile-menu" />
+          </div>
         </nav>
       </header>
     </div>

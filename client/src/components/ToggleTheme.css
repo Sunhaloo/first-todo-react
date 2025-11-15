@@ -1,5 +1,6 @@
 .theme-toggle-button {
   min-width: 5rem;
+  height: 2.3rem;
   background-color: var(--primary);
   color: white;
   border: none;
