@@ -20,14 +20,17 @@ function ToggleTheme({ className }) {
     toggleTheme();
   };
 
+  // the actual component that is going to be returned
   return (
     <Button
+      // implement the "custom" 'antd' class name
       className={`theme-toggle-button ${className || ""}`.trim()}
       onClick={handleToggleTheme}
       icon={theme === "light" ? <AiFillSun /> : <AiFillMoon />}
       type="primary"
       size="large"
     >
+      {/* "write" 'Light' when on light theme and vice versa ( for dark theme ) */}
       {theme === "light" ? "Light" : "Dark"}
     </Button>
   );

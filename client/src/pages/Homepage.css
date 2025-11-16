@@ -25,6 +25,21 @@
   margin-left: 1.5rem;
 }
 
+.homepage-navbar .center-logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.homepage-navbar .center-logo h2 {
+  margin-top: 1.2rem;
+  font-family: "Stack Sans Notch";
+}
+
+.auth-logo {
+  margin-top: 0.25rem;
+}
+
 .homepage-navbar .right-section {
   display: flex;
   align-items: center;
@@ -38,6 +53,7 @@
   justify-content: center;
   margin-top: 1.25rem;
   margin-left: 1.5rem;
+  font-family: "PT Sans";
 }
 
 .custom-profile-menu {
