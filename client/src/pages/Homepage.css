@@ -56,6 +56,21 @@
   font-family: "PT Sans";
 }
 
+:root.dark .username {
+  background: linear-gradient(
+    -45deg,
+    hsl(var(--hue), 100%, 60%),
+    hsl(calc(var(--hue) + 60deg), 100%, 60%),
+    hsl(calc(var(--hue) + 120deg), 100%, 60%),
+    hsl(calc(var(--hue) + 180deg), 100%, 60%)
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rgb-cycle 3s linear infinite;
+}
+
 .custom-profile-menu {
   display: flex;
   align-items: center;
