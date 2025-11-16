@@ -5,11 +5,30 @@ import { useEffect, useState } from "react";
 import { getUserProfile } from "../services/api";
 
 function Username({ className }) {
+  // declare array of "greetings"
+  const greetings = [
+    "Welcome Back",
+    "Hello",
+    "Hi",
+    "Hey",
+    "Greetings",
+    "Howdy",
+    "Salutations",
+    "Good day",
+    "Aloha",
+    "Bonjour",
+    "Hola",
+    "G'day",
+  ];
+
   // declare variable that is going to hold the username
   const [username, setUsername] = useState("");
 
   // declare variable to keep track of "loading"
   const [userFetchLoading, setUserFetchLoading] = useState(true);
+
+  // get a random number ( upper bound ==> length of array )
+  const greetIndex = Math.floor(Math.random() * greetings.length);
 
   // function that is going to fetch / get user details from the database
   const fetchProfile = async () => {
@@ -40,7 +59,11 @@ function Username({ className }) {
   }
 
   // else if the username HAS been retrieved from the database
-  return <span className={className}>{username}</span>;
+  return (
+    <span className={className}>
+      {greetings[greetIndex]} {username}
+    </span>
+  );
 }
 
 // export as reusable component
