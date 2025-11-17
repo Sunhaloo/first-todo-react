@@ -58,3 +58,33 @@
 .profile-menu-card li:hover {
   background-color: var(--selection-background);
 }
+
+@media (max-width: 768px) {
+  .profile-picture {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .profile-menu-card {
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-picture {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .profile-menu-card {
+    min-width: 100px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .profile-picture {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}

@@ -9,51 +9,56 @@
 }
 
 .homepage-navbar {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 0.5rem;
+  padding: 1rem 2rem;
   border-radius: 0.7rem;
   background-color: var(--white);
   border-bottom: 1px solid var(--selection-background);
   box-shadow: var(--card-shadow);
-}
-
-.homepage-navbar .left-section {
-  display: flex;
-  align-items: center;
-  margin-left: 1.5rem;
-}
-
-.homepage-navbar .center-logo {
-  display: flex;
-  align-items: center;
   gap: 1rem;
 }
 
-.homepage-navbar .center-logo h2 {
-  margin-top: 1.2rem;
-  font-family: "Stack Sans Notch";
-}
-
-.auth-logo {
+.homepage-navbar .left-section {
+  justify-self: start;
+  display: flex;
+  align-items: center;
   margin-top: 0.25rem;
 }
 
-.homepage-navbar .right-section {
+.homepage-navbar .center-logo {
+  justify-self: center;
   display: flex;
   align-items: center;
-  margin-right: 1.5rem;
+  gap: 0.5rem;
+}
+
+.homepage-navbar .center-logo h2 {
+  margin-top: 0.6rem;
+  font-family: "Stack Sans Notch";
+  font-size: 1.5rem;
+  white-space: nowrap;
+}
+
+.auth-logo {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+}
+
+.homepage-navbar .right-section {
+  justify-self: end;
+  display: flex;
+  align-items: center;
   gap: 1rem;
 }
 
 .username {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1.25rem;
-  margin-left: 1.5rem;
   font-family: "PT Sans";
+  font-size: 1.5rem;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 :root.dark .username {
@@ -71,9 +76,118 @@
   animation: rgb-cycle 3s linear infinite;
 }
 
-.custom-profile-menu {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 1.5rem;
+@media (max-width: 968px) {
+  .homepage-navbar {
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .homepage-navbar .center-logo h2 {
+    font-size: 1.2rem;
+  }
+
+  .username {
+    font-size: 1.4rem;
+  }
+
+  .auth-logo {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .homepage-navbar .right-section {
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .homepage-container {
+    padding: 5px;
+  }
+
+  .homepage-navbar {
+    padding: 0.5rem 0.5rem;
+    gap: 0.25rem;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+
+  .username {
+    font-size: 1.25rem;
+  }
+
+  .homepage-navbar .center-logo {
+    gap: 0.25rem;
+  }
+
+  .homepage-navbar .center-logo h2 {
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+  }
+
+  .auth-logo {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .homepage-navbar .right-section {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .homepage-navbar {
+    padding: 0.4rem 0.4rem;
+    gap: 0.15rem;
+  }
+
+  .username {
+    font-size: 1rem;
+  }
+
+  .homepage-navbar .center-logo {
+    gap: 0.2rem;
+  }
+
+  .homepage-navbar .center-logo h2 {
+    font-size: 0.75rem;
+    margin-top: 0.3rem;
+  }
+
+  .auth-logo {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  .homepage-navbar .right-section {
+    gap: 0.4rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .homepage-navbar {
+    padding: 0.3rem 0.3rem;
+    gap: 0.1rem;
+  }
+
+  .username {
+    font-size: 1rem;
+  }
+
+  .homepage-navbar .center-logo {
+    gap: 0.15rem;
+  }
+
+  .homepage-navba .center-logo h2 {
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+
+  .auth-logo {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .homepage-navbar .right-section {
+    gap: 0.3rem;
+  }
 }
