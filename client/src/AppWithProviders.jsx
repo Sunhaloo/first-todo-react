@@ -1,27 +1,24 @@
-// src/AppWithProviders.jsx
-import React from "react";
+// import `ConfigProvider`, `antdTheme` component, hook from 'antd'
 import { ConfigProvider, theme as antdTheme } from "antd";
-import App from "./App.jsx";
+
+// import the theme provider and custom hook from 'ThemeContext.jsx'
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 
+// import the actual "main" react application
+import App from "./App.jsx";
+
+// get the required algorithm from 'antd'
 const { defaultAlgorithm, darkAlgorithm } = antdTheme;
 
-// This component reads our theme and configures Ant Design
 function AntdThemedApp() {
-  const { theme } = useTheme(); // "light" or "dark"
+  // get the current theme
+  const { theme } = useTheme();
 
   return (
     <ConfigProvider
       theme={{
-        // switch AntD between light and dark
+        // switch the theme for the 'antd' components depending on the current theme
         algorithm: theme === "dark" ? darkAlgorithm : defaultAlgorithm,
-
-        // OPTIONAL: also map some AntD colours to your CSS variables
-        // token: {
-        //   colorBgBase: "var(--background)",
-        //   colorTextBase: "var(--foreground)",
-        //   colorPrimary: "var(--primary)",
-        // },
       }}
     >
       <App />
@@ -29,7 +26,7 @@ function AntdThemedApp() {
   );
 }
 
-// Wrap everything in ThemeProvider so useTheme() works
+// return the function that is going to wrap everything
 export default function AppWithProviders() {
   return (
     <ThemeProvider>
