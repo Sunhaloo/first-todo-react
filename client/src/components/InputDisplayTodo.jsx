@@ -4,10 +4,25 @@ import { useEffect, useState } from "react";
 // import the API function that will talk to back-end
 import { createTodo, getTodos, updateTodo, deleteTodo } from "../services/api";
 
-// import the components from 'antd'
-import { Button, Card, Form, Input, Select } from "antd";
+// import the gradient button component ( see official docs ) from 'antd'
+import GradientButton from "./GradientButton";
 
-function CreateTodoForm() {
+// import the components from 'antd'
+import {
+  Button,
+  Card,
+  Checkbox,
+  Form,
+  List,
+  Input,
+  Select,
+  Typography,
+} from "antd";
+
+// add the required styling to style input and display
+import "./InputDisplayTodo.css";
+
+function InputDisplayTodo() {
   // states for our TODO items
   const [todos, setTodos] = useState([]);
   const [todoFetchLoading, setTodoFetchLoading] = useState(false);
@@ -112,9 +127,14 @@ function CreateTodoForm() {
           variant="borderless"
         >
           {/* the actual form that is going to handle the input from the user */}
-          <Form form={form} layout="vertical" onFinish={handleCreateTodo}>
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleCreateTodo}
+            initialValues={{ category: "Miscellaneous" }}
+          >
             <Form.Item
-              name="todo-description"
+              name="description"
               label="What do you need to do?"
               rules={[
                 { required: true, message: "Please enter a description" },
@@ -129,6 +149,7 @@ function CreateTodoForm() {
                 rules={[
                   { required: true, message: "Please enter a description" },
                 ]}
+                onPressEnter={() => form.submit()}
               />
             </Form.Item>
 
@@ -157,16 +178,89 @@ function CreateTodoForm() {
               </Select>
             </Form.Item>
 
-            <Button type="primary" htmlType="submit">
-              Add TODO
-            </Button>
+            {/* button that will send the data to the database through the `api.js` services */}
+            <GradientButton
+              className="todo-submit-button"
+              text="Add TODO"
+              htmlType="submit"
+            />
           </Form>
         </Card>
       </div>
+
       {/* 'div' that is going to handle the displaying of TODO items */}
-      <div className="display-todos"></div>
+      <div className="display-todos">
+        {/* TODO List */}
+        <Card title={`My TODOs (${todos.length})`}>
+          {todoFetchLoading ? (
+            <p>Loading todos...</p>
+          ) : todos.length === 0 ? (
+            <p style={{ textAlign: "center", color: "#999" }}>
+              No todos yet. Create your first one above! 📝
+            </p>
+          ) : (
+            <List
+              dataSource={todos}
+              renderItem={(todo) => (
+                <List.Item
+                  actions={[
+                    <Button
+                      danger
+                      size="small"
+                      onClick={() => handleDeleteTodo(todo.id)}
+                    >
+                      Delete
+                    </Button>,
+                  ]}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      width: "100%",
+                    }}
+                  >
+                    <Checkbox
+                      checked={todo.completed}
+                      onChange={() =>
+                        handleToggleComplete(todo.id, todo.completed)
+                      }
+                      style={{ marginRight: "12px" }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <div
+                        style={{
+                          textDecoration: todo.completed
+                            ? "line-through"
+                            : "none",
+                          color: todo.completed ? "#999" : "#000",
+                        }}
+                      >
+                        {todo.description}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "12px",
+                          color: "#666",
+                          marginTop: "4px",
+                        }}
+                      >
+                        Category: {todo.category}
+                      </div>
+                    </div>
+                  </div>
+                </List.Item>
+              )}
+            />
+          )}
+        </Card>
+      </div>
+
+      <Typography.Title
+        level={3}
+      >{`Todo Count: ${todos.length}`}</Typography.Title>
     </div>
   );
 }
 
-export default CreateTodoForm;
+export default InputDisplayTodo;

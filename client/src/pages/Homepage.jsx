@@ -14,7 +14,7 @@ import { RiTodoLine } from "react-icons/ri";
 import Username from "../components/Username";
 import ProfileMenu from "../components/ProfileMenu";
 import ToggleThemeBtn from "../components/ToggleTheme";
-import CreateTodoForm from "../components/CreateTodoForm";
+import InputDisplayTodo from "../components/InputDisplayTodo";
 
 // import the styling the for our homepage component
 import "./Homepage.css";
@@ -131,111 +131,8 @@ function Homepage() {
         </nav>
       </header>
 
-      <div className="misc"></div>
-      <div className="todo-input"></div>
-
-      {/* Create TODO Form */}
-      <Card title="Create New TODO" style={{ marginBottom: "20px" }}>
-        <Form form={form} layout="vertical" onFinish={handleCreateTodo}>
-          <Form.Item
-            name="description"
-            label="What do you need to do?"
-            rules={[{ required: true, message: "Please enter a description" }]}
-          >
-            <Input.TextArea placeholder="E.g., Fix the login bug..." rows={3} />
-          </Form.Item>
-
-          <Form.Item
-            name="category"
-            label="Category"
-            rules={[{ required: true, message: "Please select a category" }]}
-          >
-            <Select placeholder="Select category">
-              <Select.Option value="Code Review">Code Review</Select.Option>
-              <Select.Option value="Coding">Coding</Select.Option>
-              <Select.Option value="Debugging">Debugging</Select.Option>
-              <Select.Option value="Deployment">Deployment</Select.Option>
-              <Select.Option value="Documentation">Documentation</Select.Option>
-              <Select.Option value="Learning">Learning</Select.Option>
-              <Select.Option value="Meeting">Meeting</Select.Option>
-              <Select.Option value="Miscellaneous">Miscellaneous</Select.Option>
-              <Select.Option value="Planning">Planning</Select.Option>
-              <Select.Option value="Refactoring">Refactoring</Select.Option>
-              <Select.Option value="Testing">Testing</Select.Option>
-            </Select>
-          </Form.Item>
-
-          <Button type="primary" htmlType="submit" block>
-            Add TODO
-          </Button>
-        </Form>
-      </Card>
-
-      {/* TODO List */}
-      <Card title={`My TODOs (${todos.length})`}>
-        {todoFetchLoading ? (
-          <p>Loading todos...</p>
-        ) : todos.length === 0 ? (
-          <p style={{ textAlign: "center", color: "#999" }}>
-            No todos yet. Create your first one above! 📝
-          </p>
-        ) : (
-          <List
-            dataSource={todos}
-            renderItem={(todo) => (
-              <List.Item
-                actions={[
-                  <Button
-                    danger
-                    size="small"
-                    onClick={() => handleDeleteTodo(todo.id)}
-                  >
-                    Delete
-                  </Button>,
-                ]}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    width: "100%",
-                  }}
-                >
-                  <Checkbox
-                    checked={todo.completed}
-                    onChange={() =>
-                      handleToggleComplete(todo.id, todo.completed)
-                    }
-                    style={{ marginRight: "12px" }}
-                  />
-                  <div style={{ flex: 1 }}>
-                    <div
-                      style={{
-                        textDecoration: todo.completed
-                          ? "line-through"
-                          : "none",
-                        color: todo.completed ? "#999" : "#000",
-                      }}
-                    >
-                      {todo.description}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "12px",
-                        color: "#666",
-                        marginTop: "4px",
-                      }}
-                    >
-                      Category: {todo.category}
-                    </div>
-                  </div>
-                </div>
-              </List.Item>
-            )}
-          />
-        )}
-      </Card>
-      <CreateTodoForm />
+      {/* component that will be responsible to input and display of TODO */}
+      <InputDisplayTodo />
     </div>
   );
 }
