@@ -129,6 +129,8 @@ function Homepage() {
           </div>
         </nav>
       </header>
+
+      <div className="misc"></div>
     </div>
   );
 }

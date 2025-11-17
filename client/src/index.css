@@ -26,6 +26,7 @@
   --secondary: #3f37c9;
   --accent: #4cc9f0;
   --light-bg: #f9f9f9;
+  --page-width: 100%;
   --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   --card-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
   --border-radius: 12px;
@@ -83,8 +84,10 @@
 
 /* style the whole HTML tag */
 html {
-  max-width: 100%;
+  max-width: var(--page-width);
   margin: auto;
+  background-color: var(--background);
+  transition: var(--transition);
 }
 
 /* create the custom hue property */

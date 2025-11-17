@@ -7,7 +7,6 @@ import { getUserProfile } from "../services/api";
 function Username({ className }) {
   // declare array of "greetings"
   const greetings = [
-    "Welcome Back",
     "Hello",
     "Hi",
     "Hey",

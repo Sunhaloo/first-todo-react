@@ -29,8 +29,25 @@ function ProfileMenu({ className, ...props }) {
     navigate("/");
   };
 
+  // function to be able to toggle the whole width of the page
+  const handleWidthToggle = () => {
+    // current value of `--page-width` variable
+    const currentWidth = getComputedStyle(document.documentElement)
+      .getPropertyValue("--page-width")
+      .trim();
+
+    // compare current value to "set" value ( by first setting the initial value with `currentWidth`)
+    const setWidth = currentWidth === "100%" ? "80%" : "100%";
+
+    // change the value of the width by setting the new value
+    document.documentElement.style.setProperty("--page-width", setWidth);
+  };
+
   // declare the menus that are going to be present upon hover / click
-  const profileMenus = [<p onClick={handleLogout}>Logout</p>];
+  const profileMenus = [
+    <p onClick={handleLogout}>Logout</p>,
+    <p onClick={handleWidthToggle}>Toggle Width</p>,
+  ];
 
   // declare variable that is going to handle the "custom" `className`
   const customClassName = `profile-menu-component ${className || ""}`.trim();
