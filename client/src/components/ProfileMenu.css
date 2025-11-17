@@ -20,7 +20,7 @@
 .profile-menu-card {
   position: absolute;
   min-width: 150px;
-  padding: 0.5rem;
+  padding: 0.3rem;
   top: calc(100% + 0.5rem);
   right: 0;
   z-index: 1000;
