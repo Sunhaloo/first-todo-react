@@ -19,7 +19,6 @@
 
 .profile-menu-card {
   position: absolute;
-  min-width: 150px;
   padding: 0.3rem;
   top: calc(100% + 0.5rem);
   right: 0;
@@ -35,15 +34,31 @@
   padding: 0;
 }
 
-.profile-menu-card li {
-  padding: 0.2rem;
-  border-radius: calc(var(--border-radius) / 2);
-  list-style: none;
-  transition: var(--transition);
+.profile-menu-card .ant-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--border-radius);
+  width: 100%;
+  text-align: center;
 }
 
-.profile-menu-card li:hover {
-  background-color: var(--selection-background);
+.profile-menu-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.profile-menu-card ul li {
+  margin: 0.25rem 0;
+  width: 100%;
+}
+
+.profile-menu-card ul li .ant-btn {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  padding: 0.5rem 1rem;
 }
 
 @media (max-width: 768px) {

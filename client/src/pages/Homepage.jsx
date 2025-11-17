@@ -51,26 +51,6 @@ function Homepage() {
     fetchTodos();
   }, []);
 
-  const handleCreateTodo = async (values) => {
-    try {
-      // wait for the database to finish writing TODO items
-      const response = await createTodo(values);
-
-      // display a little message inside the console
-      console.log("Todo Created");
-
-      // add the new TODO item to the list ==> to be rendered out
-      setTodos([response.todo, ...todos]);
-
-      // create the form for new input of TODO item
-      form.resetFields();
-
-      // if there was any errors while creation of TODO item
-    } catch (error) {
-      console.error(`Error while creating TODOs: ${error}`);
-    }
-  };
-
   // function to "check-off" TODO items
   const handleToggleComplete = async (todoId, currentStatus) => {
     try {

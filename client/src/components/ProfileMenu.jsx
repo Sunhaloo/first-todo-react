@@ -95,26 +95,32 @@ function ProfileMenu({ className, ...props }) {
           <ul>
             {/* Toggle Width - only on desktop */}
             {isDesktop && (
-              <Button
-                onClick={() => {
-                  handleWidthToggle();
-                  setOpen(false);
-                }}
-              >
-                Toggle Width
-              </Button>
+              <li>
+                <Button
+                  onClick={() => {
+                    handleWidthToggle();
+                    setOpen(false);
+                  }}
+                  type="text"
+                >
+                  Toggle Width
+                </Button>
+              </li>
             )}
 
             {/* Logout - always visible */}
-            <Button
-              onClick={() => {
-                handleLogout();
-                setOpen(false);
-              }}
-              danger
-            >
-              Logout
-            </Button>
+            <li>
+              <Button
+                onClick={() => {
+                  handleLogout();
+                  setOpen(false);
+                }}
+                type="text"
+                danger
+              >
+                Logout
+              </Button>
+            </li>
           </ul>
         </div>
       )}
