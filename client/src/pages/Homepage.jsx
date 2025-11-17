@@ -51,6 +51,26 @@ function Homepage() {
     fetchTodos();
   }, []);
 
+  const handleCreateTodo = async (values) => {
+    try {
+      // wait for the database to finish writing TODO items
+      const response = await createTodo(values);
+
+      // display a little message inside the console
+      console.log("Todo Created");
+
+      // add the new TODO item to the list ==> to be rendered out
+      setTodos([response.todo, ...todos]);
+
+      // create the form for new input of TODO item
+      form.resetFields();
+
+      // if there was any errors while creation of TODO item
+    } catch (error) {
+      console.error(`Error while creating TODOs: ${error}`);
+    }
+  };
+
   // function to "check-off" TODO items
   const handleToggleComplete = async (todoId, currentStatus) => {
     try {
@@ -112,9 +132,110 @@ function Homepage() {
       </header>
 
       <div className="misc"></div>
-      <div className="todo-input">
-        <CreateTodoForm />
-      </div>
+      <div className="todo-input"></div>
+
+      {/* Create TODO Form */}
+      <Card title="Create New TODO" style={{ marginBottom: "20px" }}>
+        <Form form={form} layout="vertical" onFinish={handleCreateTodo}>
+          <Form.Item
+            name="description"
+            label="What do you need to do?"
+            rules={[{ required: true, message: "Please enter a description" }]}
+          >
+            <Input.TextArea placeholder="E.g., Fix the login bug..." rows={3} />
+          </Form.Item>
+
+          <Form.Item
+            name="category"
+            label="Category"
+            rules={[{ required: true, message: "Please select a category" }]}
+          >
+            <Select placeholder="Select category">
+              <Select.Option value="Code Review">Code Review</Select.Option>
+              <Select.Option value="Coding">Coding</Select.Option>
+              <Select.Option value="Debugging">Debugging</Select.Option>
+              <Select.Option value="Deployment">Deployment</Select.Option>
+              <Select.Option value="Documentation">Documentation</Select.Option>
+              <Select.Option value="Learning">Learning</Select.Option>
+              <Select.Option value="Meeting">Meeting</Select.Option>
+              <Select.Option value="Miscellaneous">Miscellaneous</Select.Option>
+              <Select.Option value="Planning">Planning</Select.Option>
+              <Select.Option value="Refactoring">Refactoring</Select.Option>
+              <Select.Option value="Testing">Testing</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Button type="primary" htmlType="submit" block>
+            Add TODO
+          </Button>
+        </Form>
+      </Card>
+
+      {/* TODO List */}
+      <Card title={`My TODOs (${todos.length})`}>
+        {todoFetchLoading ? (
+          <p>Loading todos...</p>
+        ) : todos.length === 0 ? (
+          <p style={{ textAlign: "center", color: "#999" }}>
+            No todos yet. Create your first one above! 📝
+          </p>
+        ) : (
+          <List
+            dataSource={todos}
+            renderItem={(todo) => (
+              <List.Item
+                actions={[
+                  <Button
+                    danger
+                    size="small"
+                    onClick={() => handleDeleteTodo(todo.id)}
+                  >
+                    Delete
+                  </Button>,
+                ]}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    width: "100%",
+                  }}
+                >
+                  <Checkbox
+                    checked={todo.completed}
+                    onChange={() =>
+                      handleToggleComplete(todo.id, todo.completed)
+                    }
+                    style={{ marginRight: "12px" }}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <div
+                      style={{
+                        textDecoration: todo.completed
+                          ? "line-through"
+                          : "none",
+                        color: todo.completed ? "#999" : "#000",
+                      }}
+                    >
+                      {todo.description}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        color: "#666",
+                        marginTop: "4px",
+                      }}
+                    >
+                      Category: {todo.category}
+                    </div>
+                  </div>
+                </div>
+              </List.Item>
+            )}
+          />
+        )}
+      </Card>
+      <CreateTodoForm />
     </div>
   );
 }
