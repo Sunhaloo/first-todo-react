@@ -1,8 +1,7 @@
 // import the required hooks from 'react' library
 import { useEffect, useRef, useState } from "react";
 
-// import the required image from the `assets` folder
-import profilePicture from "../assets/images/profile-picture-icon.jpg";
+import { Button } from "antd";
 
 // import the `useAuth` function from `AuthContext.jsx`
 import { useAuth } from "../contexts/AuthContext";
@@ -12,6 +11,9 @@ import { useNavigate } from "react-router-dom";
 
 // import the custom hook
 import { useMediaQuery } from "../hooks/useMediaQuery.js";
+
+// import the required image from the `assets` folder
+import profilePicture from "../assets/images/profile-picture-icon.jpg";
 
 // add the required styling to profile menu
 import "./ProfileMenu.css";
@@ -91,29 +93,28 @@ function ProfileMenu({ className, ...props }) {
       {open && (
         <div className="profile-menu-card">
           <ul>
-            {/* Logout - always visible */}
-            <li
-              className="profile-menu-items"
-              onClick={() => {
-                handleLogout();
-                setOpen(false);
-              }}
-            >
-              <p>Logout</p>
-            </li>
-
             {/* Toggle Width - only on desktop */}
             {isDesktop && (
-              <li
-                className="profile-menu-items"
+              <Button
                 onClick={() => {
                   handleWidthToggle();
                   setOpen(false);
                 }}
               >
-                <p>Toggle Width</p>
-              </li>
+                Toggle Width
+              </Button>
             )}
+
+            {/* Logout - always visible */}
+            <Button
+              onClick={() => {
+                handleLogout();
+                setOpen(false);
+              }}
+              danger
+            >
+              Logout
+            </Button>
           </ul>
         </div>
       )}
