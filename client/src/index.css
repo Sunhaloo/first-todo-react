@@ -91,10 +91,10 @@ html {
 }
 
 /* style the authentication page only */
-html .auth-container {
-  /* INFO: 'dark mode' does not affect authentication page */
-  background-color: #f8f9fa;
-}
+/* html .auth-container { */
+/* INFO: 'dark mode' does not affect authentication page */
+/* background-color: #f8f9fa; */
+/* } */
 
 /* create the custom hue property */
 @property --hue {

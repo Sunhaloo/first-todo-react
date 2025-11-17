@@ -14,6 +14,7 @@ import { RiTodoLine } from "react-icons/ri";
 import Username from "../components/Username";
 import ProfileMenu from "../components/ProfileMenu";
 import ToggleThemeBtn from "../components/ToggleTheme";
+import CreateTodoForm from "../components/CreateTodoForm";
 
 // import the styling the for our homepage component
 import "./Homepage.css";
@@ -131,6 +132,9 @@ function Homepage() {
       </header>
 
       <div className="misc"></div>
+      <div className="todo-input">
+        <CreateTodoForm />
+      </div>
     </div>
   );
 }

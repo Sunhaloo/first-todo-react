@@ -13,12 +13,10 @@ import "antd/dist/reset.css";
 import App from "./App.jsx";
 import "./index.css";
 
+import AppWithProviders from "./AppWithProviders.jsx";
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ConfigProvider>
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
-    </ConfigProvider>
+    <AppWithProviders />
   </StrictMode>,
 );
