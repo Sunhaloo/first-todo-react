@@ -350,8 +350,10 @@ function InputDisplayTodo() {
                           >
                             {todo.description}
                           </div>
-                          <div className="todo-category">
-                            Category: {todo.category}
+                          <div
+                            className={`todo-category ${todo.completed ? "completed" : ""}`}
+                          >
+                            #{todo.category}
                           </div>
                         </div>
                       </div>
