@@ -1,3 +1,5 @@
+const { TODO_CATEGORIES } = require("../../config/categories");
+
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
@@ -9,21 +11,7 @@ exports.up = function (knex) {
     // our fields
     table.increments("id").primary();
     table.text("description").notNullable();
-    table
-      .enu("category", [
-        "Code Review",
-        "Coding",
-        "Debugging",
-        "Deployment",
-        "Documentation",
-        "Learning",
-        "Meeting",
-        "Miscellaneous",
-        "Planning",
-        "Refactoring",
-        "Testing",
-      ])
-      .defaultTo("Miscellaneous");
+    table.enu("category", TODO_CATEGORIES).defaultTo("Miscellaneous");
     table.boolean("completed").defaultTo(false);
 
     // add time stamps of when created / updated

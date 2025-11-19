@@ -1,5 +1,6 @@
 // import the "database connection"
 const db = require("../db/knex");
+const { TODO_CATEGORIES } = require("../config/categories");
 
 // function to be able to create a new 'TODO' item
 const createTodo = async (req, res) => {
@@ -165,10 +166,30 @@ const deleteTodo = async (req, res) => {
   }
 };
 
+// function to get available categories
+const getCategories = async (req, res) => {
+  try {
+    // return the list of possible categories that match the ENUM in the database
+    // this matches the categories defined in the migration file
+    const categories = TODO_CATEGORIES;
+
+    res.json({
+      message: "Categories retrieved successfully",
+      categories,
+    });
+  } catch (error) {
+    console.error("Get categories error:", error);
+    res.status(500).json({
+      error: "Server error while fetching categories",
+    });
+  }
+};
+
 // export the functions that are going to be create to the 'CRUD' operations of TODOs
 module.exports = {
   getTodos,
   createTodo,
   updateTodo,
   deleteTodo,
+  getCategories,
 };

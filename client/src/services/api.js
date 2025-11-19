@@ -100,5 +100,15 @@ export const getUserProfile = async () => {
   }
 };
 
+// get available categories ( endpoint )
+export const getCategories = async () => {
+  try {
+    const response = await api.get("/todos/categories");
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Failed to fetch categories" };
+  }
+};
+
 // export the actual connection
 export default api;

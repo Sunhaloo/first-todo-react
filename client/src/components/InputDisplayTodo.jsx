@@ -2,7 +2,13 @@
 import { useEffect, useState } from "react";
 
 // import the API function that will talk to back-end
-import { createTodo, getTodos, updateTodo, deleteTodo } from "../services/api";
+import {
+  createTodo,
+  getTodos,
+  updateTodo,
+  deleteTodo,
+  getCategories,
+} from "../services/api";
 
 // import the infinite scroll component
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -40,10 +46,38 @@ function InputDisplayTodo() {
   const [editingTodo, setEditingTodo] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [categories, setCategories] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
   const pageSize = 8;
 
   // declare variable to hold the maximum length of TODO "input"
   const maxLengthInput = 50;
+
+  // function that is going to fetch available categories from the server
+  const fetchCategories = async () => {
+    try {
+      const response = await getCategories();
+      setCategories(response.categories || []);
+    } catch (error) {
+      console.error(`Error while fetching categories: ${error}`);
+      // Fallback to default categories if API fails
+      setCategories([
+        "Code Review",
+        "Coding",
+        "Debugging",
+        "Deployment",
+        "Documentation",
+        "Learning",
+        "Meeting",
+        "Miscellaneous",
+        "Planning",
+        "Refactoring",
+        "Testing",
+      ]);
+    } finally {
+      setCategoriesLoading(false);
+    }
+  };
 
   // function that is going to fetch / get TODOs from the database once
   const fetchAllTodos = async () => {
@@ -80,10 +114,21 @@ function InputDisplayTodo() {
     }
   };
 
-  // fetch the TODOs when the components loads up ( from the database )
+  // fetch the TODOs and categories when the component loads up ( from the database )
   useEffect(() => {
     fetchAllTodos();
-  });
+    fetchCategories();
+  }, []);
+
+  // Update the editing form when editingTodo changes
+  useEffect(() => {
+    if (editingTodo) {
+      editingForm.setFieldsValue({
+        description: editingTodo.description,
+        category: editingTodo.category,
+      });
+    }
+  }, [editingTodo, editingForm]);
 
   // function to load more data when user scrolls
   const fetchMoreData = () => {
@@ -269,10 +314,13 @@ function InputDisplayTodo() {
   // function to open edit modal
   const openEditModal = (todo) => {
     setEditingTodo(todo);
-    editingForm.setFieldsValue({
-      description: todo.description,
-      category: todo.category,
-    });
+    // Use setTimeout to ensure the form has time to re-render with updated categories before setting values
+    setTimeout(() => {
+      editingForm.setFieldsValue({
+        description: todo.description,
+        category: todo.category,
+      });
+    }, 0);
     setIsModalVisible(true);
   };
 
@@ -292,7 +340,10 @@ function InputDisplayTodo() {
               form={form}
               layout="vertical"
               onFinish={handleCreateTodo}
-              initialValues={{ category: "Miscellaneous" }}
+              initialValues={{
+                category:
+                  categories.length > 0 ? categories[0] : "Miscellaneous",
+              }}
             >
               <Form.Item
                 name="description"
@@ -327,21 +378,11 @@ function InputDisplayTodo() {
                 ]}
               >
                 <Select placeholder="Select category">
-                  <Select.Option value="Code Review">Code Review</Select.Option>
-                  <Select.Option value="Coding">Coding</Select.Option>
-                  <Select.Option value="Debugging">Debugging</Select.Option>
-                  <Select.Option value="Deployment">Deployment</Select.Option>
-                  <Select.Option value="Documentation">
-                    Documentation
-                  </Select.Option>
-                  <Select.Option value="Learning">Learning</Select.Option>
-                  <Select.Option value="Meeting">Meeting</Select.Option>
-                  <Select.Option value="Miscellaneous">
-                    Miscellaneous
-                  </Select.Option>
-                  <Select.Option value="Planning">Planning</Select.Option>
-                  <Select.Option value="Refactoring">Refactoring</Select.Option>
-                  <Select.Option value="Testing">Testing</Select.Option>
+                  {categories.map((category) => (
+                    <Select.Option key={category} value={category}>
+                      {category}
+                    </Select.Option>
+                  ))}
                 </Select>
               </Form.Item>
 
@@ -465,8 +506,10 @@ function InputDisplayTodo() {
                 layout="vertical"
                 onFinish={handleUpdateTodo}
                 initialValues={{
-                  description: editingTodo?.description,
-                  category: editingTodo?.category,
+                  description: editingTodo?.description || "",
+                  category:
+                    editingTodo?.category ||
+                    (categories.length > 0 ? categories[0] : "Miscellaneous"),
                 }}
               >
                 <Form.Item
@@ -487,25 +530,11 @@ function InputDisplayTodo() {
                   ]}
                 >
                   <Select>
-                    <Select.Option value="Code Review">
-                      Code Review
-                    </Select.Option>
-                    <Select.Option value="Coding">Coding</Select.Option>
-                    <Select.Option value="Debugging">Debugging</Select.Option>
-                    <Select.Option value="Deployment">Deployment</Select.Option>
-                    <Select.Option value="Documentation">
-                      Documentation
-                    </Select.Option>
-                    <Select.Option value="Learning">Learning</Select.Option>
-                    <Select.Option value="Meeting">Meeting</Select.Option>
-                    <Select.Option value="Miscellaneous">
-                      Miscellaneous
-                    </Select.Option>
-                    <Select.Option value="Planning">Planning</Select.Option>
-                    <Select.Option value="Refactoring">
-                      Refactoring
-                    </Select.Option>
-                    <Select.Option value="Testing">Testing</Select.Option>
+                    {categories.map((category) => (
+                      <Select.Option key={category} value={category}>
+                        {category}
+                      </Select.Option>
+                    ))}
                   </Select>
                 </Form.Item>
 
