@@ -422,14 +422,13 @@ function InputDisplayTodo() {
               title="Edit Todo"
               open={isModalVisible}
               onCancel={() => {
+                messageApi.open({
+                  type: "warning",
+                  content: "Todo update cancelled!",
+                });
                 setIsModalVisible(false);
                 setEditingTodo(null);
                 editingForm.resetFields();
-
-                messageApi.open({
-                  type: "warning",
-                  content: "Todo updated cancelled!",
-                });
               }}
               footer={null}
             >
@@ -483,10 +482,18 @@ function InputDisplayTodo() {
                 </Form.Item>
 
                 <Form.Item>
-                  <GradientButton text="Update Todo" htmlType="submit" />
+                  <GradientButton
+                    className="todo-modal-update-button"
+                    text="Update TODO"
+                    htmlType="submit"
+                  />
                   <Button
                     className="todo-modal-cancel-button"
                     onClick={() => {
+                      messageApi.open({
+                        type: "warning",
+                        content: "Todo updated cancelled!",
+                      });
                       setIsModalVisible(false);
                       setEditingTodo(null);
                       editingForm.resetFields();
