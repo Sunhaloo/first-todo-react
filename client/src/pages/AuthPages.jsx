@@ -47,11 +47,6 @@ function AuthPages() {
       login(response.token);
 
       // display a little 'success' message to the user
-      messageApi.open({
-        type: "success",
-        content: "Registration successful!",
-        duration: 1,
-      });
       console.log("Registered user:", response.user);
 
       // navigate to the dashboard route
@@ -114,11 +109,6 @@ function AuthPages() {
       console.log(`Values = ${values}`);
 
       // display a little 'success' message to the user
-      messageApi.open({
-        type: "success",
-        content: "Login successful!",
-        duration: 1,
-      });
       console.log("Logged in user:", response.user);
 
       // navigate to the dashboard route
