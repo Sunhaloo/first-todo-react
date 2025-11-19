@@ -69,7 +69,7 @@
   background-color: var(--background);
   border-radius: var(--border-radius);
   margin-bottom: 0.75rem;
-  border: 1px solid var(--selection-background);
+  border: 1px solid var(--selection-background) !important;
   box-shadow: none;
 }
 
@@ -80,4 +80,8 @@
 .todo-submit-button {
   margin-top: 0.75rem;
   width: 100%;
+}
+
+.todo-modal-cancel-button {
+  margin-left: 0.5rem;
 }

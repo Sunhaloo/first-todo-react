@@ -20,6 +20,7 @@ import {
   Input,
   Select,
   Typography,
+  Modal,
 } from "antd";
 
 // add the required styling to style input and display
@@ -33,6 +34,9 @@ function InputDisplayTodo() {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [form] = Form.useForm();
+  const [editingForm] = Form.useForm();
+  const [editingTodo, setEditingTodo] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const pageSize = 8;
 
   // declare variable to hold the maximum length of TODO "input"
@@ -139,6 +143,38 @@ function InputDisplayTodo() {
     }
   };
 
+  // function to update TODO items
+  const handleUpdateTodo = async (values) => {
+    try {
+      // run the `updateTodo` function on a specific TODO item
+      const response = await updateTodo(editingTodo.id, values);
+
+      // update the todo in the lists
+      setTodos(
+        todos.map((todo) =>
+          todo.id === editingTodo.id ? response.todo : todo,
+        ),
+      );
+      setAllTodos(
+        allTodos.map((todo) =>
+          todo.id === editingTodo.id ? response.todo : todo,
+        ),
+      );
+
+      // close the modal
+      setIsModalVisible(false);
+      setEditingTodo(null);
+      editingForm.resetFields();
+
+      // display a little message
+      console.log("Todo updated!");
+
+      // if there are any errors that occurs during update
+    } catch (error) {
+      console.error(`Error updating todo: ${error}`);
+    }
+  };
+
   // function to delete TODO items
   const handleDeleteTodo = async (todoId) => {
     try {
@@ -164,6 +200,16 @@ function InputDisplayTodo() {
     } catch (error) {
       console.error(`Error deleting todo: ${error}`);
     }
+  };
+
+  // function to open edit modal
+  const openEditModal = (todo) => {
+    setEditingTodo(todo);
+    editingForm.setFieldsValue({
+      description: todo.description,
+      category: todo.category,
+    });
+    setIsModalVisible(true);
   };
 
   return (
@@ -274,6 +320,14 @@ function InputDisplayTodo() {
                       actions={[
                         <Button
                           className="todo-delete-button"
+                          type="primary"
+                          size="small"
+                          onClick={() => openEditModal(todo)}
+                        >
+                          Edit
+                        </Button>,
+                        <Button
+                          className="todo-delete-button"
                           danger
                           size="small"
                           onClick={() => handleDeleteTodo(todo.id)}
@@ -307,6 +361,78 @@ function InputDisplayTodo() {
               )}
             </InfiniteScroll>
           </Card>
+
+          {/* Edit Todo Modal */}
+          <Modal
+            title="Edit Todo"
+            open={isModalVisible}
+            onCancel={() => {
+              setIsModalVisible(false);
+              setEditingTodo(null);
+              editingForm.resetFields();
+            }}
+            footer={null}
+          >
+            <Form
+              form={editingForm}
+              layout="vertical"
+              onFinish={handleUpdateTodo}
+              initialValues={{
+                description: editingTodo?.description,
+                category: editingTodo?.category,
+              }}
+            >
+              <Form.Item
+                name="description"
+                label="Description"
+                rules={[
+                  { required: true, message: "Please enter a description" },
+                ]}
+              >
+                <Input maxLength={maxLengthInput} />
+              </Form.Item>
+
+              <Form.Item
+                name="category"
+                label="Category"
+                rules={[
+                  { required: true, message: "Please select a category" },
+                ]}
+              >
+                <Select>
+                  <Select.Option value="Code Review">Code Review</Select.Option>
+                  <Select.Option value="Coding">Coding</Select.Option>
+                  <Select.Option value="Debugging">Debugging</Select.Option>
+                  <Select.Option value="Deployment">Deployment</Select.Option>
+                  <Select.Option value="Documentation">
+                    Documentation
+                  </Select.Option>
+                  <Select.Option value="Learning">Learning</Select.Option>
+                  <Select.Option value="Meeting">Meeting</Select.Option>
+                  <Select.Option value="Miscellaneous">
+                    Miscellaneous
+                  </Select.Option>
+                  <Select.Option value="Planning">Planning</Select.Option>
+                  <Select.Option value="Refactoring">Refactoring</Select.Option>
+                  <Select.Option value="Testing">Testing</Select.Option>
+                </Select>
+              </Form.Item>
+
+              <Form.Item>
+                <GradientButton text="Update Todo" htmlType="submit" />
+                <Button
+                  className="todo-modal-cancel-button"
+                  onClick={() => {
+                    setIsModalVisible(false);
+                    setEditingTodo(null);
+                    editingForm.resetFields();
+                  }}
+                >
+                  Cancel
+                </Button>
+              </Form.Item>
+            </Form>
+          </Modal>
         </div>
       </div>
     </div>
