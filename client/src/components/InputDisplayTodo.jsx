@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 // import the API function that will talk to back-end
 import { createTodo, getTodos, updateTodo, deleteTodo } from "../services/api";
 
+// import the infinite scroll component
+import InfiniteScroll from "react-infinite-scroll-component";
+
 // import the gradient button component ( see official docs ) from 'antd'
 import GradientButton from "./GradientButton";
 
@@ -25,37 +28,67 @@ import "./InputDisplayTodo.css";
 function InputDisplayTodo() {
   // states for our TODO items
   const [todos, setTodos] = useState([]);
+  const [allTodos, setAllTodos] = useState([]);
   const [todoFetchLoading, setTodoFetchLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
   const [form] = Form.useForm();
+  const pageSize = 8;
 
   // declare variable to hold the maximum length of TODO "input"
   const maxLengthInput = 50;
 
-  // function that is going to fetch / get TODOs from the database
-  const fetchTodos = async () => {
-    setTodoFetchLoading(true);
+  // function that is going to fetch / get TODOs from the database once
+  const fetchAllTodos = async () => {
+    if (allTodos.length === 0) {
+      // Only fetch if we haven't fetched yet
+      setTodoFetchLoading(true);
 
-    try {
-      // get the response / TODO ( `id` ) from the database
-      const response = await getTodos();
+      try {
+        // get the response / TODO ( `id` ) from the database
+        const response = await getTodos();
 
-      // get the user's TODOs if not present return an empty list
-      setTodos(response.todos || []);
+        // get the user's TODOs if not present return an empty list
+        const allTodosFromServer = response.todos || [];
 
-      // if some error while fetching TODOs occurs
-    } catch (error) {
-      console.error(`Error while fetching TODOs: ${error}`);
+        // for initial load, set all todos and show first page
+        setAllTodos(allTodosFromServer);
+        const initialTodos = allTodosFromServer.slice(0, pageSize);
+        setTodos(initialTodos);
+        setHasMore(allTodosFromServer.length > pageSize);
 
-      // change the loading status back to `false`
-    } finally {
-      setTodoFetchLoading(false);
+        // if some error while fetching TODOs occurs
+      } catch (error) {
+        console.error(`Error while fetching TODOs: ${error}`);
+
+        // change the loading status back to `false`
+      } finally {
+        setTodoFetchLoading(false);
+      }
     }
   };
 
   // fetch the TODOs when the components loads up ( from the database )
   useEffect(() => {
-    fetchTodos();
-  }, []);
+    fetchAllTodos();
+  });
+
+  // function to load more data when user scrolls
+  const fetchMoreData = () => {
+    if (!todoFetchLoading && hasMore) {
+      setTodoFetchLoading(true);
+      setTimeout(() => {
+        // simulate network request
+        const nextPage = page + 1;
+        const newTodos = allTodos.slice(0, nextPage * pageSize);
+        setTodos(newTodos);
+        setHasMore(newTodos.length < allTodos.length);
+        setPage(nextPage);
+        // add a small delay to simulate API call
+        setTodoFetchLoading(false);
+      }, 500);
+    }
+  };
 
   const handleCreateTodo = async (values) => {
     try {
@@ -65,8 +98,12 @@ function InputDisplayTodo() {
       // display a little message inside the console
       console.log("Todo Created");
 
-      // add the new TODO item to the list ==> to be rendered out
+      // add the new TODO item to the beginning of the lists ==> to be rendered out
       setTodos([response.todo, ...todos]);
+      setAllTodos([response.todo, ...allTodos]);
+
+      // Reset page to 1 to ensure the new todo is visible
+      setPage(1);
 
       // create the form for new input of TODO item
       form.resetFields();
@@ -89,6 +126,9 @@ function InputDisplayTodo() {
       setTodos(
         todos.map((todo) => (todo.id === todoId ? response.todo : todo)),
       );
+      setAllTodos(
+        allTodos.map((todo) => (todo.id === todoId ? response.todo : todo)),
+      );
 
       // display a little message
       console.log("Todo Updated ( Check Off Function )");
@@ -105,8 +145,17 @@ function InputDisplayTodo() {
       // run the `deleteTodo` function on a specific TODO item
       await deleteTodo(todoId);
 
-      // Remove todo from the list
-      setTodos(todos.filter((todo) => todo.id !== todoId));
+      // remove todo from the lists
+      const updatedTodos = todos.filter((todo) => todo.id !== todoId);
+      const updatedAllTodos = allTodos.filter((todo) => todo.id !== todoId);
+
+      setTodos(updatedTodos);
+      setAllTodos(updatedAllTodos);
+
+      // if we're on a page where the last item was just deleted, go back a page
+      if (updatedTodos.length === 0 && page > 1) {
+        setPage(page - 1);
+      }
 
       // display a little message
       console.log("Todo deleted!");
@@ -189,76 +238,77 @@ function InputDisplayTodo() {
       </div>
 
       {/* 'div' that is going to handle the displaying of TODO items */}
-      <div className="display-todos">
-        {/* TODO List */}
-        <Card title={`My TODOs (${todos.length})`}>
-          {todoFetchLoading ? (
-            <p>Loading todos...</p>
-          ) : todos.length === 0 ? (
-            <p style={{ textAlign: "center", color: "#999" }}>
-              No todos yet. Create your first one above! 📝
-            </p>
-          ) : (
-            <List
-              dataSource={todos}
-              renderItem={(todo) => (
-                <List.Item
-                  actions={[
-                    <Button
-                      danger
-                      size="small"
-                      onClick={() => handleDeleteTodo(todo.id)}
-                    >
-                      Delete
-                    </Button>,
-                  ]}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      width: "100%",
-                    }}
-                  >
-                    <Checkbox
-                      checked={todo.completed}
-                      onChange={() =>
-                        handleToggleComplete(todo.id, todo.completed)
-                      }
-                      style={{ marginRight: "12px" }}
-                    />
-                    <div style={{ flex: 1 }}>
-                      <div
-                        style={{
-                          textDecoration: todo.completed
-                            ? "line-through"
-                            : "none",
-                          color: todo.completed ? "#999" : "#000",
-                        }}
-                      >
-                        {todo.description}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: "12px",
-                          color: "#666",
-                          marginTop: "4px",
-                        }}
-                      >
-                        Category: {todo.category}
-                      </div>
-                    </div>
-                  </div>
-                </List.Item>
-              )}
-            />
-          )}
-        </Card>
-      </div>
+      <div className="display-todos-main">
+        <div className="display-todo-background">
+          <Typography.Title level={4} className="display-todos-counter">
+            {`Todo Count: ${todos.length}`}
+          </Typography.Title>
 
-      <Typography.Title
-        level={3}
-      >{`Todo Count: ${todos.length}`}</Typography.Title>
+          {/* TODO list with infinite scroll */}
+          <Card
+            id="display-todos-card"
+            className="display-todos-card"
+            variant="borderless"
+          >
+            <InfiniteScroll
+              dataLength={todos.length}
+              next={fetchMoreData}
+              hasMore={hasMore}
+              loader={
+                todoFetchLoading && todos.length < allTodos.length ? (
+                  <p className="display-todos-loader">Loading more todos...</p>
+                ) : null
+              }
+              scrollableTarget="display-todos-card"
+            >
+              {todos.length === 0 ? (
+                <p className="display-todos-completed-message">
+                  You completed all your TODO items!
+                </p>
+              ) : (
+                <List
+                  dataSource={todos}
+                  renderItem={(todo) => (
+                    <List.Item
+                      className="todo-list-main"
+                      actions={[
+                        <Button
+                          className="todo-delete-button"
+                          danger
+                          size="small"
+                          onClick={() => handleDeleteTodo(todo.id)}
+                        >
+                          Delete
+                        </Button>,
+                      ]}
+                    >
+                      <div className="todo-item-container">
+                        <Checkbox
+                          className="todo-checkbox-button"
+                          checked={todo.completed}
+                          onChange={() =>
+                            handleToggleComplete(todo.id, todo.completed)
+                          }
+                        />
+                        <div className="todo-content">
+                          <div
+                            className={`todo-description ${todo.completed ? "completed" : ""}`}
+                          >
+                            {todo.description}
+                          </div>
+                          <div className="todo-category">
+                            Category: {todo.category}
+                          </div>
+                        </div>
+                      </div>
+                    </List.Item>
+                  )}
+                />
+              )}
+            </InfiniteScroll>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }
