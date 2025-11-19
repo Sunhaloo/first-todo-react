@@ -21,6 +21,7 @@ import {
   Select,
   Typography,
   Modal,
+  message,
 } from "antd";
 
 // add the required styling to style input and display
@@ -37,6 +38,7 @@ function InputDisplayTodo() {
   const [editingForm] = Form.useForm();
   const [editingTodo, setEditingTodo] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
   const pageSize = 8;
 
   // declare variable to hold the maximum length of TODO "input"
@@ -63,6 +65,10 @@ function InputDisplayTodo() {
 
         // if some error while fetching TODOs occurs
       } catch (error) {
+        messageApi.open({
+          type: "error",
+          content: "Error fetching todos. Please refresh the page.",
+        });
         console.error(`Error while fetching TODOs: ${error}`);
 
         // change the loading status back to `false`
@@ -99,8 +105,14 @@ function InputDisplayTodo() {
       // wait for the database to finish writing TODO items
       const response = await createTodo(values);
 
-      // display a little message inside the console
-      console.log("Todo Created");
+      // display a success message to the user
+      messageApi.open({
+        type: "success",
+        content: "Todo created successfully!",
+      });
+
+      // log the creation of TODO to the console
+      console.log("Todo created successfully!");
 
       // add the new TODO item to the beginning of the lists ==> to be rendered out
       setTodos([response.todo, ...todos]);
@@ -114,6 +126,10 @@ function InputDisplayTodo() {
 
       // if there was any errors while creation of TODO item
     } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: "Error creating todo. Please try again.",
+      });
       console.error(`Error while creating TODOs: ${error}`);
     }
   };
@@ -134,11 +150,22 @@ function InputDisplayTodo() {
         allTodos.map((todo) => (todo.id === todoId ? response.todo : todo)),
       );
 
-      // display a little message
-      console.log("Todo Updated ( Check Off Function )");
+      // display a success message to the user
+      const statusText = !currentStatus ? "completed" : "marked as incomplete";
+      messageApi.open({
+        type: "success",
+        content: `Todo ${statusText} successfully!`,
+      });
+
+      // log the checking-off of TODO to the console
+      console.log(`Todo ${statusText} successfully!`);
 
       // if any error happends when "checking-off" a TODO item
     } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: "Error updating todo. Please try again.",
+      });
       console.error(`Error updating todo: ${error}`);
     }
   };
@@ -166,11 +193,21 @@ function InputDisplayTodo() {
       setEditingTodo(null);
       editingForm.resetFields();
 
-      // display a little message
-      console.log("Todo updated!");
+      // display a success message to the user
+      messageApi.open({
+        type: "success",
+        content: "Todo updated successfully!",
+      });
+
+      // log the update of TODO to the console
+      console.log("Todo updated successfully!");
 
       // if there are any errors that occurs during update
     } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: "Error updating todo. Please try again.",
+      });
       console.error(`Error updating todo: ${error}`);
     }
   };
@@ -193,11 +230,21 @@ function InputDisplayTodo() {
         setPage(page - 1);
       }
 
-      // display a little message
-      console.log("Todo deleted!");
+      // display a success message to the user
+      messageApi.open({
+        type: "success",
+        content: "Todo deleted successfully!",
+      });
+
+      // log the deletion of TODO to the console
+      console.log("Todo deleted successfully!");
 
       // if there are any errors that occurs during deletion
     } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: "Error deleting todo. Please try again.",
+      });
       console.error(`Error deleting todo: ${error}`);
     }
   };
@@ -213,187 +260,44 @@ function InputDisplayTodo() {
   };
 
   return (
-    <div className="create-todo-component">
-      <div className="create-todo-input">
-        {/* 'div' that is going to handle the creation of TODO items */}
-        <Card
-          className="create-todo-form"
-          title="TODO Input"
-          variant="borderless"
-        >
-          {/* the actual form that is going to handle the input from the user */}
-          <Form
-            form={form}
-            layout="vertical"
-            onFinish={handleCreateTodo}
-            initialValues={{ category: "Miscellaneous" }}
-          >
-            <Form.Item
-              name="description"
-              label="What do you need to do?"
-              rules={[
-                { required: true, message: "Please enter a description" },
-              ]}
-            >
-              {/* the actual input tag */}
-              <Input
-                placeholder={`Enter TODO item ( Max Length: ${maxLengthInput} )`}
-                rows={1}
-                maxLength={maxLengthInput}
-                variant="filled"
-                rules={[
-                  { required: true, message: "Please enter a description" },
-                ]}
-                onPressEnter={() => form.submit()}
-              />
-            </Form.Item>
-
-            {/* the select tag that is going to handle category selection */}
-            <Form.Item
-              name="category"
-              label="Category"
-              rules={[{ required: true, message: "Please select a category" }]}
-            >
-              <Select placeholder="Select category">
-                <Select.Option value="Code Review">Code Review</Select.Option>
-                <Select.Option value="Coding">Coding</Select.Option>
-                <Select.Option value="Debugging">Debugging</Select.Option>
-                <Select.Option value="Deployment">Deployment</Select.Option>
-                <Select.Option value="Documentation">
-                  Documentation
-                </Select.Option>
-                <Select.Option value="Learning">Learning</Select.Option>
-                <Select.Option value="Meeting">Meeting</Select.Option>
-                <Select.Option value="Miscellaneous">
-                  Miscellaneous
-                </Select.Option>
-                <Select.Option value="Planning">Planning</Select.Option>
-                <Select.Option value="Refactoring">Refactoring</Select.Option>
-                <Select.Option value="Testing">Testing</Select.Option>
-              </Select>
-            </Form.Item>
-
-            {/* button that will send the data to the database through the `api.js` services */}
-            <GradientButton
-              className="todo-submit-button"
-              text="Add TODO"
-              htmlType="submit"
-            />
-          </Form>
-        </Card>
-      </div>
-
-      {/* 'div' that is going to handle the displaying of TODO items */}
-      <div className="display-todos-main">
-        <div className="display-todo-background">
-          <Typography.Title level={4} className="display-todos-counter">
-            {`Todo Count: ${todos.length}`}
-          </Typography.Title>
-
-          {/* TODO list with infinite scroll */}
+    <>
+      {contextHolder}
+      <div className="create-todo-component">
+        <div className="create-todo-input">
+          {/* 'div' that is going to handle the creation of TODO items */}
           <Card
-            id="display-todos-card"
-            className="display-todos-card"
+            className="create-todo-form"
+            title="TODO Input"
             variant="borderless"
           >
-            <InfiniteScroll
-              dataLength={todos.length}
-              next={fetchMoreData}
-              hasMore={hasMore}
-              loader={
-                todoFetchLoading && todos.length < allTodos.length ? (
-                  <p className="display-todos-loader">Loading more todos...</p>
-                ) : null
-              }
-              scrollableTarget="display-todos-card"
-            >
-              {todos.length === 0 ? (
-                <p className="display-todos-completed-message">
-                  You completed all your TODO items!
-                </p>
-              ) : (
-                <List
-                  dataSource={todos}
-                  renderItem={(todo) => (
-                    <List.Item
-                      className="todo-list-main"
-                      actions={[
-                        <Button
-                          className="todo-delete-button"
-                          type="primary"
-                          size="small"
-                          onClick={() => openEditModal(todo)}
-                        >
-                          Edit
-                        </Button>,
-                        <Button
-                          className="todo-delete-button"
-                          danger
-                          size="small"
-                          onClick={() => handleDeleteTodo(todo.id)}
-                        >
-                          Delete
-                        </Button>,
-                      ]}
-                    >
-                      <div className="todo-item-container">
-                        <Checkbox
-                          className="todo-checkbox-button"
-                          checked={todo.completed}
-                          onChange={() =>
-                            handleToggleComplete(todo.id, todo.completed)
-                          }
-                        />
-                        <div className="todo-content">
-                          <div
-                            className={`todo-description ${todo.completed ? "completed" : ""}`}
-                          >
-                            {todo.description}
-                          </div>
-                          <div
-                            className={`todo-category ${todo.completed ? "completed" : ""}`}
-                          >
-                            #{todo.category}
-                          </div>
-                        </div>
-                      </div>
-                    </List.Item>
-                  )}
-                />
-              )}
-            </InfiniteScroll>
-          </Card>
-
-          {/* Edit Todo Modal */}
-          <Modal
-            title="Edit Todo"
-            open={isModalVisible}
-            onCancel={() => {
-              setIsModalVisible(false);
-              setEditingTodo(null);
-              editingForm.resetFields();
-            }}
-            footer={null}
-          >
+            {/* the actual form that is going to handle the input from the user */}
             <Form
-              form={editingForm}
+              form={form}
               layout="vertical"
-              onFinish={handleUpdateTodo}
-              initialValues={{
-                description: editingTodo?.description,
-                category: editingTodo?.category,
-              }}
+              onFinish={handleCreateTodo}
+              initialValues={{ category: "Miscellaneous" }}
             >
               <Form.Item
                 name="description"
-                label="Description"
+                label="What do you need to do?"
                 rules={[
                   { required: true, message: "Please enter a description" },
                 ]}
               >
-                <Input maxLength={maxLengthInput} />
+                {/* the actual input tag */}
+                <Input
+                  placeholder={`Enter TODO item ( Max Length: ${maxLengthInput} )`}
+                  rows={1}
+                  maxLength={maxLengthInput}
+                  variant="filled"
+                  rules={[
+                    { required: true, message: "Please enter a description" },
+                  ]}
+                  onPressEnter={() => form.submit()}
+                />
               </Form.Item>
 
+              {/* the select tag that is going to handle category selection */}
               <Form.Item
                 name="category"
                 label="Category"
@@ -401,7 +305,7 @@ function InputDisplayTodo() {
                   { required: true, message: "Please select a category" },
                 ]}
               >
-                <Select>
+                <Select placeholder="Select category">
                   <Select.Option value="Code Review">Code Review</Select.Option>
                   <Select.Option value="Coding">Coding</Select.Option>
                   <Select.Option value="Debugging">Debugging</Select.Option>
@@ -420,24 +324,183 @@ function InputDisplayTodo() {
                 </Select>
               </Form.Item>
 
-              <Form.Item>
-                <GradientButton text="Update Todo" htmlType="submit" />
-                <Button
-                  className="todo-modal-cancel-button"
-                  onClick={() => {
-                    setIsModalVisible(false);
-                    setEditingTodo(null);
-                    editingForm.resetFields();
-                  }}
-                >
-                  Cancel
-                </Button>
-              </Form.Item>
+              {/* button that will send the data to the database through the `api.js` services */}
+              <GradientButton
+                className="todo-submit-button"
+                text="Add TODO"
+                htmlType="submit"
+              />
             </Form>
-          </Modal>
+          </Card>
+        </div>
+
+        {/* 'div' that is going to handle the displaying of TODO items */}
+        <div className="display-todos-main">
+          <div className="display-todo-background">
+            <Typography.Title level={4} className="display-todos-counter">
+              {`Todo Count: ${todos.length}`}
+            </Typography.Title>
+
+            {/* TODO list with infinite scroll */}
+            <Card
+              id="display-todos-card"
+              className="display-todos-card"
+              variant="borderless"
+            >
+              <InfiniteScroll
+                dataLength={todos.length}
+                next={fetchMoreData}
+                hasMore={hasMore}
+                loader={
+                  todoFetchLoading && todos.length < allTodos.length ? (
+                    <p className="display-todos-loader">
+                      Loading more todos...
+                    </p>
+                  ) : null
+                }
+                scrollableTarget="display-todos-card"
+              >
+                {todos.length === 0 ? (
+                  <p className="display-todos-completed-message">
+                    You completed all your TODO items!
+                  </p>
+                ) : (
+                  <List
+                    dataSource={todos}
+                    renderItem={(todo) => (
+                      <List.Item
+                        className="todo-list-main"
+                        actions={[
+                          <Button
+                            className="todo-delete-button"
+                            type="primary"
+                            size="small"
+                            onClick={() => openEditModal(todo)}
+                          >
+                            Edit
+                          </Button>,
+                          <Button
+                            className="todo-delete-button"
+                            danger
+                            size="small"
+                            onClick={() => handleDeleteTodo(todo.id)}
+                          >
+                            Delete
+                          </Button>,
+                        ]}
+                      >
+                        <div className="todo-item-container">
+                          <Checkbox
+                            className="todo-checkbox-button"
+                            checked={todo.completed}
+                            onChange={() =>
+                              handleToggleComplete(todo.id, todo.completed)
+                            }
+                          />
+                          <div className="todo-content">
+                            <div
+                              className={`todo-description ${todo.completed ? "completed" : ""}`}
+                            >
+                              {todo.description}
+                            </div>
+                            <div
+                              className={`todo-category ${todo.completed ? "completed" : ""}`}
+                            >
+                              #{todo.category}
+                            </div>
+                          </div>
+                        </div>
+                      </List.Item>
+                    )}
+                  />
+                )}
+              </InfiniteScroll>
+            </Card>
+
+            {/* Edit Todo Modal */}
+            <Modal
+              title="Edit Todo"
+              open={isModalVisible}
+              onCancel={() => {
+                setIsModalVisible(false);
+                setEditingTodo(null);
+                editingForm.resetFields();
+
+                messageApi.open({
+                  type: "warning",
+                  content: "Todo updated cancelled!",
+                });
+              }}
+              footer={null}
+            >
+              <Form
+                form={editingForm}
+                layout="vertical"
+                onFinish={handleUpdateTodo}
+                initialValues={{
+                  description: editingTodo?.description,
+                  category: editingTodo?.category,
+                }}
+              >
+                <Form.Item
+                  name="description"
+                  label="Description"
+                  rules={[
+                    { required: true, message: "Please enter a description" },
+                  ]}
+                >
+                  <Input maxLength={maxLengthInput} />
+                </Form.Item>
+
+                <Form.Item
+                  name="category"
+                  label="Category"
+                  rules={[
+                    { required: true, message: "Please select a category" },
+                  ]}
+                >
+                  <Select>
+                    <Select.Option value="Code Review">
+                      Code Review
+                    </Select.Option>
+                    <Select.Option value="Coding">Coding</Select.Option>
+                    <Select.Option value="Debugging">Debugging</Select.Option>
+                    <Select.Option value="Deployment">Deployment</Select.Option>
+                    <Select.Option value="Documentation">
+                      Documentation
+                    </Select.Option>
+                    <Select.Option value="Learning">Learning</Select.Option>
+                    <Select.Option value="Meeting">Meeting</Select.Option>
+                    <Select.Option value="Miscellaneous">
+                      Miscellaneous
+                    </Select.Option>
+                    <Select.Option value="Planning">Planning</Select.Option>
+                    <Select.Option value="Refactoring">
+                      Refactoring
+                    </Select.Option>
+                    <Select.Option value="Testing">Testing</Select.Option>
+                  </Select>
+                </Form.Item>
+
+                <Form.Item>
+                  <GradientButton text="Update Todo" htmlType="submit" />
+                  <Button
+                    className="todo-modal-cancel-button"
+                    onClick={() => {
+                      setIsModalVisible(false);
+                      setEditingTodo(null);
+                      editingForm.resetFields();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Modal>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
