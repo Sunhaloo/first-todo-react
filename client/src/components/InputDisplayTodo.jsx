@@ -32,6 +32,7 @@ function InputDisplayTodo() {
   const [todos, setTodos] = useState([]);
   const [allTodos, setAllTodos] = useState([]);
   const [todoFetchLoading, setTodoFetchLoading] = useState(false);
+  const [todoCreateLoading, setTodoCreateLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [form] = Form.useForm();
@@ -102,6 +103,11 @@ function InputDisplayTodo() {
   };
 
   const handleCreateTodo = async (values) => {
+    // Prevent duplicate submissions
+    if (todoCreateLoading) return;
+
+    setTodoCreateLoading(true);
+
     try {
       // wait for the database to finish writing TODO items
       const response = await createTodo(values);
@@ -116,9 +122,9 @@ function InputDisplayTodo() {
       // log the creation of TODO to the console
       console.log("Todo created successfully!");
 
-      // add the new TODO item to the beginning of the lists ==> to be rendered out
-      setTodos([response.todo, ...todos]);
-      setAllTodos([response.todo, ...allTodos]);
+      // add the new TODO item to the end of the lists ==> oldest first
+      setTodos([...todos, response.todo]);
+      setAllTodos([...allTodos, response.todo]);
 
       // Reset page to 1 to ensure the new todo is visible
       setPage(1);
@@ -134,6 +140,8 @@ function InputDisplayTodo() {
         duration: 1,
       });
       console.error(`Error while creating TODOs: ${error}`);
+    } finally {
+      setTodoCreateLoading(false);
     }
   };
 
@@ -302,7 +310,11 @@ function InputDisplayTodo() {
                   rules={[
                     { required: true, message: "Please enter a description" },
                   ]}
-                  onPressEnter={() => form.submit()}
+                  onPressEnter={() => {
+                    if (!todoCreateLoading) {
+                      form.submit();
+                    }
+                  }}
                 />
               </Form.Item>
 
@@ -338,6 +350,7 @@ function InputDisplayTodo() {
                 className="todo-submit-button"
                 text="Add TODO"
                 htmlType="submit"
+                disabled={todoCreateLoading}
               />
             </Form>
           </Card>
@@ -416,6 +429,11 @@ function InputDisplayTodo() {
                               className={`todo-category ${todo.completed ? "completed" : ""}`}
                             >
                               #{todo.category}
+                            </div>
+                            <div
+                              className={`todo-created-at ${todo.completed ? "completed" : ""}`}
+                            >
+                              {new Date(todo.created_at).toLocaleDateString()}
                             </div>
                           </div>
                         </div>
