@@ -68,6 +68,7 @@ function InputDisplayTodo() {
         messageApi.open({
           type: "error",
           content: "Error fetching todos. Please refresh the page.",
+          duration: 1,
         });
         console.error(`Error while fetching TODOs: ${error}`);
 
@@ -109,6 +110,7 @@ function InputDisplayTodo() {
       messageApi.open({
         type: "success",
         content: "Todo created successfully!",
+        duration: 1,
       });
 
       // log the creation of TODO to the console
@@ -129,6 +131,7 @@ function InputDisplayTodo() {
       messageApi.open({
         type: "error",
         content: "Error creating todo. Please try again.",
+        duration: 1,
       });
       console.error(`Error while creating TODOs: ${error}`);
     }
@@ -155,6 +158,7 @@ function InputDisplayTodo() {
       messageApi.open({
         type: "success",
         content: `Todo ${statusText} successfully!`,
+        duration: 1,
       });
 
       // log the checking-off of TODO to the console
@@ -165,6 +169,7 @@ function InputDisplayTodo() {
       messageApi.open({
         type: "error",
         content: "Error updating todo. Please try again.",
+        duration: 1,
       });
       console.error(`Error updating todo: ${error}`);
     }
@@ -197,6 +202,7 @@ function InputDisplayTodo() {
       messageApi.open({
         type: "success",
         content: "Todo updated successfully!",
+        duration: 1,
       });
 
       // log the update of TODO to the console
@@ -207,6 +213,7 @@ function InputDisplayTodo() {
       messageApi.open({
         type: "error",
         content: "Error updating todo. Please try again.",
+        duration: 1,
       });
       console.error(`Error updating todo: ${error}`);
     }
@@ -234,6 +241,7 @@ function InputDisplayTodo() {
       messageApi.open({
         type: "success",
         content: "Todo deleted successfully!",
+        duration: 1,
       });
 
       // log the deletion of TODO to the console
@@ -244,6 +252,7 @@ function InputDisplayTodo() {
       messageApi.open({
         type: "error",
         content: "Error deleting todo. Please try again.",
+        duration: 1,
       });
       console.error(`Error deleting todo: ${error}`);
     }
@@ -372,7 +381,7 @@ function InputDisplayTodo() {
                         className="todo-list-main"
                         actions={[
                           <Button
-                            className="todo-delete-button"
+                            className="todo-edit-button"
                             type="primary"
                             size="small"
                             onClick={() => openEditModal(todo)}
@@ -425,6 +434,7 @@ function InputDisplayTodo() {
                 messageApi.open({
                   type: "warning",
                   content: "Todo update cancelled!",
+                  duration: 1,
                 });
                 setIsModalVisible(false);
                 setEditingTodo(null);
@@ -493,6 +503,7 @@ function InputDisplayTodo() {
                       messageApi.open({
                         type: "warning",
                         content: "Todo updated cancelled!",
+                        duration: 1,
                       });
                       setIsModalVisible(false);
                       setEditingTodo(null);
