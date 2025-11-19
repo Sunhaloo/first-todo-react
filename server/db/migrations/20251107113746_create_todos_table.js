@@ -20,7 +20,7 @@ exports.up = function (knex) {
         "Meeting",
         "Miscellaneous",
         "Planning",
-        "Refactorig",
+        "Refactoring",
         "Testing",
       ])
       .defaultTo("Miscellaneous");

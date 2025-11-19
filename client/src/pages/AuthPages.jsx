@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 // import components from 'antd'
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, Select, message } from "antd";
 
 // import icons from 'react-icons' ( "ri" ) library
 import { RiTodoLine } from "react-icons/ri";
@@ -21,14 +21,14 @@ import "./AuthPages.css";
 
 // page "component" that's going to handle front-end for registration and login
 function AuthPages() {
+  // declare variable to be able to use the `message` component
+  const [messageApi, contextHolder] = message.useMessage();
+
   // declare "variable" to check if user is on 'login' / 'register' page
   const [isLoginPage, setToLoginPage] = useState(true);
 
   // declare "variable" to show 'loading' state
   const [loading, setLoading] = useState(false);
-
-  // declare "variable" to show error messages
-  const [errorMessage, setErrorMessage] = useState("");
 
   // declare variable to be able to use the `useNavigate` function
   const navigate = useNavigate();
@@ -40,8 +40,6 @@ function AuthPages() {
   const handleRegister = async (values) => {
     // change the 'loading' state to true
     setLoading(true);
-    // clear any previous error message
-    setErrorMessage("");
     try {
       const response = await register(values);
 
@@ -49,6 +47,11 @@ function AuthPages() {
       login(response.token);
 
       // display a little 'success' message to the user
+      messageApi.open({
+        type: "success",
+        content: "Registration successful!",
+        duration: 1,
+      });
       console.log("Registered user:", response.user);
 
       // navigate to the dashboard route
@@ -58,22 +61,36 @@ function AuthPages() {
       if (error.response) {
         // server side errors
         if (error.response.status === 400) {
-          setErrorMessage(
-            error.response.data.error ||
+          messageApi.open({
+            type: "error",
+            content:
+              error.response.data.error ||
               "Registration failed - Please check your information",
-          );
+            duration: 1,
+          });
         } else {
-          setErrorMessage("An error occurred during registration");
+          messageApi.open({
+            type: "error",
+            content: "An error occurred during registration",
+            duration: 1,
+          });
         }
 
         // requests sent but no response
       } else if (error.request) {
-        setErrorMessage("Network error - please check your connection");
+        messageApi.open({
+          type: "error",
+          content: "Network error - please check your connection",
+          duration: 1,
+        });
 
         // if anything else happened
       } else {
-        setErrorMessage("An unexpected error occurred");
-        setErrorMessage("Test");
+        messageApi.open({
+          type: "error",
+          content: "An unexpected error occurred",
+          duration: 1,
+        });
       }
 
       // log the error to the console
@@ -89,8 +106,6 @@ function AuthPages() {
   const handleLogin = async (values) => {
     // change the 'loading' state to true
     setLoading(true);
-    // clear any previous error message
-    setErrorMessage("");
     try {
       const response = await apiLogin(values);
 
@@ -99,6 +114,11 @@ function AuthPages() {
       console.log(`Values = ${values}`);
 
       // display a little 'success' message to the user
+      messageApi.open({
+        type: "success",
+        content: "Login successful!",
+        duration: 1,
+      });
       console.log("Logged in user:", response.user);
 
       // navigate to the dashboard route
@@ -108,21 +128,42 @@ function AuthPages() {
       if (error.response) {
         // server side errors
         if (error.response.status === 401) {
-          setErrorMessage("Invalid credentials");
+          messageApi.open({
+            type: "error",
+            content: "Invalid credentials",
+            duration: 1,
+          });
+
           // if user did not fill the form correctly
         } else if (error.response.status === 400) {
-          setErrorMessage("Please fill in all required fields");
+          messageApi.open({
+            type: "error",
+            content: "Please fill in all required fields",
+            duration: 1,
+          });
         } else {
           // if anything else happened
-          setErrorMessage("An error occurred during login");
+          messageApi.open({
+            type: "error",
+            content: "An error occurred during login",
+            duration: 1,
+          });
         }
 
         // requests sent but no response
       } else if (error.request) {
-        setErrorMessage("Network error - please check your connection");
+        messageApi.open({
+          type: "error",
+          content: "Network error - please check your connection",
+          duration: 1,
+        });
         // if anything else happened
       } else {
-        setErrorMessage("Invalid Credentials");
+        messageApi.open({
+          type: "error",
+          content: "Invalid Credentials",
+          duration: 1,
+        });
       }
       console.error("Login error:", error);
 
@@ -133,44 +174,35 @@ function AuthPages() {
   };
 
   return (
-    <div className="auth-container">
-      <header className="auth-header">
-        <nav className="auth-navbar">
-          <RiTodoLine className="auth-logo" />
-          <h3 className="auth-text-logo">Act Don't React</h3>
-        </nav>
-      </header>
+    <>
+      {contextHolder}
+      <div className="auth-container">
+        <header className="auth-header">
+          <nav className="auth-navbar">
+            <RiTodoLine className="auth-logo" />
+            <h3 className="auth-text-logo">Act Don't React</h3>
+          </nav>
+        </header>
 
-      <div className="greetings">
-        <h2>Welcome To Act Don't React</h2>
-        <h3>A new way to write TODOs.</h3>
-      </div>
+        <div className="greetings">
+          <h2>Welcome To Act Don't React</h2>
+          <h3>A new way to write TODOs.</h3>
+        </div>
 
-      <div className="whole-form">
-        {/* // ternary operation --> either for login / registration */}
-        {isLoginPage ? (
-          // login page
-          <>
+        <div className="whole-form">
+          {/* // ternary operation --> either for login / registration */}
+          {isLoginPage ? (
+            // login page
             <div className="login-form">
               <Form layout="vertical" onFinish={handleLogin}>
-                {/* display a little error message */}
-                {errorMessage && (
-                  <div
-                    className="error-message"
-                    style={{
-                      color: "red",
-                      marginBottom: "15px",
-                      textAlign: "center",
-                    }}
-                  >
-                    {errorMessage}
-                  </div>
-                )}
                 {/* username input */}
                 <Form.Item
                   name="username"
                   rules={[
-                    { required: true, message: "Please enter your username." },
+                    {
+                      required: true,
+                      message: "Please enter your username.",
+                    },
                   ]}
                 >
                   <Input placeholder="John Doe" size="large" />
@@ -211,103 +243,92 @@ function AuthPages() {
                 </span>
               </p>
             </div>
-          </>
-        ) : (
-          // registration page
-          <>
-            <div className="register-form">
-              <Form layout="vertical" onFinish={handleRegister}>
-                {/* Error message display */}
-                {errorMessage && (
-                  <div
-                    className="error-message"
-                    style={{
-                      color: "red",
-                      marginBottom: "15px",
-                      textAlign: "center",
+          ) : (
+            // registration page
+            <>
+              <div className="register-form">
+                <Form layout="vertical" onFinish={handleRegister}>
+                  {/* username input */}
+                  <Form.Item
+                    name="username"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your username.",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="John Doe" size="large" />
+                  </Form.Item>
+
+                  {/* email input */}
+                  <Form.Item
+                    name="email"
+                    rules={[
+                      { required: true, message: "Please enter your email." },
+                      { type: "email", message: "Please enter a valid email." },
+                    ]}
+                  >
+                    <Input placeholder="johndoe@email.com" size="large" />
+                  </Form.Item>
+
+                  {/* gender input / selection */}
+                  <Form.Item
+                    name="gender"
+                    rules={[
+                      { required: true, message: "Please enter your gender." },
+                    ]}
+                  >
+                    <Select placeholder="Select Gender" size="large">
+                      <Select.Option value="male">Male</Select.Option>
+                      <Select.Option value="female">Female</Select.Option>
+                    </Select>
+                  </Form.Item>
+
+                  {/* password input */}
+                  <Form.Item
+                    name="password"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Enter You Your Password",
+                      },
+                    ]}
+                  >
+                    <Input.Password placeholder="Password" size="large" />
+                  </Form.Item>
+
+                  {/* NOTE: `block` makes it take the whole width */}
+                  <Button
+                    className="register-button"
+                    type="primary"
+                    htmlType="submit"
+                    block
+                    size="large"
+                    loading={loading}
+                  >
+                    Sign Up
+                  </Button>
+                </Form>
+
+                {/* if the user does not have an account */}
+                <p className="auth-switch">
+                  Already have an account?{" "}
+                  <span
+                    className="auth-link"
+                    onClick={() => {
+                      setToLoginPage(true);
                     }}
                   >
-                    {errorMessage}
-                  </div>
-                )}
-                {/* username input */}
-                <Form.Item
-                  name="username"
-                  rules={[
-                    { required: true, message: "Please enter your username." },
-                  ]}
-                >
-                  <Input placeholder="John Doe" size="large" />
-                </Form.Item>
-
-                {/* email input */}
-                <Form.Item
-                  name="email"
-                  rules={[
-                    { required: true, message: "Please enter your email." },
-                    { type: "email", message: "Please enter a valid email." },
-                  ]}
-                >
-                  <Input placeholder="johndoe@email.com" size="large" />
-                </Form.Item>
-
-                {/* gender input / selection */}
-                <Form.Item
-                  name="gender"
-                  rules={[
-                    { required: true, message: "Please enter your gender." },
-                  ]}
-                >
-                  <Select placeholder="Select Gender" size="large">
-                    <Select.Option value="male">Male</Select.Option>
-                    <Select.Option value="female">Female</Select.Option>
-                  </Select>
-                </Form.Item>
-
-                {/* password input */}
-                <Form.Item
-                  name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Enter You Your Password",
-                    },
-                  ]}
-                >
-                  <Input.Password placeholder="Password" size="large" />
-                </Form.Item>
-
-                {/* NOTE: `block` makes it take the whole width */}
-                <Button
-                  className="register-button"
-                  type="primary"
-                  htmlType="submit"
-                  block
-                  size="large"
-                  loading={loading}
-                >
-                  Sign Up
-                </Button>
-              </Form>
-
-              {/* if the user does not have an account */}
-              <p className="auth-switch">
-                Already have an account?{" "}
-                <span
-                  className="auth-link"
-                  onClick={() => {
-                    setToLoginPage(true);
-                    setErrorMessage("");
-                  }}
-                >
-                  Login Here!
-                </span>
-              </p>
-            </div>
-          </>
-        )}
+                    Login Here!
+                  </span>
+                </p>
+              </div>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

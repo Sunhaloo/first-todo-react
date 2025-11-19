@@ -58,7 +58,7 @@ const getTodos = async (req, res) => {
     // get all of the TODO items from the database for that user in descending order of creation date
     const todos = await db("todo")
       .where({ user_id: userId })
-      .orderBy("created_at", "desc");
+      .orderBy("created_at", "asc");
 
     // get the data to the user with / using 'JSON'
     res.json({
