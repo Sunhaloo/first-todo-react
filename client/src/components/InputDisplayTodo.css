@@ -96,3 +96,57 @@
 .todo-modal-cancel-button {
   margin-left: 0.5rem;
 }
+
+@media (max-width: 968px) {
+  .todo-category {
+    margin: 0.25rem 0rem 0.7rem 0rem;
+    width: 20%;
+  }
+
+  .todo-submit-button {
+    width: 90%;
+    height: 90%;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .todo-category {
+    margin: 0.25rem 0rem 0.7rem 0rem;
+    width: 20%;
+  }
+
+  .todo-submit-button {
+    width: 95%;
+    height: 95%;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .todo-category {
+    margin: 0.25rem 0rem 0.7rem 0rem;
+    width: 28%;
+  }
+
+  .todo-submit-button {
+    margin-top: 0.15rem;
+    width: 90%;
+    height: 90%;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .todo-category {
+    margin: 0.25rem 0rem 0.7rem 0rem;
+    width: 38%;
+  }
+
+  .todo-submit-button {
+    margin-top: 0.15rem;
+    width: 85%;
+    height: 85%;
+    font-size: 0.85rem;
+  }
+}
