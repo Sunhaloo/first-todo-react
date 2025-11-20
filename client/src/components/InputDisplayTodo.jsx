@@ -53,6 +53,11 @@ function InputDisplayTodo() {
   // declare variable to hold the maximum length of TODO "input"
   const maxLengthInput = 50;
 
+  // Helper function to find the Miscellaneous category if it exists
+  const getMiscellaneousCategory = () => {
+    return categories.find((cat) => cat === "Miscellaneous");
+  };
+
   // function that is going to fetch available categories from the server
   const fetchCategories = async () => {
     try {
@@ -118,6 +123,22 @@ function InputDisplayTodo() {
   useEffect(() => {
     fetchAllTodos();
     fetchCategories();
+  });
+
+  // set default category to 'Miscellaneous' after categories are loaded
+  useEffect(() => {
+    if (categories.length > 0) {
+      // only set the default if the field hasn't been set by user interaction
+      const categoryFieldValue = form.getFieldValue("category");
+      if (categoryFieldValue === undefined) {
+        const miscellaneousCategory = getMiscellaneousCategory();
+        if (miscellaneousCategory) {
+          form.setFieldsValue({ category: miscellaneousCategory });
+        } else {
+          form.setFieldsValue({ category: categories[0] });
+        }
+      }
+    }
   });
 
   // Update the editing form when editingTodo changes
@@ -341,8 +362,7 @@ function InputDisplayTodo() {
               layout="vertical"
               onFinish={handleCreateTodo}
               initialValues={{
-                category:
-                  categories.length > 0 ? categories[7] : "Miscellaneous",
+                category: undefined,
               }}
             >
               <Form.Item
