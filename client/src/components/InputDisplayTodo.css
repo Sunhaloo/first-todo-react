@@ -99,6 +99,12 @@
   box-shadow: none;
 }
 
+.gradient-button-icon {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
 .todo-edit-button {
   margin-right: 0.25rem;
   width: 3.8rem;
@@ -110,7 +116,6 @@
 
 .todo-submit-button {
   margin-top: 0.75rem;
-  /* margin: 0.75rem 0rem 0rem 10rem; */
   width: auto;
   max-width: 100%;
 }
@@ -123,37 +128,10 @@
   height: 100%;
 }
 
-.todo-modal-cancel-button {
-}
-
 .todo-modal-buttons-container {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-}
-
-@media (max-width: 968px) {
-  .todo-modal-cancel-button {
-    margin-left: 0;
-  }
-}
-
-@media (max-width: 768px) {
-  .todo-modal-cancel-button {
-    margin-left: 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .todo-modal-cancel-button {
-    margin-left: 0;
-  }
-}
-
-@media (max-width: 375px) {
-  .todo-modal-cancel-button {
-    margin-left: 0;
-  }
 }
 
 @media (max-width: 968px) {
@@ -163,8 +141,9 @@
   }
 
   .todo-submit-button {
-    width: 90%;
-    height: 90%;
+    width: auto;
+    max-width: 100%;
+    height: auto;
     font-size: 0.9rem;
   }
 }
@@ -176,8 +155,9 @@
   }
 
   .todo-submit-button {
-    width: 95%;
-    height: 95%;
+    width: auto;
+    max-width: 100%;
+    height: auto;
     font-size: 0.9rem;
   }
 
@@ -193,9 +173,9 @@
   }
 
   .todo-submit-button {
-    margin-top: 0.15rem;
-    width: 90%;
-    height: 90%;
+    width: auto;
+    max-width: 100%;
+    height: auto;
     font-size: 0.9rem;
   }
 
@@ -211,32 +191,13 @@
   }
 
   .todo-submit-button {
-    margin-top: 0.15rem;
-    width: 85%;
-    height: 85%;
+    width: auto;
+    max-width: 100%;
+    height: auto;
     font-size: 0.85rem;
   }
 
   .todo-modal-cancel-button {
     margin-left: 6.5rem;
-  }
-}
-
-.gradient-button-icon {
-  margin-right: 8px;
-  display: flex;
-  align-items: center;
-}
-
-@media (max-width: 768px) {
-  .todo-submit-button {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .todo-submit-button {
-    width: 100%;
-    font-size: 0.9rem;
   }
 }
