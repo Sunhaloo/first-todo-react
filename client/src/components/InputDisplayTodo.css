@@ -72,6 +72,12 @@
   min-width: fit-content;
 }
 
+.todo-created-at {
+  border: 1px solid var(--selection-foreground);
+  background: none;
+  color: var(--selection-foreground);
+}
+
 .todo-category.completed,
 .todo-created-at.completed {
   background: none;
@@ -104,7 +110,12 @@
 
 .todo-submit-button {
   margin-top: 0.75rem;
+  /* margin: 0.75rem 0rem 0rem 10rem; */
   width: 100%;
+}
+
+.todo-submit-button-container {
+  text-align: right;
 }
 
 .todo-modal-update-button {

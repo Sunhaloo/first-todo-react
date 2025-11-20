@@ -407,12 +407,14 @@ function InputDisplayTodo() {
               </Form.Item>
 
               {/* button that will send the data to the database through the `api.js` services */}
-              <GradientButton
-                className="todo-submit-button"
-                text="Add"
-                htmlType="submit"
-                disabled={todoCreateLoading}
-              />
+              <Form.Item className="todo-submit-button-container">
+                <GradientButton
+                  className="todo-submit-button"
+                  text="Add"
+                  htmlType="submit"
+                  disabled={todoCreateLoading}
+                />
+              </Form.Item>
             </Form>
           </Card>
         </div>
