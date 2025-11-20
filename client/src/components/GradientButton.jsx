@@ -1,5 +1,5 @@
 // import the required components from 'antd'
-import { Button, ConfigProvider, Space } from "antd";
+import { Button, ConfigProvider } from "antd";
 
 // import the `createStyles` hook from 'antd-style'
 import { createStyles } from "antd-style";
@@ -9,8 +9,12 @@ const useStyle = createStyles(({ prefixCls, css }) => ({
     &.${prefixCls}-btn-primary:not([disabled]):not(
         .${prefixCls}-btn-dangerous
       ) {
-      > span {
+      & > span {
         position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       &::before {
@@ -21,6 +25,7 @@ const useStyle = createStyles(({ prefixCls, css }) => ({
         opacity: 1;
         transition: all 0.3s;
         border-radius: inherit;
+        z-index: 0;
       }
 
       &:hover::before {
@@ -30,7 +35,7 @@ const useStyle = createStyles(({ prefixCls, css }) => ({
   `,
 }));
 
-function GradientButton({ text, ...props }) {
+function GradientButton({ text, icon, ...props }) {
   const { styles } = useStyle();
 
   return (
@@ -39,11 +44,10 @@ function GradientButton({ text, ...props }) {
         className: styles.linearGradientButton,
       }}
     >
-      <Space>
-        <Button type="primary" size="large" {...props}>
-          {text}
-        </Button>
-      </Space>
+      <Button type="primary" size="middle" {...props}>
+        {icon && <span className="gradient-button-icon">{icon}</span>}
+        {text}
+      </Button>
     </ConfigProvider>
   );
 }

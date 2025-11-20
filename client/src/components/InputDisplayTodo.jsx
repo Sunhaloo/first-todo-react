@@ -30,6 +30,9 @@ import {
   message,
 } from "antd";
 
+// import icons from react-icons
+import { FiPlus, FiCheck } from "react-icons/fi";
+
 // add the required styling to style input and display
 import "./InputDisplayTodo.css";
 
@@ -411,6 +414,7 @@ function InputDisplayTodo() {
                 <GradientButton
                   className="todo-submit-button"
                   text="Add"
+                  icon={<FiPlus />}
                   htmlType="submit"
                   disabled={todoCreateLoading}
                 />
@@ -562,11 +566,6 @@ function InputDisplayTodo() {
 
                 <Form.Item>
                   <div className="todo-modal-buttons-container">
-                    <GradientButton
-                      className="todo-modal-update-button"
-                      text="Update"
-                      htmlType="submit"
-                    />
                     <Button
                       className="todo-modal-cancel-button"
                       onClick={() => {
@@ -582,6 +581,12 @@ function InputDisplayTodo() {
                     >
                       Cancel
                     </Button>
+                    <GradientButton
+                      className="todo-modal-update-button"
+                      text="Update"
+                      icon={<FiCheck />}
+                      htmlType="submit"
+                    />
                   </div>
                 </Form.Item>
               </Form>
