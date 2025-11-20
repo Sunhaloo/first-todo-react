@@ -124,14 +124,14 @@
   text-align: right;
 }
 
-.todo-modal-update-button {
-  height: 100%;
-}
-
 .todo-modal-buttons-container {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 0.5rem;
+}
+
+.todo-modal-update-button {
+  height: 100%;
 }
 
 @media (max-width: 968px) {
@@ -182,6 +182,11 @@
   .todo-modal-cancel-button {
     margin-left: 13.1rem;
   }
+
+  .todo-edit-button {
+    display: inline-block;
+    margin-left: 13rem;
+  }
 }
 
 @media (max-width: 375px) {
@@ -198,6 +203,11 @@
   }
 
   .todo-modal-cancel-button {
+    margin-left: 6.5rem;
+  }
+
+  .todo-edit-button {
+    display: inline-block;
     margin-left: 6.5rem;
   }
 }
