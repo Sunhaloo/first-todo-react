@@ -561,26 +561,28 @@ function InputDisplayTodo() {
                 </Form.Item>
 
                 <Form.Item>
-                  <GradientButton
-                    className="todo-modal-update-button"
-                    text="Update"
-                    htmlType="submit"
-                  />
-                  <Button
-                    className="todo-modal-cancel-button"
-                    onClick={() => {
-                      messageApi.open({
-                        type: "warning",
-                        content: "Todo updated cancelled!",
-                        duration: 1,
-                      });
-                      setIsModalVisible(false);
-                      setEditingTodo(null);
-                      editingForm.resetFields();
-                    }}
-                  >
-                    Cancel
-                  </Button>
+                  <div className="todo-modal-buttons-container">
+                    <GradientButton
+                      className="todo-modal-update-button"
+                      text="Update"
+                      htmlType="submit"
+                    />
+                    <Button
+                      className="todo-modal-cancel-button"
+                      onClick={() => {
+                        messageApi.open({
+                          type: "warning",
+                          content: "Todo updated cancelled!",
+                          duration: 1,
+                        });
+                        setIsModalVisible(false);
+                        setEditingTodo(null);
+                        editingForm.resetFields();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
                 </Form.Item>
               </Form>
             </Modal>
