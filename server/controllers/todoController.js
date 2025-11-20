@@ -1,5 +1,7 @@
 // import the "database connection"
 const db = require("../db/knex");
+
+// import the `TODO_CATEGORIES` list
 const { TODO_CATEGORIES } = require("../config/categories");
 
 // function to be able to create a new 'TODO' item

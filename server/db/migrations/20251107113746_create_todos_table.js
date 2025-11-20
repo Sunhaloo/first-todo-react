@@ -1,3 +1,4 @@
+// import the 'categories' list
 const { TODO_CATEGORIES } = require("../../config/categories");
 
 /**

@@ -342,7 +342,7 @@ function InputDisplayTodo() {
               onFinish={handleCreateTodo}
               initialValues={{
                 category:
-                  categories.length > 0 ? categories[0] : "Miscellaneous",
+                  categories.length > 0 ? categories[7] : "Miscellaneous",
               }}
             >
               <Form.Item

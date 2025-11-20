@@ -17,4 +17,3 @@ const TODO_CATEGORIES = [
 module.exports = {
   TODO_CATEGORIES,
 };
-
