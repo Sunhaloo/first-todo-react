@@ -188,6 +188,7 @@ function AuthPages() {
                 {/* username input */}
                 <Form.Item
                   name="username"
+                  label="Username"
                   rules={[
                     {
                       required: true,
@@ -195,11 +196,12 @@ function AuthPages() {
                     },
                   ]}
                 >
-                  <Input placeholder="John Doe" size="large" />
+                  <Input placeholder="Enter Username" size="large" />
                 </Form.Item>
                 {/* password input */}
                 <Form.Item
                   name="password"
+                  label="Password"
                   rules={[
                     {
                       required: true,
@@ -207,7 +209,7 @@ function AuthPages() {
                     },
                   ]}
                 >
-                  <Input.Password placeholder="Password" size="large" />
+                  <Input.Password placeholder="Enter Password" size="large" />
                 </Form.Item>
                 {/* NOTE: `block` makes it take the whole width */}
                 <Button
@@ -241,6 +243,7 @@ function AuthPages() {
                   {/* username input */}
                   <Form.Item
                     name="username"
+                    label="Username"
                     rules={[
                       {
                         required: true,
@@ -248,40 +251,29 @@ function AuthPages() {
                       },
                     ]}
                   >
-                    <Input placeholder="John Doe" size="large" />
+                    <Input placeholder="Enter Username" size="large" />
                   </Form.Item>
 
                   {/* email input */}
                   <Form.Item
                     name="email"
+                    label="Email"
                     rules={[
                       { required: true, message: "Please enter your email." },
                       { type: "email", message: "Please enter a valid email." },
                     ]}
                   >
-                    <Input placeholder="johndoe@email.com" size="large" />
-                  </Form.Item>
-
-                  {/* gender input / selection */}
-                  <Form.Item
-                    name="gender"
-                    rules={[
-                      { required: true, message: "Please enter your gender." },
-                    ]}
-                  >
-                    <Select placeholder="Select Gender" size="large">
-                      <Select.Option value="male">Male</Select.Option>
-                      <Select.Option value="female">Female</Select.Option>
-                    </Select>
+                    <Input placeholder="Enter Email" size="large" />
                   </Form.Item>
 
                   {/* password input */}
                   <Form.Item
                     name="password"
+                    label="Password"
                     rules={[
                       {
                         required: true,
-                        message: "Please Enter You Your Password",
+                        message: "Please Enter Your Password",
                       },
                     ]}
                   >

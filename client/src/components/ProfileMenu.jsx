@@ -1,6 +1,7 @@
 // import the required hooks from 'react' library
 import { useEffect, useRef, useState } from "react";
 
+// import the Button component from 'antd'
 import { Button } from "antd";
 
 // import the `useAuth` function from `AuthContext.jsx`
@@ -9,9 +10,6 @@ import { useAuth } from "../contexts/AuthContext";
 // import the `useNavigate` component from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
 
-// import the custom hook
-import { useMediaQuery } from "../hooks/useMediaQuery.js";
-
 // import the required image from the `assets` folder
 import profilePicture from "../assets/images/profile-picture-icon.jpg";
 
@@ -19,9 +17,6 @@ import profilePicture from "../assets/images/profile-picture-icon.jpg";
 import "./ProfileMenu.css";
 
 function ProfileMenu({ className, ...props }) {
-  // declare variable to check if user is on desktop computer or any larger screen devices
-  const isDesktop = useMediaQuery("(min-width: 769px)");
-
   // get the `logout` function
   const { logout } = useAuth();
 
@@ -35,20 +30,6 @@ function ProfileMenu({ className, ...props }) {
 
     // go back to the login - register page
     navigate("/");
-  };
-
-  // function to be able to toggle the whole width of the page
-  const handleWidthToggle = () => {
-    // current value of `--page-width` variable
-    const currentWidth = getComputedStyle(document.documentElement)
-      .getPropertyValue("--page-width")
-      .trim();
-
-    // compare current value to "set" value ( by first setting the initial value with `currentWidth`)
-    const setWidth = currentWidth === "100%" ? "80%" : "100%";
-
-    // change the value of the width by setting the new value
-    document.documentElement.style.setProperty("--page-width", setWidth);
   };
 
   // declare variable that is going to handle the "custom" `className`
@@ -79,8 +60,7 @@ function ProfileMenu({ className, ...props }) {
     <div
       className={customClassName}
       ref={containerRef}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onClick={() => setOpen(!open)}
       {...props}
     >
       <img
@@ -93,22 +73,6 @@ function ProfileMenu({ className, ...props }) {
       {open && (
         <div className="profile-menu-card">
           <ul>
-            {/* Toggle Width - only on desktop */}
-            {isDesktop && (
-              <li>
-                <Button
-                  onClick={() => {
-                    handleWidthToggle();
-                    setOpen(false);
-                  }}
-                  type="text"
-                >
-                  Toggle Width
-                </Button>
-              </li>
-            )}
-
-            {/* Logout - always visible */}
             <li>
               <Button
                 onClick={() => {

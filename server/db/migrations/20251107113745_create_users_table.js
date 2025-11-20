@@ -11,8 +11,6 @@ exports.up = function (knex) {
     table.string("username", 50).notNullable().unique();
     table.string("email", 100).notNullable().unique();
     table.string("password").notNullable();
-    table.enu("gender", ["male", "female"]).notNullable();
-
     // add time stamps of when created / updated
     table.timestamps(true, true);
   });

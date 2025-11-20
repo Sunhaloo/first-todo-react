@@ -118,7 +118,7 @@ function InputDisplayTodo() {
   useEffect(() => {
     fetchAllTodos();
     fetchCategories();
-  }, []);
+  });
 
   // Update the editing form when editingTodo changes
   useEffect(() => {
@@ -389,7 +389,7 @@ function InputDisplayTodo() {
               {/* button that will send the data to the database through the `api.js` services */}
               <GradientButton
                 className="todo-submit-button"
-                text="Add TODO"
+                text="Add"
                 htmlType="submit"
                 disabled={todoCreateLoading}
               />
@@ -541,7 +541,7 @@ function InputDisplayTodo() {
                 <Form.Item>
                   <GradientButton
                     className="todo-modal-update-button"
-                    text="Update TODO"
+                    text="Update"
                     htmlType="submit"
                   />
                   <Button

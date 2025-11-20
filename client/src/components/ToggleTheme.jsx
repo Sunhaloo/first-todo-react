@@ -7,6 +7,9 @@ import { useTheme } from "../contexts/ThemeContext";
 // import icons from 'react-icons' ( "ai" ) library
 import { AiFillMoon, AiFillSun } from "react-icons/ai";
 
+// import the gradient button component ( see official docs ) from 'antd'
+import GradientButton from "./GradientButton";
+
 // add the required styling to toggle theme button
 import "./ToggleTheme.css";
 
@@ -22,17 +25,15 @@ function ToggleTheme({ className }) {
 
   // the actual component that is going to be returned
   return (
-    <Button
+    <GradientButton
       // implement the "custom" 'antd' class name
       className={`theme-toggle-button ${className || ""}`.trim()}
       onClick={handleToggleTheme}
-      icon={theme === "light" ? <AiFillSun /> : <AiFillMoon />}
+      icon={theme === "light" ? <AiFillMoon /> : <AiFillSun />}
       type="primary"
       size="large"
-    >
-      {/* "write" 'Light' when on light theme and vice versa ( for dark theme ) */}
-      {theme === "light" ? "Light" : "Dark"}
-    </Button>
+      text={theme === "light" ? "Dark" : "Light"}
+    />
   );
 }
 

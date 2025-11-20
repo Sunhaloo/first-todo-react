@@ -9,10 +9,10 @@ const db = require("../db/knex");
 const register = async (req, res) => {
   try {
     // get the crendentials from the 'JSON' body
-    const { username, email, password, gender } = req.body;
+    const { username, email, password } = req.body;
 
     // if the credentials are not valid
-    if (!username || !email || !password || !gender) {
+    if (!username || !email || !password) {
       return res.status(400).json({
         error: "All fields are required",
       });
@@ -39,7 +39,6 @@ const register = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      gender,
     });
 
     // create the digital token ( "security badge" ) for the user
@@ -56,7 +55,6 @@ const register = async (req, res) => {
         id: userId,
         username,
         email,
-        gender,
       },
     });
 
@@ -120,7 +118,6 @@ const login = async (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
-        gender: user.gender,
       },
     });
 

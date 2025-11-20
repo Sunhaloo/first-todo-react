@@ -9,7 +9,7 @@ const getUserProfile = async (req, res) => {
 
     // get the user's profile from the database
     const userProfile = await db("user")
-      .select("id", "username", "gender", "created_at")
+      .select("id", "username", "created_at")
       .where({ id: userId })
       .first();
 
