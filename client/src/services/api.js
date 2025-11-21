@@ -31,7 +31,7 @@ api.interceptors.request.use(
 // register a new user ( endpoint )
 export const register = async (userData) => {
   try {
-    const response = await api.post("/auth/register", userData);
+    const response = await api.post(`${API_BASE_URL}/auth/register`, userData);
     return response.data;
   } catch (error) {
     throw error.response?.data || { error: "Registration failed" };
@@ -42,7 +42,7 @@ export const register = async (userData) => {
 // NOTE: the `crendentials` parameters is basically the 'JSON' object
 export const login = async (credentials) => {
   try {
-    const response = await api.post("/auth/login", credentials);
+    const response = await api.post(`${API_BASE_URL}/auth/login`, credentials);
     return response.data;
   } catch (error) {
     throw error.response?.data || { error: "Login failed" };
