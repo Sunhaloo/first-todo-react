@@ -24,16 +24,14 @@ const createTodo = async (req, res) => {
     // INFO: no need to validate the 'category' / 'completed' as it's going to be defaulted to 'Miscellaneous'!
 
     // insert the new TODO item into the database
-    const [todoId] = await db("todo").insert({
-      user_id: userId,
-      description,
-      category: category || "Miscellaneous",
-      completed: false,
-    });
-
-    // get the `id` of the newly created TODO item
-    // INFO: the `.first` function / method is going to only get the "first" data
-    const newTodo = await db("todo").where({ id: todoId }).first();
+    const [newTodo] = await db("todo")
+      .insert({
+        user_id: userId,
+        description,
+        category: category || "Miscellaneous",
+        completed: false,
+      })
+      .returning("*");
 
     // if user has been able to successfully create / 'POST' TODO item on server
     // NOTE: status code = '201' ==> creation of a new resource on server
@@ -110,8 +108,11 @@ const updateTodo = async (req, res) => {
     // update the TODO item in the database
     await db("todo").where({ id: todoId }).update(updateData);
 
-    // get the `id` of the updated TODO item
-    const updatedTodo = await db("todo").where({ id: todoId }).first();
+    // get the update and return query in one object
+    const [updatedTodo] = await db("todo")
+      .where({ id: todoId })
+      .update(updateData)
+      .returning("*");
 
     // simply return a little success message
     res.json({

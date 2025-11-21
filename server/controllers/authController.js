@@ -35,11 +35,16 @@ const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // if user does not exists and all inputs are inserted correctly ==> add the user to database
-    const [userId] = await db("user").insert({
-      username,
-      email,
-      password: hashedPassword,
-    });
+    const [result] = await db("user")
+      .insert({
+        username,
+        email,
+        password: hashedPassword,
+      })
+      .returning("*");
+
+    // get the 'ID' from the returning result
+    const userId = result.id;
 
     // create the digital token ( "security badge" ) for the user
     const token = jwt.sign({ userId, username }, process.env.JWT_SECRET, {
