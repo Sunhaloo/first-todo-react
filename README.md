@@ -1,2 +1,1 @@
-# todo
-TODO App in React
+# First TODO React Application
