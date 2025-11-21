@@ -1,8 +1,9 @@
 // import the 'axios' library to connect front-end to back-end
 import axios from "axios";
 
-// our base URL for the back-end ( API )
-const API_BASE_URL = "http://localhost:5000/api";
+// our base URL for the back-end ( API ) --> "vercel" backend + localhost
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 // create axios instance with default configuration
 const api = axios.create({
