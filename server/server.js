@@ -17,7 +17,17 @@ const PORT = process.env.PORT || 5000;
 
 // define the middleware with 'cors'
 // NOTE: the function that is going to allow front-end to talk with back-end
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://first-todo-react-dstv.vercel.app/",
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 
 // convert front-end data into JS object
 app.use(express.json());
