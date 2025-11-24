@@ -126,7 +126,7 @@ function InputDisplayTodo() {
   useEffect(() => {
     fetchAllTodos();
     fetchCategories();
-  });
+  }, []);
 
   // set default category to 'Miscellaneous' after categories are loaded
   useEffect(() => {
