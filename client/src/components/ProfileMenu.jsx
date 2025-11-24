@@ -128,6 +128,7 @@ function ProfileMenu({ className, ...props }) {
         onCancel={() => setShowDeleteModal(false)}
         okText="Yes, Delete"
         cancelText="No, Cancel"
+        cancelButtonProps={{ type: "primary" }}
         okButtonProps={{ danger: true }}
       >
         <p>

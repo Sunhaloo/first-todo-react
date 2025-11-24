@@ -51,10 +51,10 @@ function InputDisplayTodo() {
   const [messageApi, contextHolder] = message.useMessage();
   const [categories, setCategories] = useState([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
-  const pageSize = 8;
+  const pageSize = 10;
 
   // declare variable to hold the maximum length of TODO "input"
-  const maxLengthInput = 50;
+  const maxLengthInput = 75;
 
   // Helper function to find the Miscellaneous category if it exists
   const getMiscellaneousCategory = () => {
