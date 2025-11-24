@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 
 // import the required components from 'antd'
-import { Button } from "antd";
+import { Button, Modal } from "antd";
 
 // import the `useAuth` function from `AuthContext.jsx`
 import { useAuth } from "../contexts/AuthContext";
@@ -55,6 +55,7 @@ function ProfileMenu({ className, ...props }) {
   // declare variable that is going to handle the "custom" `className`
   const customClassName = `profile-menu-component ${className || ""}`.trim();
   const [open, setOpen] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // create a reference to the whole container
   const containerRef = useRef(null);
@@ -107,7 +108,7 @@ function ProfileMenu({ className, ...props }) {
             <li>
               <Button
                 onClick={() => {
-                  handleDelete();
+                  setShowDeleteModal(true);
                   setOpen(false);
                 }}
                 type="text"
@@ -119,6 +120,21 @@ function ProfileMenu({ className, ...props }) {
           </ul>
         </div>
       )}
+
+      <Modal
+        title="Confirm Account Deletion"
+        open={showDeleteModal}
+        onOk={handleDelete}
+        onCancel={() => setShowDeleteModal(false)}
+        okText="Yes, Delete"
+        cancelText="No, Cancel"
+        okButtonProps={{ danger: true }}
+      >
+        <p>
+          Are you sure you want to delete your account? This action cannot be
+          undone and all your data will be permanently removed.
+        </p>
+      </Modal>
     </div>
   );
 }
