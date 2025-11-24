@@ -1,11 +1,14 @@
 // import the required hooks from 'react' library
 import { useEffect, useRef, useState } from "react";
 
-// import the Button component from 'antd'
+// import the required components from 'antd'
 import { Button } from "antd";
 
 // import the `useAuth` function from `AuthContext.jsx`
 import { useAuth } from "../contexts/AuthContext";
+
+// import the API function that will talk to back-end
+import { deleteUser } from "../services/api.js";
 
 // import the `useNavigate` component from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
@@ -30,6 +33,23 @@ function ProfileMenu({ className, ...props }) {
 
     // go back to the login - register page
     navigate("/");
+  };
+
+  // function to be able to delete the user's account
+  const handleDelete = async () => {
+    try {
+      // call the function to be able to delete the user account
+      await deleteUser();
+
+      // log the user out
+      logout();
+
+      // go back to the login - register page
+      navigate("/");
+    } catch (error) {
+      // log the error to the console
+      console.error(`Failed to delete account`, error);
+    }
   };
 
   // declare variable that is going to handle the "custom" `className`
@@ -80,9 +100,20 @@ function ProfileMenu({ className, ...props }) {
                   setOpen(false);
                 }}
                 type="text"
-                danger
               >
                 Logout
+              </Button>
+            </li>
+            <li>
+              <Button
+                onClick={() => {
+                  handleDelete();
+                  setOpen(false);
+                }}
+                type="text"
+                danger
+              >
+                Delete Account
               </Button>
             </li>
           </ul>

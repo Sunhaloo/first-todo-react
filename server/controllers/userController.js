@@ -42,7 +42,37 @@ const getUserProfile = async (req, res) => {
   }
 };
 
+// asynchronous function that will be used to delete user profile entirely
+const deleteAccount = async (req, res) => {
+  try {
+    // get the crendentials from the 'JSON' body
+    const userId = req.user.userId;
+
+    // check if the user already exists
+    const existingUser = await db("user").where({ id: userId }).first();
+
+    if (!existingUser) {
+      return res.status(400).json({
+        error: "Username or email does not exists",
+      });
+    }
+
+    // delete the user from the database
+    await db("user").where({ id: userId }).del();
+
+    res.json({
+      message: "User profile successfully deleted",
+    });
+  } catch (error) {
+    console.error("Deletion error:", error);
+    res.status(500).json({
+      error: "Server error during deletion",
+    });
+  }
+};
+
 // export the function to be used by others
 module.exports = {
   getUserProfile,
+  deleteAccount,
 };

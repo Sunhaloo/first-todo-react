@@ -9,5 +9,8 @@ const { authenticateToken } = require("../middleware/authMiddleware");
 // get the user profile details
 router.get("/", authenticateToken, userController.getUserProfile);
 
+// delete the user from the database
+router.delete("/", authenticateToken, userController.deleteAccount);
+
 // export the actual routes ( `/api/user/{functionName}` )
 module.exports = router;

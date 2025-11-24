@@ -49,6 +49,16 @@ export const login = async (credentials) => {
   }
 };
 
+// delete an existing user ( endpoint )
+export const deleteUser = async () => {
+  try {
+    const response = await api.delete("/user");
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Deletion of account failed" };
+  }
+};
+
 // get all TODOs for logged-in user ( endpoint )
 export const getTodos = async () => {
   try {
