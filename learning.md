@@ -87,7 +87,7 @@ status: In-Progress
   - #Generate JSON Web Token Secret Key
 - ***
 
-> [!INFO] Resource(s)
+> [!NOTE] Resource(s)
 >
 > - https://knexjs.org/
 > - https://knexjs.org/guide/#configuration-options
@@ -118,7 +118,7 @@ status: In-Progress
 > - Weather
 > - AI Chatbot
 
-> [!INFO] Software and Tools
+> [!NOTE] Software and Tools
 >
 > - React and Vite with 'JSX'
 >   - Designs from '[Ant Design](https://ant.design/)'
@@ -175,7 +175,7 @@ npm install express knex sqlite3 cors dotenv
 npm install --save-dev nodemon
 ```
 
-> [!INFO] What did we install?
+> [!NOTE] What did we install?
 >
 > - `express`: Web framework for API building
 > - `knex`: The object relational mapping --> ORM builder
@@ -184,7 +184,7 @@ npm install --save-dev nodemon
 > - `dotenv`: Loading of environment variable from file
 > - `nodemon`: Auto restarts back-end server when update is made ( development only )
 
-> [!INFO]
+> [!NOTE]
 >
 > After running these `npm` command, you should see that the `package.json` file gets updated!
 
@@ -208,7 +208,7 @@ node_modules/
 *.sqlite3
 ```
 
-> [!INFO] Testing
+> [!NOTE] Testing
 >
 > - Add the following code in the `server/server.js` file:
 >
@@ -303,7 +303,7 @@ cd db
 mkdir seeds
 ```
 
-> [!INFO] What is the `seeds` folder?
+> [!NOTE] What is the `seeds` folder?
 >
 > In short, its just **sample** data that we can use and play around when we are developing the application!
 >
@@ -421,7 +421,7 @@ Now, we need to actually make `sqlite` think that we are actually running these 
 npx knex migrate:latest
 ```
 
-> [!INFO] Switching Computers
+> [!NOTE] Switching Computers
 >
 > I am now at my desktop and I just clone the 'todo' repository that we are currently working on!
 >
@@ -579,7 +579,7 @@ Server running on 'http://localhost:5000'
 > > [!NOTE]
 > > I have **removed** the above _testing_ code that we just wrote... Again it was just for testing purposes!
 
-> [!INFO] What is `app.use(express.json());`?
+> [!NOTE] What is `app.use(express.json());`?
 >
 > Let's say that our user needs to enter his **username** and **password** to be able to login to the web-app.
 >
@@ -606,7 +606,7 @@ Server running on 'http://localhost:5000'
 
 > I **don't** know anything about this
 
-> [!INFO] Resource(s)
+> [!NOTE] Resource(s)
 >
 > - https://www.npmjs.com/package/bcryptjs
 > - https://www.npmjs.com/package/jsonwebtoken
@@ -801,7 +801,7 @@ module.exports = {
 };
 ```
 
-> [!INFO] What Have We Just Done?
+> [!NOTE] What Have We Just Done?
 >
 > We have just code the function that are going to be used when we go to an _endpoint_ like `/api/auth/register`. That endpoint is then going to call the `authCrontroller.register()` function which is going to allow the user to **register** for the web-app.
 >
@@ -1007,7 +1007,7 @@ if __name__ == "__main__":
 > > [!SUCCESS]-
 > > Very nice!
 
-> [!INFO] Delete `tester` User From Database
+> [!NOTE] Delete `tester` User From Database
 >
 > I am going to delete the `tester` user from or 'user' database.
 >
@@ -1033,7 +1033,7 @@ if __name__ == "__main__":
 
 ## Create Authentication Middleware
 
-> [!INFO] Resource(s)
+> [!NOTE] Resource(s)
 >
 > - https://www.redhat.com/en/topics/middleware/what-is-middleware
 >   - https://www.redhat.com/en/topics/middleware/what-is-middleware#middleware-and-apis
@@ -1120,7 +1120,7 @@ const createTodo = async (req, res) => {
       });
     }
 
-    // INFO: no need to validate the 'category' / 'completed' as it's going to be defaulted to 'Miscellaneous'!
+    // NOTE: no need to validate the 'category' / 'completed' as it's going to be defaulted to 'Miscellaneous'!
 
     // insert the new TODO item into the database
     const [todoId] = await db("todo").insert({
@@ -1131,7 +1131,7 @@ const createTodo = async (req, res) => {
     });
 
     // get the `id` of the newly created TODO item
-    // INFO: the `.first` function / method is going to only get the "first" data
+    // NOTE: the `.first` function / method is going to only get the "first" data
     const newTodo = await db("todo").where({ id: todoId }).first();
 
     // if user has been able to successfully create / 'POST' TODO item on server
@@ -1604,7 +1604,7 @@ We are going to be using Ant Design as much as possible. Therefore, there are so
 npm install antd axios
 ```
 
-> [!INFO]
+> [!NOTE]
 >
 > - `antd`: Obviously for _pre-made_ designs and templates
 > - `axios`: HTTP **client** to make _requests_ to our 'Express.js' **back-end**
@@ -1635,7 +1635,7 @@ rm App.css index.css && touch App.css index.css
 rm assets/react.svg
 
 # change directory to where the `vite.svg` file is found
-# INFO: change from current working `src/` directory to `public/` folder
+# NOTE: change from current working `src/` directory to `public/` folder
 cd ../public/
 
 # delete the unwanted asset - vite image
@@ -1687,7 +1687,7 @@ npm run dev
 mkdir context components pages services
 ```
 
-> [!INFO] What are these folders for?
+> [!NOTE] What are these folders for?
 >
 > - `context`: For global state management ( _'current' theme, 'TODOs'_ )
 > - `components`: For resuable designs / components ( _buttons, toggles_ )
@@ -1728,7 +1728,7 @@ export default App;
 
 ## Create Main 'Registration - Login' Page
 
-> [!INFO] Resource(s)
+> [!NOTE] Resource(s)
 >
 > - https://react.dev/reference/react/useState
 > - https://react.dev/learn/conditional-rendering
@@ -1739,7 +1739,7 @@ Now, we are going to be creating some **forms** later on that are going to show 
 
 ### Install React Icons
 
-> [!INFO] Resource(s)
+> [!NOTE] Resource(s)
 >
 > - https://github.com/react-icons/react-icons
 > - https://react-icons.github.io/react-icons/
@@ -1994,7 +1994,7 @@ return (
 
 # Axios API Connection
 
-> [!INFO] Resource(s)
+> [!NOTE] Resource(s)
 >
 > - https://axios-http.com/
 >   - https://axios-http.com/docs/intro
@@ -2100,7 +2100,7 @@ export const deleteTodo = async (todoId) => {
 export default api;
 ```
 
-> [!INFO] What is this doing?
+> [!NOTE] What is this doing?
 >
 > - Create an 'Axios' instance which is a pre-configured HTTP client
 > - Automatically adds the 'JSON' web token ( _if available_ )
@@ -2403,7 +2403,7 @@ import { useNavigate } from "react-router-dom";
 
 #### Using Context To Solve The `window.location.reload()` Issue
 
-> [!INFO] Resource(s)
+> [!NOTE] Resource(s)
 >
 > - https://react.dev/reference/react/useContext
 > - https://legacy.reactjs.org/docs/context.html ( "_deprecated_" )
@@ -3005,7 +3005,7 @@ git push -u origin test
 
 > Not the guy that delivers your letters!
 
-> [!INFO] Resource(s)
+> [!NOTE] Resource(s)
 >
 > - https://www.postman.com/
 
@@ -3053,7 +3053,7 @@ Let us say that we now want to know the 'JSON' output that we get when the `test
   }
   ```
 
-> [!INFO]- We are going to be using that `token`!
+> [!NOTE]- We are going to be using that `token`!
 >
 > We are going to be using this very `token` value that we got:
 >
@@ -3338,7 +3338,7 @@ return (
 
 # Create Profile Picture - Drop Down Menu Component
 
-> [!INFO] Resource(s)
+> [!NOTE] Resource(s)
 >
 > - https://www.youtube.com/watch?v=zQ2kqc0eep8
 > - https://react.dev/reference/react/useRef
@@ -3614,7 +3614,7 @@ export const useMediaQuery = (query) => {
 
 # Toggle Theme ( Button / Toggle )
 
-> [!INFO] Resource(s)
+> [!NOTE] Resource(s)
 >
 > - https://react.dev/reference/react/createContext
 > - https://react.dev/reference/react/useContext
@@ -3718,7 +3718,7 @@ createRoot(document.getElementById("root")).render(
 
 ## Create Actual Toggle Theme Component
 
-> [!INFO] Resource(s)
+> [!NOTE] Resource(s)
 >
 > - https://react-icons.github.io/react-icons/
 
@@ -3869,7 +3869,7 @@ createRoot(document.getElementById("root")).render(
 >
 > Therefore, you should see that even the Ant Design components are going to switch to the _correct_ 'Dark Mode'.
 >
-> > [!INFO]
+> > [!NOTE]
 > > Now, I have gone and updates all of the places ( _mostly inside of `client/src/AuthPages.jsx`_ ) whereby I have hard coded some colours as our theme is currently "_per browser_".
 > >
 > > Meaning that if the user switches to 'Dark Mode'; then the `AuthPages.jsx` is also going to **switch** to the dark variant.
@@ -3878,7 +3878,7 @@ createRoot(document.getElementById("root")).render(
 >
 > The `InputDisplayTodo.jsx` file is getting to big ( _that's what she said_ ). Therefore, I will suggest you to look at the code itself as its basically front-end stuff and using components from 'Ant Design'.
 >
-> > [!INFO] Nevertheless...
+> > [!NOTE] Nevertheless...
 > > Here are some of the things that we implemented:
 > >
 > > - Custom 'TODO' input component
@@ -4279,7 +4279,7 @@ No Pending Migration files Found.
 
 # Migrating To Neon DB
 
-> [!INFO] Resource(s)
+> [!NOTE] Resource(s)
 >
 > - https://neon.com/
 > - https://vercel.com/
@@ -4297,7 +4297,7 @@ Therefore, speaking with some of the developers here; as they use '[Postgresql](
 
 ## Setup Neon
 
-> [!INFO] Sign Up and Project Creation
+> [!NOTE] Sign Up and Project Creation
 >
 > - Project Name: TODO - React Web App
 > - Postgresql: 17
@@ -4340,7 +4340,7 @@ npm install pg
 
 #### Update Our Knex Database Connection File
 
-> [!INFO] Resource(s)
+> [!NOTE] Resource(s)
 >
 > - https://knexjs.org/guide/#configuration-options
 
@@ -4418,7 +4418,7 @@ DATABASE_URL=postgresql://neondb_owner:****************@ep-twilight-bonus-a1yrz9
 rm db/app.db
 ```
 
-> [!INFO]
+> [!NOTE]
 >
 > Optionally... Update the `.gitignore` file to **remove** all the "_things_" related to SQLite!
 
@@ -4534,7 +4534,7 @@ const [updatedTodo] = await db("todo")
 
 # Vercel
 
-> [!INFO] Resource(s)
+> [!NOTE] Resource(s)
 >
 > - https://vercel.com/
 >   - https://vercel.com/docs/getting-started-with-vercel
@@ -4745,7 +4745,7 @@ index-D7KBWe7p.js:287 Registration error:
 ||M_|@|index-D7KBWe7p.js:9|
 ```
 
-> [!INFO]
+> [!NOTE]
 >
 > I think I know the issue... The issue is coming "_primarily_" from Neon. The thing is Neon, by default, gave us 2 branches. The _development_ branch and the _production_ branch.
 >
