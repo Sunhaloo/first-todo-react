@@ -196,7 +196,7 @@ function AuthPages() {
                     },
                   ]}
                 >
-                  <Input placeholder="Enter Username" size="large" />
+                  <Input size="large" />
                 </Form.Item>
                 {/* password input */}
                 <Form.Item
@@ -209,7 +209,7 @@ function AuthPages() {
                     },
                   ]}
                 >
-                  <Input.Password placeholder="Enter Password" size="large" />
+                  <Input.Password size="large" />
                 </Form.Item>
                 {/* NOTE: `block` makes it take the whole width */}
                 <Button
@@ -251,7 +251,7 @@ function AuthPages() {
                       },
                     ]}
                   >
-                    <Input placeholder="Enter Username" size="large" />
+                    <Input placeholder="E.g: John Doe" size="large" />
                   </Form.Item>
 
                   {/* email input */}
@@ -263,21 +263,51 @@ function AuthPages() {
                       { type: "email", message: "Please enter a valid email." },
                     ]}
                   >
-                    <Input placeholder="Enter Email" size="large" />
+                    <Input placeholder="E.g: johndoe@email.com" size="large" />
                   </Form.Item>
 
-                  {/* password input */}
+                  {/* password input - first */}
                   <Form.Item
                     name="password"
                     label="Password"
                     rules={[
                       {
                         required: true,
-                        message: "Please Enter Your Password",
+                        message: "Please enter your password.",
                       },
                     ]}
                   >
-                    <Input.Password placeholder="Password" size="large" />
+                    <Input.Password placeholder="Enter Password" size="large" />
+                  </Form.Item>
+
+                  {/* password input - confirmation */}
+                  <Form.Item
+                    name="confirmPassword"
+                    label="Confirm Password"
+                    dependencies={["password"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please confirm your password.",
+                      },
+                      // function to compare the value of the original password input
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          // use promises to wait for the input
+                          if (!value || getFieldValue("password") === value) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error("The two passwords do not match!"),
+                          );
+                        },
+                      }),
+                    ]}
+                  >
+                    <Input.Password
+                      placeholder="Confirm Password"
+                      size="large"
+                    />
                   </Form.Item>
 
                   {/* NOTE: `block` makes it take the whole width */}
