@@ -92,14 +92,14 @@ status: In-Progress
 > - https://knexjs.org/
 > - https://knexjs.org/guide/#configuration-options
 > - https://expressjs.com
->   - https://expressjs.com/en/guide/routing.html
+> - https://expressjs.com/en/guide/routing.html
 
 > [!WARNING]
 >
 > Because I know nothing about this... I am going to be learning with [Claude](https://claude.ai) and [ChatGPT](https://chat.openai.com) and reading the official documentations:
 >
 > - https://react.dev
->   - https://react.dev/reference
+> - https://react.dev/reference
 > - https://knexjs.org/guide/
 > - https://expressjs.com/en/starter
 >
@@ -121,8 +121,8 @@ status: In-Progress
 > [!NOTE] Software and Tools
 >
 > - React and Vite with 'JSX'
->   - Designs from '[Ant Design](https://ant.design/)'
->   - Follow the same layout as [this](https://github.com/Sunhaloo/Simple-HTML-CSS-JS-TODO)
+> - Designs from '[Ant Design](https://ant.design/)'
+> - Follow the same layout as [this](https://github.com/Sunhaloo/Simple-HTML-CSS-JS-TODO)
 > - SQLite Database
 > - Object Relational Mapping: [Knex.js](https://knexjs.org/)
 
@@ -1004,7 +1004,7 @@ if __name__ == "__main__":
 > }
 > ```
 >
-> > [!SUCCESS]-
+> > [!SUCCESS]
 > > Very nice!
 
 > [!NOTE] Delete `tester` User From Database
@@ -1036,7 +1036,7 @@ if __name__ == "__main__":
 > [!NOTE] Resource(s)
 >
 > - https://www.redhat.com/en/topics/middleware/what-is-middleware
->   - https://www.redhat.com/en/topics/middleware/what-is-middleware#middleware-and-apis
+> - https://www.redhat.com/en/topics/middleware/what-is-middleware#middleware-and-apis
 > - https://en.wikipedia.org/wiki/Middleware
 
 A 'Middleware' is a _function_ that is going to sit in **between** a _request_ and a _response_. In our case, we are going to check if the _requests_ sent from the front-end is **valid** if and only if it as the 'JSON Web Token' in the _requests 'Authorisation' header_.
@@ -1997,7 +1997,7 @@ return (
 > [!NOTE] Resource(s)
 >
 > - https://axios-http.com/
->   - https://axios-http.com/docs/intro
+> - https://axios-http.com/docs/intro
 
 ## Create API Service
 
@@ -3342,7 +3342,7 @@ return (
 >
 > - https://www.youtube.com/watch?v=zQ2kqc0eep8
 > - https://react.dev/reference/react/useRef
->   - https://react.dev/reference/react/useRef#manipulating-the-dom-with-a-ref
+> - https://react.dev/reference/react/useRef#manipulating-the-dom-with-a-ref
 
 > [!WARNING] Only showing parts of it!!!
 >
@@ -4168,7 +4168,6 @@ npx knex migrate:rollback --all
 ### No Data In Database
 
 > [!BUG] I **cannot** create / register any users!
->
 
 As we have deleted the whole database file, this means that we **lost** all of our users and _their_ respective 'TODO' items.
 
@@ -4537,7 +4536,7 @@ const [updatedTodo] = await db("todo")
 > [!NOTE] Resource(s)
 >
 > - https://vercel.com/
->   - https://vercel.com/docs/getting-started-with-vercel
+> - https://vercel.com/docs/getting-started-with-vercel
 > - https://www.youtube.com/watch?v=22Rywce_kcg
 
 This is the platform that we are going to use to **host**, **deploy** our 'TODO' application. I have already signed in and we are going to get started with _deploying_ our application to the world!
