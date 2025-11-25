@@ -142,7 +142,7 @@ function InputDisplayTodo() {
         }
       }
     }
-  });
+  }, [categories, form]);
 
   // Update the editing form when editingTodo changes
   useEffect(() => {
