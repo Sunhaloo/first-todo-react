@@ -13,6 +13,9 @@ import {
 // import the required components from 'antd'
 import { Tooltip } from "antd";
 
+// import the required icons from 'react-icons'
+import { MdEdit, MdDelete } from "react-icons/md";
+
 // import the infinite scroll component
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -464,22 +467,24 @@ function InputDisplayTodo() {
                       <List.Item
                         className="todo-list-main"
                         actions={[
-                          <Button
-                            className="todo-edit-button"
-                            type="primary"
-                            size="small"
-                            onClick={() => openEditModal(todo)}
-                          >
-                            Edit
-                          </Button>,
-                          <Button
-                            className="todo-delete-button"
-                            danger
-                            size="small"
-                            onClick={() => handleDeleteTodo(todo.id)}
-                          >
-                            Delete
-                          </Button>,
+                          <Tooltip title="Edit TODO">
+                            <Button
+                              className="todo-edit-button"
+                              type="primary"
+                              size="middle"
+                              onClick={() => openEditModal(todo)}
+                              icon={<MdEdit size="18px" />}
+                            ></Button>
+                          </Tooltip>,
+                          <Tooltip title="Delete TODO">
+                            <Button
+                              className="todo-delete-button"
+                              danger
+                              size="middle"
+                              onClick={() => handleDeleteTodo(todo.id)}
+                              icon={<MdDelete size="18px" />}
+                            ></Button>
+                          </Tooltip>,
                         ]}
                       >
                         <div className="todo-item-container">
