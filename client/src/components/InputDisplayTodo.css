@@ -160,12 +160,21 @@
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .todo-modal-cancel-button,
 .todo-modal-update-button {
   min-width: 5rem;
   height: 2rem;
+}
+
+.todo-item-container {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
 @media (max-width: 968px) {
@@ -223,10 +232,6 @@
     min-height: 2rem;
   }
 
-  .todo-modal-cancel-button {
-    margin-left: 16.6rem;
-  }
-
   .todo-edit-button,
   .todo-delete-button {
     min-width: 2rem;
@@ -252,6 +257,17 @@
     width: 100%;
     height: 100%;
   }
+
+  .todo-modal-buttons-container {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .todo-modal-cancel-button,
+  .todo-modal-update-button {
+    width: 100%;
+    max-width: 12rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -266,15 +282,6 @@
     height: auto;
     font-size: 1rem;
     min-height: 1.8rem;
-  }
-
-  .todo-modal-cancel-button {
-    margin-left: 13.1rem;
-  }
-
-  .todo-edit-button {
-    display: inline-block;
-    margin-left: 16rem;
   }
 
   .todo-edit-button,
@@ -302,6 +309,17 @@
     width: 100%;
     height: 100%;
   }
+
+  .todo-modal-buttons-container {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .todo-modal-cancel-button,
+  .todo-modal-update-button {
+    width: 100%;
+    max-width: 12rem;
+  }
 }
 
 @media (max-width: 375px) {
@@ -316,15 +334,6 @@
     height: auto;
     font-size: 0.95rem;
     min-height: 1.8rem;
-  }
-
-  .todo-modal-cancel-button {
-    margin-left: 6.5rem;
-  }
-
-  .todo-edit-button {
-    display: inline-block;
-    margin-left: 10rem;
   }
 
   .todo-edit-button,
@@ -351,5 +360,16 @@
     justify-content: center;
     width: 100%;
     height: 100%;
+  }
+
+  .todo-modal-buttons-container {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .todo-modal-cancel-button,
+  .todo-modal-update-button {
+    width: 100%;
+    max-width: 12rem;
   }
 }
