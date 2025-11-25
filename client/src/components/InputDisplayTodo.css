@@ -114,14 +114,14 @@
   margin-left: 0.25rem;
 }
 
-.todo-submit-button {
-  margin-top: 0.75rem;
-  width: auto;
-  max-width: 100%;
-}
-
 .todo-submit-button-container {
   text-align: right;
+}
+
+.todo-submit-button {
+  margin-top: 0.2rem;
+  width: auto;
+  max-width: 100%;
 }
 
 .todo-modal-buttons-container {

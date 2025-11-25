@@ -10,6 +10,9 @@ import {
   getCategories,
 } from "../services/api";
 
+// import the required components from 'antd'
+import { Tooltip } from "antd";
+
 // import the infinite scroll component
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -411,13 +414,14 @@ function InputDisplayTodo() {
 
               {/* button that will send the data to the database through the `api.js` services */}
               <Form.Item className="todo-submit-button-container">
-                <GradientButton
-                  className="todo-submit-button"
-                  text="Add"
-                  icon={<FiPlus />}
-                  htmlType="submit"
-                  disabled={todoCreateLoading}
-                />
+                <Tooltip title="Add TODO">
+                  <GradientButton
+                    className="todo-submit-button"
+                    icon={<FiPlus />}
+                    htmlType="submit"
+                    disabled={todoCreateLoading}
+                  />
+                </Tooltip>
               </Form.Item>
             </Form>
           </Card>
