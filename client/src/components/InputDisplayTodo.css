@@ -113,6 +113,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
 }
 
 .todo-delete-button {
@@ -123,11 +124,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
 }
 
 /* Ensure icon is centered within the button */
 .todo-edit-button .ant-btn-icon,
 .todo-delete-button .ant-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.todo-edit-button > span,
+.todo-delete-button > span {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -151,8 +162,10 @@
   gap: 0.5rem;
 }
 
+.todo-modal-cancel-button,
 .todo-modal-update-button {
-  height: 100%;
+  min-width: 5rem;
+  height: 2rem;
 }
 
 @media (max-width: 968px) {
@@ -165,7 +178,8 @@
     width: auto;
     max-width: 100%;
     height: auto;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    min-height: 2rem;
   }
 
   .todo-edit-button,
@@ -173,10 +187,20 @@
     min-width: 2.2rem;
     height: 2.2rem;
     font-size: 0.85rem;
+    padding: 0;
   }
 
   .todo-edit-button .ant-btn-icon,
   .todo-delete-button .ant-btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .todo-edit-button > span,
+  .todo-delete-button > span {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -195,7 +219,8 @@
     width: auto;
     max-width: 100%;
     height: auto;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    min-height: 2rem;
   }
 
   .todo-modal-cancel-button {
@@ -207,10 +232,20 @@
     min-width: 2rem;
     height: 2rem;
     font-size: 0.8rem;
+    padding: 0;
   }
 
   .todo-edit-button .ant-btn-icon,
   .todo-delete-button .ant-btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .todo-edit-button > span,
+  .todo-delete-button > span {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -229,7 +264,8 @@
     width: auto;
     max-width: 100%;
     height: auto;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    min-height: 1.8rem;
   }
 
   .todo-modal-cancel-button {
@@ -246,10 +282,20 @@
     min-width: 1.8rem;
     height: 1.8rem;
     font-size: 0.75rem;
+    padding: 0;
   }
 
   .todo-edit-button .ant-btn-icon,
   .todo-delete-button .ant-btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .todo-edit-button > span,
+  .todo-delete-button > span {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -268,7 +314,8 @@
     width: auto;
     max-width: 100%;
     height: auto;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
+    min-height: 1.8rem;
   }
 
   .todo-modal-cancel-button {
@@ -285,10 +332,20 @@
     min-width: 1.6rem;
     height: 1.6rem;
     font-size: 0.7rem;
+    padding: 0;
   }
 
   .todo-edit-button .ant-btn-icon,
   .todo-delete-button .ant-btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .todo-edit-button > span,
+  .todo-delete-button > span {
     display: flex;
     align-items: center;
     justify-content: center;

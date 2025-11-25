@@ -474,7 +474,7 @@ function InputDisplayTodo() {
                               size="middle"
                               onClick={() => openEditModal(todo)}
                               icon={<MdEdit size="18px" />}
-                            ></Button>
+                            />
                           </Tooltip>,
                           <Tooltip title="Delete TODO">
                             <Button
@@ -483,7 +483,7 @@ function InputDisplayTodo() {
                               size="middle"
                               onClick={() => handleDeleteTodo(todo.id)}
                               icon={<MdDelete size="18px" />}
-                            ></Button>
+                            />
                           </Tooltip>,
                         ]}
                       >
