@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 
 // import the required components from 'antd'
-import { Button, Modal } from "antd";
+import { Button, Modal, Tooltip } from "antd";
 
 // import the `useAuth` function from `AuthContext.jsx`
 import { useAuth } from "../contexts/AuthContext";
@@ -84,12 +84,18 @@ function ProfileMenu({ className, ...props }) {
       onClick={() => setOpen(!open)}
       {...props}
     >
-      <img
-        className="profile-picture"
-        src={profilePicture}
-        alt="Profile"
-        onClick={() => setOpen(!open)}
-      />
+      <Tooltip
+        title="Profile Menu"
+        mouseEnterDelay={0.55}
+        mouseLeaveDelay={0.02}
+      >
+        <img
+          className="profile-picture"
+          src={profilePicture}
+          alt="Profile"
+          onClick={() => setOpen(!open)}
+        />
+      </Tooltip>
 
       {open && (
         <div className="profile-menu-card">

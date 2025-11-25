@@ -1,8 +1,8 @@
-// import the `Button` component from 'antd'
-import { Button } from "antd";
-
 // import the `useAuth` function from `AuthContext.jsx`
 import { useTheme } from "../contexts/ThemeContext";
+
+// import the `Button` component from 'antd'
+import { Tooltip } from "antd";
 
 // import icons from 'react-icons' ( "ai" ) library
 import { AiFillMoon, AiFillSun } from "react-icons/ai";
@@ -25,15 +25,16 @@ function ToggleTheme({ className }) {
 
   // the actual component that is going to be returned
   return (
-    <GradientButton
-      // implement the "custom" 'antd' class name
-      className={`theme-toggle-button ${className || ""}`.trim()}
-      onClick={handleToggleTheme}
-      icon={theme === "light" ? <AiFillMoon /> : <AiFillSun />}
-      type="primary"
-      size="large"
-      text={theme === "light" ? "Dark" : "Light"}
-    />
+    <Tooltip title="Toggle Theme">
+      <GradientButton
+        // implement the "custom" 'antd' class name
+        className={`theme-toggle-button ${className || ""}`.trim()}
+        onClick={handleToggleTheme}
+        icon={theme === "light" ? <AiFillMoon /> : <AiFillSun />}
+        type="primary"
+        size="large"
+      />
+    </Tooltip>
   );
 }
 

@@ -44,8 +44,7 @@ function GradientButton({ text, icon, ...props }) {
         className: styles.linearGradientButton,
       }}
     >
-      <Button type="primary" size="middle" {...props}>
-        {icon && <span className="gradient-button-icon">{icon}</span>}
+      <Button type="primary" size="middle" icon={icon} {...props}>
         {text}
       </Button>
     </ConfigProvider>

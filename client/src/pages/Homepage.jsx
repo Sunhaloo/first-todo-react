@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { createTodo, getTodos, updateTodo, deleteTodo } from "../services/api";
 
 // import the following components from 'antd'
-import { Button, Card, Checkbox, Form, Input, List, Select } from "antd";
+import { Form } from "antd";
 
 // import icons from 'react-icons' ( "ri" ) library
 import { RiTodoLine } from "react-icons/ri";

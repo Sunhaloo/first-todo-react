@@ -1,42 +1,49 @@
 .theme-toggle-button {
   min-width: auto;
+  width: 2.5rem;
   height: 2.5rem;
-  padding: 0 0.5rem;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+}
+
+.theme-toggle-button .anticon {
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 768px) {
   .theme-toggle-button {
-    min-width: 2rem !important;
-    height: 2rem !important;
+    width: 2rem;
+    height: 2rem;
   }
 
   .theme-toggle-button .anticon {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 }
 
 @media (max-width: 480px) {
   .theme-toggle-button {
-    min-width: 1.75rem !important;
-    height: 1.75rem !important;
+    width: 1.75rem;
+    height: 1.75rem;
   }
 
   .theme-toggle-button .anticon {
-    font-size: 0.9rem;
+    font-size: 0.7rem;
   }
 }
 
 @media (max-width: 375px) {
   .theme-toggle-button {
-    min-width: 1.5rem !important;
-    height: 1.5rem !important;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   .theme-toggle-button .anticon {
-    font-size: 0.8rem;
+    font-size: 0.6rem;
   }
 }
