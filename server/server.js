@@ -9,6 +9,7 @@ require("dotenv").config();
 const authRouter = require("./routers/authRouters.js");
 const todoRouter = require("./routers/todoRouters.js");
 const userRouter = require("./routers/userRouters.js");
+const chatRouter = require("./routers/chatRouters.js");
 
 // create the actual 'express' application / server
 const app = express();
@@ -50,6 +51,9 @@ app.use("/api/todos", todoRouter);
 
 // user routers
 app.use("/api/user", userRouter);
+
+// chat routers
+app.use("/api/chat", chatRouter);
 
 // start the server
 app.listen(PORT, () => {
