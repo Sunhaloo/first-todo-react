@@ -124,7 +124,7 @@ export const getCategories = async () => {
 // send message to AI
 export const sendChatMessage = async (message) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/chat`, {
+    const response = await fetch(`${API_BASE_URL}/chat/message`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

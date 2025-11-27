@@ -37,10 +37,7 @@ function ChatBot() {
   };
 
   // function to handle the input of messages
-  const handleUserMessageInput = async (e) => {
-    // NOTE: stop the page from reloading and wait for input to process first
-    e.preventDefault();
-
+  const handleUserMessageInput = async () => {
     // check if the user is sending trying to send empty inputs --> "skip it"
     if (!userMessage.trim()) {
       return;
@@ -87,7 +84,7 @@ function ChatBot() {
       };
 
       // INFO: do also add the failed message to chat
-      setChatHistory((prev) => [...prev, errorMessage]);
+      setChatHistory((prev) => [...(prev || []), errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -117,20 +114,38 @@ function ChatBot() {
 
         {isChatVisible && (
           <div className="chatbot-main-chat">
-            <div className="chatbot-display-container"></div>
+            <div className="chatbot-display-container">
+              {chatHistory.map((msg, index) => (
+                <div key={index} className={`chat-message ${msg.role}`}>
+                  <div className="message-content">{msg.content}</div>
+                </div>
+              ))}
+
+              {isLoading && <div>Thinking...</div>}
+            </div>
             <div className="chatbot-main-input">
-              <Form layout="vertical" className="chatbot-input-form">
+              <Form
+                layout="vertical"
+                className="chatbot-input-form"
+                onFinish={handleUserMessageInput}
+              >
                 <Form.Item className="chatbot-input-container">
                   <div className="chatbot-inputs">
                     <Input
+                      value={userMessage}
+                      onChange={(e) => {
+                        setUserMessage(e.target.value);
+                      }}
                       className="chatbot-input-component"
                       placeholder="Please Enter A Message"
                       size="large"
                       prefix={<CiChat1 />}
+                      disabled={isLoading}
                     />
                     <GradientButton
                       className="chatbot-submit-button"
                       icon={<FaChevronUp />}
+                      disabled={isLoading || !userMessage.trim()}
                     />
                   </div>
                 </Form.Item>
