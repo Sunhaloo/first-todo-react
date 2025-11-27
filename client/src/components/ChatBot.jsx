@@ -17,11 +17,15 @@ import "./ChatBot.css";
 function ChatBot() {
   // declare variable for toggling heading animation
   const [isHeadingAnimating, setHeadingAnimating] = useState(false);
+  // declare variable for toggling chat app visibility
+  const [isChatVisible, setIsChatVisible] = useState(false);
 
   // function to "enable" / run when the switch is on
   const handleSwitchChecked = (checked) => {
     // change / set the animation for the heading
     setHeadingAnimating(checked);
+    // change / set the visibility of the chat app
+    setIsChatVisible(checked);
   };
 
   return (
@@ -33,7 +37,7 @@ function ChatBot() {
               level={4}
               className={`chatbot-heading-text ${isHeadingAnimating ? "heading-move-up-down" : ""}`}
             >
-              AI Chatbot
+              Task Whisperer
             </Typography.Title>
           </div>
 
@@ -46,27 +50,29 @@ function ChatBot() {
           </div>
         </div>
 
-        <div className="chatbot-main-chat">
-          <div className="chatbot-display-container"></div>
-          <div className="chatbot-main-input">
-            <Form layout="vertical" className="chatbot-input-form">
-              <Form.Item className="chatbot-input-container">
-                <div className="chatbot-inputs">
-                  <Input
-                    className="chatbot-input-component"
-                    placeholder="Please Enter A Message"
-                    size="large"
-                    prefix={<CiChat1 />}
-                  />
-                  <GradientButton
-                    className="chatbot-submit-button"
-                    icon={<FaChevronUp />}
-                  />
-                </div>
-              </Form.Item>
-            </Form>
+        {isChatVisible && (
+          <div className="chatbot-main-chat">
+            <div className="chatbot-display-container"></div>
+            <div className="chatbot-main-input">
+              <Form layout="vertical" className="chatbot-input-form">
+                <Form.Item className="chatbot-input-container">
+                  <div className="chatbot-inputs">
+                    <Input
+                      className="chatbot-input-component"
+                      placeholder="Please Enter A Message"
+                      size="large"
+                      prefix={<CiChat1 />}
+                    />
+                    <GradientButton
+                      className="chatbot-submit-button"
+                      icon={<FaChevronUp />}
+                    />
+                  </div>
+                </Form.Item>
+              </Form>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
