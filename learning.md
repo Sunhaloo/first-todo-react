@@ -15,93 +15,94 @@ status: In-Progress
 
 ## List of Contents
 
-- #Planning
-- #Setup Project
-- #Configure The Knex
-  - #Write The Schema For Tables
-  - #Run The Migrations
-- #Configure The Main Express.JS Server
-  - #Setup Connection Between Database And Server
-  - #Create / Configure The Main Server File
-- #Security and Authentication
-  - #Creation Of Authentication Controller
-  - #Creation Of Routing For Authentication
-    - #Make The URL ( For Authentication )
-    - #Test The URL ( For Authentication )
-  - #Create Authentication Middleware
-- #TODO Related Tasks
-  - #Creation Of TODO Controller
-  - #Creation Of Routing For TODO
-    - #Make The URL ( For TODO )
-    - #Test The URL ( For TODO )
-- #React Development Setup
-  - #Download Required Dependencies
-    - #Setup React Project To Use Ant Design
-  - #Creation Of Folders
-    - #Testing Ant Design
-- #Registration - Login Page
-  - #Create Main 'Registration - Login' Page
-    - #Install React Icons
-    - #Example Usage
-  - #RGB Colour Shifting
-    - #Implementation In React
-  - #Logo Animation
-- #Axios API Connection
-  - #Create API Service
-  - #Connect React - Forms To API
-    - #Testing Front-End And Back-End Connection ( Register / Login )
-  - #Creation Of Main Page
-    - #Routes!!!
-    - #Create The Actual Dashboard File
-    - #Add The Routings
-- #Main Pages Components
-  - #Creating The MVP
-    - #Our Main ( Home ) Page
-- #Learn How To Use Postman
-  - #Login Post Requests
-  - #TODO Get Requests
-- #Create Username Component
-  - #Back-End / Express.JS
-  - #Front-End / React
-- #Create Profile Picture - Drop Down Menu Component
-  - #Make It Behave Like Ant Design's Component
-  - #Making The Card
-- #Toggle Theme ( Button / Toggle )
-  - #Theme Context
-  - #Create Actual Toggle Theme Component
-  - #The Select Component And Back-End Category
-- #Create TODO Form Component
-  - #But Before Ant Design!!!
-  - #The Select Component And Back-End Category
-- #Back-end Issue - Migration File
-  - #Start Clean - Revert / Rollback Everything
-    - #No Data In Database
-- #Migrating To Neon DB
-  - #Setup Neon
-- #Vercel
-  - #Deploying On Vercel
-    - #Back-End Deployment
-    - #Front-End Deployment
-- #Registration / Login Issues
-  - #Update Vercel Back-End's Environment Variables
-  - #Generate JSON Web Token Secret Key
+- Planning
+- Setup Project
+- Configure The Knex
+  - Write The Schema For Tables
+  - Run The Migrations
+- Configure The Main Express.JS Server
+  - Setup Connection Between Database And Server
+  - Create / Configure The Main Server File
+- Security and Authentication
+  - Creation Of Authentication Controller
+  - Creation Of Routing For Authentication
+    - Make The URL ( For Authentication )
+    - Test The URL ( For Authentication )
+  - Create Authentication Middleware
+- TODO Related Tasks
+  - Creation Of TODO Controller
+  - Creation Of Routing For TODO
+    - Make The URL ( For TODO )
+    - Test The URL ( For TODO )
+- React Development Setup
+  - Download Required Dependencies
+    - Setup React Project To Use Ant Design
+  - Creation Of Folders
+    - Testing Ant Design
+- Registration - Login Page
+  - Create Main 'Registration - Login' Page
+    - Install React Icons
+    - Example Usage
+  - RGB Colour Shifting
+    - Implementation In React
+  - Logo Animation
+- Axios API Connection
+  - Create API Service
+  - Connect React - Forms To API
+    - Testing Front-End And Back-End Connection ( Register / Login )
+  - Creation Of Main Page
+    - Routes!!!
+    - Create The Actual Dashboard File
+    - Add The Routings
+- Main Pages Components
+  - Creating The MVP
+    - Our Main ( Home ) Page
+- Learn How To Use Postman
+  - Login Post Requests
+  - TODO Get Requests
+- Create Username Component
+  - Back-End / Express.JS
+  - Front-End / React
+- Create Profile Picture - Drop Down Menu Component
+  - Make It Behave Like Ant Design's Component
+  - Making The Card
+- Toggle Theme ( Button / Toggle )
+  - Theme Context
+  - Create Actual Toggle Theme Component
+  - The Select Component And Back-End Category
+- Create TODO Form Component
+  - But Before Ant Design!!!
+  - The Select Component And Back-End Category
+- Back-end Issue - Migration File
+  - Start Clean - Revert / Rollback Everything
+    - No Data In Database
+- Migrating To Neon DB
+  - Setup Neon
+- Vercel
+  - Deploying On Vercel
+    - Back-End Deployment
+    - Front-End Deployment
+- Registration / Login Issues
+  - Update Vercel Back-End's Environment Variables
+  - Generate JSON Web Token Secret Key
+
 - ***
 
 > [!NOTE] Resource(s)
 >
-> - https://knexjs.org/
-> - https://knexjs.org/guide/#configuration-options
-> - https://expressjs.com
-> - https://expressjs.com/en/guide/routing.html
+> - <https://knexjs.org/>
+> - <https://knexjs.org/guide/#configuration-options>
+> - <https://expressjs.com>
+> - <https://expressjs.com/en/guide/routing.html>
 
 > [!WARNING]
 >
 > Because I know nothing about this... I am going to be learning with [Claude](https://claude.ai) and [ChatGPT](https://chat.openai.com) and reading the official documentations:
 >
-> - https://react.dev
-> - https://react.dev/reference
-> - https://knexjs.org/guide/
-> - https://expressjs.com/en/starter
+> - <https://react.dev>
+> - <https://react.dev/reference>
+> - <https://knexjs.org/guide/>
+> - <https://expressjs.com/en/starter>
 >
 > > I prefer 'Claude' instead of '[ChatGPT](https://www.youtube.com/watch?v=qaZ-u9n13gs)' as its answer are more "_Professional_"!
 
@@ -608,8 +609,8 @@ Server running on 'http://localhost:5000'
 
 > [!NOTE] Resource(s)
 >
-> - https://www.npmjs.com/package/bcryptjs
-> - https://www.npmjs.com/package/jsonwebtoken
+> - <https://www.npmjs.com/package/bcryptjs>
+> - <https://www.npmjs.com/package/jsonwebtoken>
 
 ## Creation Of Authentication Controller
 
@@ -769,7 +770,7 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { userId: user.id, username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     // if user is able to login ==> return a 'JSON' output
@@ -1035,9 +1036,9 @@ if __name__ == "__main__":
 
 > [!NOTE] Resource(s)
 >
-> - https://www.redhat.com/en/topics/middleware/what-is-middleware
-> - https://www.redhat.com/en/topics/middleware/what-is-middleware#middleware-and-apis
-> - https://en.wikipedia.org/wiki/Middleware
+> - <https://www.redhat.com/en/topics/middleware/what-is-middleware>
+> - <https://www.redhat.com/en/topics/middleware/what-is-middleware#middleware-and-apis>
+> - <https://en.wikipedia.org/wiki/Middleware>
 
 A 'Middleware' is a _function_ that is going to sit in **between** a _request_ and a _response_. In our case, we are going to check if the _requests_ sent from the front-end is **valid** if and only if it as the 'JSON Web Token' in the _requests 'Authorisation' header_.
 
@@ -1730,8 +1731,8 @@ export default App;
 
 > [!NOTE] Resource(s)
 >
-> - https://react.dev/reference/react/useState
-> - https://react.dev/learn/conditional-rendering
+> - <https://react.dev/reference/react/useState>
+> - <https://react.dev/learn/conditional-rendering>
 
 We are now going to code our _main_ view for the **registration** - **login** page. The file `AuthPages.jsx` file is going to handle that.
 
@@ -1741,8 +1742,8 @@ Now, we are going to be creating some **forms** later on that are going to show 
 
 > [!NOTE] Resource(s)
 >
-> - https://github.com/react-icons/react-icons
-> - https://react-icons.github.io/react-icons/
+> - <https://github.com/react-icons/react-icons>
+> - <https://react-icons.github.io/react-icons/>
 
 - Install `react-icons` package using the following command found below:
 
@@ -1996,8 +1997,8 @@ return (
 
 > [!NOTE] Resource(s)
 >
-> - https://axios-http.com/
-> - https://axios-http.com/docs/intro
+> - <https://axios-http.com/>
+> - <https://axios-http.com/docs/intro>
 
 ## Create API Service
 
@@ -2032,7 +2033,7 @@ api.interceptors.request.use(
   // if the token has not been found --> reject the user's request
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // register a new user ( endpoint )
@@ -2133,7 +2134,7 @@ createRoot(document.getElementById("root")).render(
     <ConfigProvider>
       <App />
     </ConfigProvider>
-  </StrictMode>
+  </StrictMode>,
 );
 ```
 
@@ -2285,7 +2286,7 @@ This page is going to be our "_main_" thing. That is, its going to have:
   - Input
   - Display
 
-### Routes!!!
+### Routes
 
 Compared to regular 'HTML' whereby we can use the `href` tag to be able to _go to_ another page.
 
@@ -2383,7 +2384,7 @@ import { useNavigate } from "react-router-dom";
 
 // other codes
 
-	  // USE IT LIKE SO
+   // USE IT LIKE SO
       // navigate to the dashboard route
       navigate("/homepage");
 
@@ -2392,7 +2393,7 @@ import { useNavigate } from "react-router-dom";
 
 // other codes
 
-	  // USE IT INSIDE `login` NOW
+   // USE IT INSIDE `login` NOW
       // navigate to the dashboard route
       navigate("/homepage");
 ```
@@ -2405,9 +2406,9 @@ import { useNavigate } from "react-router-dom";
 
 > [!NOTE] Resource(s)
 >
-> - https://react.dev/reference/react/useContext
-> - https://legacy.reactjs.org/docs/context.html ( "_deprecated_" )
-> - https://react.dev/reference/react/useEffect
+> - <https://react.dev/reference/react/useContext>
+> - <https://legacy.reactjs.org/docs/context.html> ( "_deprecated_" )
+> - <https://react.dev/reference/react/useEffect>
 
 > [!TIP] What is a Context?
 >
@@ -2451,7 +2452,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   // declare variables that is going to check if `token` key exists in local storage
   const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem("token")
+    !!localStorage.getItem("token"),
   );
 
   // get the value of the `token` from the local storage
@@ -2597,7 +2598,7 @@ const handleRegister = async (values) => {
       if (error.response.status === 400) {
         setErrorMessage(
           error.response.data.error ||
-            "Registration failed - Please check your information"
+            "Registration failed - Please check your information",
         );
       } else {
         setErrorMessage("An error occurred during registration");
@@ -3007,7 +3008,7 @@ git push -u origin test
 
 > [!NOTE] Resource(s)
 >
-> - https://www.postman.com/
+> - <https://www.postman.com/>
 
 > [!TIP]
 >
@@ -3071,7 +3072,6 @@ Follow the steps below to be able to achieve this:
 - Endpoint URL: `http://localhost:5000/api/todos`
 - Change the `Content-Type` from `text/plain` to `application/json` ( _simply create another key pair value_ )
 - Change the 'Authorization' **type** to be 'Bearer Token'
-
   - Then simply paste the user's _token_ value there!
 
 - Therefore in my case, I see this as output:
@@ -3340,9 +3340,9 @@ return (
 
 > [!NOTE] Resource(s)
 >
-> - https://www.youtube.com/watch?v=zQ2kqc0eep8
-> - https://react.dev/reference/react/useRef
-> - https://react.dev/reference/react/useRef#manipulating-the-dom-with-a-ref
+> - <https://www.youtube.com/watch?v=zQ2kqc0eep8>
+> - <https://react.dev/reference/react/useRef>
+> - <https://react.dev/reference/react/useRef#manipulating-the-dom-with-a-ref>
 
 > [!WARNING] Only showing parts of it!!!
 >
@@ -3616,8 +3616,8 @@ export const useMediaQuery = (query) => {
 
 > [!NOTE] Resource(s)
 >
-> - https://react.dev/reference/react/createContext
-> - https://react.dev/reference/react/useContext
+> - <https://react.dev/reference/react/createContext>
+> - <https://react.dev/reference/react/useContext>
 
 Most people from what I can see on YouTube ( _by most I mean the popular videos_ ) are using 'DOM' to be able to access them. But one of the developers told me that it's going to be better if I use **contexts**.
 
@@ -3712,7 +3712,7 @@ createRoot(document.getElementById("root")).render(
         <App />
       </ThemeProvider>
     </ConfigProvider>
-  </StrictMode>
+  </StrictMode>,
 );
 ```
 
@@ -3720,7 +3720,7 @@ createRoot(document.getElementById("root")).render(
 
 > [!NOTE] Resource(s)
 >
-> - https://react-icons.github.io/react-icons/
+> - <https://react-icons.github.io/react-icons/>
 
 - This is the implementation of the `ToggleTheme.jsx` component:
 
@@ -3795,7 +3795,7 @@ export default ToggleTheme;
 
 # Create TODO Form Component
 
-## But Before Ant Design!!!
+## But Before Ant Design
 
 Originally, I was using Ant Design's components for things like the 'Logout'. But then I implemented the 'Toggle Theme' button.
 
@@ -3861,7 +3861,7 @@ import AppWithProviders from "./AppWithProviders.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AppWithProviders />
-  </StrictMode>
+  </StrictMode>,
 );
 ```
 
@@ -4280,9 +4280,9 @@ No Pending Migration files Found.
 
 > [!NOTE] Resource(s)
 >
-> - https://neon.com/
-> - https://vercel.com/
-> - https://render.com/
+> - <https://neon.com/>
+> - <https://vercel.com/>
+> - <https://render.com/>
 
 Given that I want / will host my React 'TODO' application online. One of the developers was telling me to check our 'Vercel' or 'Render'. Given that I have seen many people online use Vercel, I am going to go with it!
 
@@ -4341,7 +4341,7 @@ npm install pg
 
 > [!NOTE] Resource(s)
 >
-> - https://knexjs.org/guide/#configuration-options
+> - <https://knexjs.org/guide/#configuration-options>
 
 - Therefore go ahead and update our `server/knexfile.js` like so:
 
@@ -4472,9 +4472,9 @@ As I have just created **new** tables for both `todo` and `user`... I decided to
 
 ```console
 __AuthPages.jsx:92__ Registration error:
-	1. {error: 'Server error during registration'}
-		1. error: "Server error during registration"
-	   2. Prototype: Object
+ 1. {error: 'Server error during registration'}
+  1. error: "Server error during registration"
+    2. Prototype: Object
   handleRegister@__AuthPages.jsx:92__
 ```
 
@@ -4535,9 +4535,9 @@ const [updatedTodo] = await db("todo")
 
 > [!NOTE] Resource(s)
 >
-> - https://vercel.com/
-> - https://vercel.com/docs/getting-started-with-vercel
-> - https://www.youtube.com/watch?v=22Rywce_kcg
+> - <https://vercel.com/>
+> - <https://vercel.com/docs/getting-started-with-vercel>
+> - <https://www.youtube.com/watch?v=22Rywce_kcg>
 
 This is the platform that we are going to use to **host**, **deploy** our 'TODO' application. I have already signed in and we are going to get started with _deploying_ our application to the world!
 
@@ -4575,7 +4575,7 @@ node_modules/
 
 ### Back-End Deployment
 
-Head over to the link 'https://vercel.com/dashboard' to get started with the **deployment**!
+Head over to the link '<https://vercel.com/dashboard>' to get started with the **deployment**!
 
 > [!TIP] Steps
 >
@@ -4612,7 +4612,7 @@ Head over to the link 'https://vercel.com/dashboard' to get started with the **d
 
 > [!SUCCESS]
 >
-> Therefore, in my case, I get the following link, 'https://first-todo-react-one.vercel.app/', whereby its going to output the _response_ like so:
+> Therefore, in my case, I get the following link, '<https://first-todo-react-one.vercel.app/>', whereby its going to output the _response_ like so:
 >
 > ```console
 > {
@@ -4685,7 +4685,7 @@ VITE_API_URL=https://your-backend.vercel.app/api
 
 > Therefore push the changes to the **remote** repository!
 
-Head over to the link 'https://vercel.com/dashboard' to get started with the **deployment**!
+Head over to the link '<https://vercel.com/dashboard>' to get started with the **deployment**!
 
 > [!TIP] Steps
 >
@@ -4815,7 +4815,7 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
+  }),
 );
 
 // other codes here
@@ -4982,9 +4982,9 @@ import { Button, Modal } from "antd";
 
 # Socials
 
-- **Instagram**: https://www.instagram.com/s.sunhaloo
-- **YouTube**: https://www.youtube.com/@s.sunhaloo
-- **GitHub**: https://www.github.com/Sunhaloo
+- **Instagram**: <https://www.instagram.com/s.sunhaloo>
+- **YouTube**: <https://www.youtube.com/@s.sunhaloo>
+- **GitHub**: <https://www.github.com/Sunhaloo>
 
 ---
 
