@@ -47,17 +47,25 @@ function ChatBot() {
         </div>
 
         <div className="chatbot-main-chat">
-          <Form>
-            <Form.Item>
-              <Input
-                placeholder="Please Enter A Message"
-                size="large"
-                prefix={<CiChat1 />}
-              />
-            </Form.Item>
-
-            <GradientButton icon={<FaChevronUp />} />
-          </Form>
+          <div className="chatbot-display-container"></div>
+          <div className="chatbot-main-input">
+            <Form layout="vertical">
+              <Form.Item className="chatbot-input-container">
+                <div className="chatbot-inputs">
+                  <Input
+                    className="chatbot-input-component"
+                    placeholder="Please Enter A Message"
+                    size="large"
+                    prefix={<CiChat1 />}
+                  />
+                  <GradientButton
+                    className="chatbot-submit-button"
+                    icon={<FaChevronUp />}
+                  />
+                </div>
+              </Form.Item>
+            </Form>
+          </div>
         </div>
       </div>
     </div>
