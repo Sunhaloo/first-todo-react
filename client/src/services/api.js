@@ -121,5 +121,32 @@ export const getCategories = async () => {
   }
 };
 
+// send message to AI
+export const sendChatMessage = async (message) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message }),
+    });
+
+    // wait for the response
+    const data = await response.json();
+
+    // if the reponse failed
+    if (!response.ok) {
+      throw new Error(data.error || "Failed to send message");
+    }
+
+    // return the data to the front-end
+    return data;
+  } catch (error) {
+    console.error("Chat API Error:", error);
+    throw error;
+  }
+};
+
 // export the actual connection
 export default api;

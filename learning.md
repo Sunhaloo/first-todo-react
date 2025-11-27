@@ -85,6 +85,7 @@ status: In-Progress
 - Registration / Login Issues
   - Update Vercel Back-End's Environment Variables
   - Generate JSON Web Token Secret Key
+- AI ChatBot
 
 - ***
 
@@ -770,7 +771,7 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { userId: user.id, username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" },
+      { expiresIn: "7d" }
     );
 
     // if user is able to login ==> return a 'JSON' output
@@ -2033,7 +2034,7 @@ api.interceptors.request.use(
   // if the token has not been found --> reject the user's request
   (error) => {
     return Promise.reject(error);
-  },
+  }
 );
 
 // register a new user ( endpoint )
@@ -2134,7 +2135,7 @@ createRoot(document.getElementById("root")).render(
     <ConfigProvider>
       <App />
     </ConfigProvider>
-  </StrictMode>,
+  </StrictMode>
 );
 ```
 
@@ -2452,7 +2453,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   // declare variables that is going to check if `token` key exists in local storage
   const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem("token"),
+    !!localStorage.getItem("token")
   );
 
   // get the value of the `token` from the local storage
@@ -2598,7 +2599,7 @@ const handleRegister = async (values) => {
       if (error.response.status === 400) {
         setErrorMessage(
           error.response.data.error ||
-            "Registration failed - Please check your information",
+            "Registration failed - Please check your information"
         );
       } else {
         setErrorMessage("An error occurred during registration");
@@ -3072,6 +3073,7 @@ Follow the steps below to be able to achieve this:
 - Endpoint URL: `http://localhost:5000/api/todos`
 - Change the `Content-Type` from `text/plain` to `application/json` ( _simply create another key pair value_ )
 - Change the 'Authorization' **type** to be 'Bearer Token'
+
   - Then simply paste the user's _token_ value there!
 
 - Therefore in my case, I see this as output:
@@ -3712,7 +3714,7 @@ createRoot(document.getElementById("root")).render(
         <App />
       </ThemeProvider>
     </ConfigProvider>
-  </StrictMode>,
+  </StrictMode>
 );
 ```
 
@@ -3861,7 +3863,7 @@ import AppWithProviders from "./AppWithProviders.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AppWithProviders />
-  </StrictMode>,
+  </StrictMode>
 );
 ```
 
@@ -4815,7 +4817,7 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  }),
+  })
 );
 
 // other codes here
@@ -4977,6 +4979,210 @@ import { Button, Modal } from "antd";
 > [!SUCCESS]
 >
 > We have now been able to implement the 'Delete Account' button / functionality to our web-app!
+
+# AI ChatBot
+
+I am now going to try to implement a AI assistant that is going have access to the _current_ user's 'TODO' items and be able to assists the user by performing 'CRUD' operations.
+
+> I have called the AI assistant 'Task Whisperer'
+
+Because I am **both** broke and cheap, I am going to be using 'Gemini' from Google ( _themselves through 'Google AI Studio'_ ). Some developers told me to use [Open Router](https://openrouter.ai/).
+
+When a friend of mine tried to implement his chatbot in his 'TODO' / Notes app; he was getting a lot of '429' error which basically means that he was '_rate limited_'.
+
+> This took a bit hit in this productivity!
+
+Hence, these are one of the reason that I am using Gemini ( _directly_ ) instead of a passing through a provider like Open Router.
+
+> Additionally, there is no point in using a "_heavy_" model for such simple tasks!
+
+> [!NOTE] Create API Key
+> Head over to the 'Google AI Studio' website through this link here: https://aistudio.google.com
+>
+> - Create your API key
+>   - You might need to create a project
+> - Copy the API Key created
+> - Open the `server/.env` file and add the **API key** to the `GEMINI_API_KEY`
+
+## Create The Controller And Route For Chats
+
+- Create the `server/controllers/chatController.js` file:
+
+```js
+// import the module responsible for AI calls
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+// import the 'dotenv' module to be able to read API key
+require("dotenv").config();
+
+// get the API key from the `.env` file
+const apiKey = process.env.GEMINI_API_KEY;
+
+// check if the API key is present ( or not )
+if (!apiKey) {
+  console.error("GEMINI_API_KEY environment variable is not set");
+
+  process.exit(1);
+}
+
+// create a new Google Gemini AI object
+const genAI = new GoogleGenerativeAI(apiKey);
+
+// function to be able to send chat requests
+const sendMessage = async (req, res) => {
+  try {
+    // get the message from the requests --> user input
+    const { message } = req.body;
+
+    // check if the request actually has a message
+    if (!message) {
+      return res.status(400).json({ error: "Message is required" });
+    }
+
+    // define the model
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash-lite",
+    });
+
+    // generate response / output message
+    const result = await model.generateContent(message);
+    const response = result.response;
+    const text = response.text();
+
+    // send response back to frontend
+    res.status(200).json({
+      success: true,
+      message: text,
+    });
+
+    // if message could not be send to "server"
+    // NOTE: status code = '500' ==> internal server error
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to get response from AI",
+    });
+  }
+};
+
+// export the functions that are going to handle the 'POST' requests for AI calls
+module.exports = {
+  sendMessage,
+};
+```
+
+- Create the `server/routers/chatRouters.js` file:
+
+```js
+// import the 'express' library and the endpoint's function for 'register' and 'login'
+const express = require("express");
+const router = express.Router();
+const chatController = require("../controllers/chatController");
+
+// 'POST' route ==> /api/chat/message
+router.post("/message", chatController.sendMessage);
+
+// export the actual routes
+module.exports = router;
+```
+
+- Update the `server/server.js` file to _link_ the routes:
+
+```js
+// other codes here
+
+// import our routers
+const authRouter = require("./routers/authRouters.js");
+const todoRouter = require("./routers/todoRouters.js");
+const userRouter = require("./routers/userRouters.js");
+const chatRouter = require("./routers/chatRouters.js");
+
+// other codes here
+
+// chat routers
+app.use("/api/chat", chatRouter);
+
+// other codes here
+```
+
+### Test With Postman
+
+> Again, **not** the guy that delivers your letters!
+
+Go ahead and make a `POST` requests and make sure that you follow the following _rules_:
+
+- Run the back-end server with `npm run dev`
+- Make a `POST` request to the 'URL' `http://localhost:5000/api/chat/message`
+- Update / Add a new 'Content-Type' key with a value of `application/json` in the 'Headers'
+- Add the following "_raw_" message to the Body:
+
+```json
+{
+  "message": "What's the HEX colour for pure white?"
+}
+```
+
+- Therefore you are going to get a response like so:
+
+```json
+{
+  "success": true,
+  "message": "The HEX colour for pure white is **#FFFFFF**."
+}
+```
+
+> [!TIP] Success
+> As you can see we are able to make requests and also get a response back from Gemini!
+
+### Update Our Front-End API
+
+- Go ahead and update our `client/src/services/api.js` file:
+
+```js
+// other codes here
+
+// send message to AI
+export const sendChatMessage = async (message) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message }),
+    });
+
+    // wait for the response
+    const data = await response.json();
+
+    // if the reponse failed
+    if (!response.ok) {
+      throw new Error(data.error || "Failed to send message");
+    }
+
+    // return the data to the front-end
+    return data;
+  } catch (error) {
+    console.error("Chat API Error:", error);
+    throw error;
+  }
+};
+
+// NOTE: these are the lasts lines below
+// export the actual connection
+export default api;
+```
+
+## AI Front-End
+
+> [!NOTE]
+> I have already created a `client/src/components/ChatBot.jsx` ( _and its asscociated `ChatBot.css` file_ ).
+>
+> I created a section whereby a user can use the 'Switch' component to toggle the chat ( _part_ ) on / off.
+>
+>>Therefore, I am simply going to be modifying it
+>
 
 ---
 
