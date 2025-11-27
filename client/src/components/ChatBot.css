@@ -32,11 +32,25 @@
 }
 
 .chatbot-main-chat {
+  display: flex;
+  flex-direction: column;
   margin-top: 1rem;
-  padding: 1.5rem 1rem 25rem 1rem;
+  padding: 1.5rem 1rem 1rem 1rem;
   background-color: var(--background);
   border-radius: var(--border-radius);
   box-shadow: var(--card-shadow);
+  min-height: 28.125rem;
+}
+
+.chatbot-display-container {
+  padding: 1rem 1rem 1rem 1rem;
+  margin-bottom: 0.7rem;
+  background-color: var(--background);
+  border-radius: var(--border-radius);
+  border: 0.1rem solid #d9d9d9;
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 12.5rem;
 }
 
 .chatbot-input-container {
@@ -54,4 +68,8 @@
 
 .chatbot-submit-button {
   height: 2.5rem;
+}
+
+.chatbot-input-form {
+  margin-bottom: 0;
 }

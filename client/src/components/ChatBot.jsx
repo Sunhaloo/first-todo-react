@@ -49,7 +49,7 @@ function ChatBot() {
         <div className="chatbot-main-chat">
           <div className="chatbot-display-container"></div>
           <div className="chatbot-main-input">
-            <Form layout="vertical">
+            <Form layout="vertical" className="chatbot-input-form">
               <Form.Item className="chatbot-input-container">
                 <div className="chatbot-inputs">
                   <Input
