@@ -34,6 +34,7 @@ import {
   Typography,
   Modal,
   message,
+  Skeleton,
 } from "antd";
 
 // import icons from react-icons
@@ -206,6 +207,15 @@ function InputDisplayTodo() {
 
       // create the form for new input of TODO item
       form.resetFields();
+
+      // set default category back to 'Miscellaneous' after form input
+      const miscellaneousCategory = getMiscellaneousCategory();
+
+      if (miscellaneousCategory) {
+        form.setFieldsValue({ category: miscellaneousCategory });
+      } else if (categories.length > 0) {
+        form.setFieldsValue({ category: categories[0] });
+      }
 
       // if there was any errors while creation of TODO item
     } catch (error) {
@@ -456,7 +466,13 @@ function InputDisplayTodo() {
                 }
                 scrollableTarget="display-todos-card"
               >
-                {todos.length === 0 ? (
+                {todoFetchLoading && allTodos.length === 0 ? (
+                  <div>
+                    {[...Array(3)].map((_, index) => (
+                      <Skeleton key={index} active paragraph={{ rows: 1 }} />
+                    ))}
+                  </div>
+                ) : todos.length === 0 ? (
                   <p className="display-todos-completed-message">
                     You completed all your TODO items!
                   </p>
