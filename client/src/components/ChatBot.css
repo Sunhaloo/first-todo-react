@@ -1,5 +1,5 @@
 .chatbot {
-  margin-top: 100px;
+  margin-top: 1.25rem;
 }
 
 .chatbot-background {
@@ -27,4 +27,11 @@
 .chatbot-top-heading .chatbot-heading-right-section {
   justify-self: end;
   align-items: center;
+}
+
+.chatbot-main-chat {
+  padding: 1.5rem 1rem 25rem 1rem;
+  background-color: var(--background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
 }

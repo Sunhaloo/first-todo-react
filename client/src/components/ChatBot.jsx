@@ -2,7 +2,14 @@
 import { useState } from "react";
 
 // import the required components from 'antd'
-import { Typography, Switch } from "antd";
+import { Button, Form, Input, Typography, Switch } from "antd";
+
+// import the required icons from 'react-icons'
+import { CiChat1 } from "react-icons/ci";
+import { FaChevronUp } from "react-icons/fa6";
+
+// import the gradient button component ( see official docs ) from 'antd'
+import GradientButton from "./GradientButton";
 
 // add the required styling to style input and display
 import "./ChatBot.css";
@@ -37,6 +44,20 @@ function ChatBot() {
               onChange={handleSwitchChecked}
             />
           </div>
+        </div>
+
+        <div className="chatbot-main-chat">
+          <Form>
+            <Form.Item>
+              <Input
+                placeholder="Please Enter A Message"
+                size="large"
+                prefix={<CiChat1 />}
+              />
+            </Form.Item>
+
+            <GradientButton icon={<FaChevronUp />} />
+          </Form>
         </div>
       </div>
     </div>
