@@ -122,14 +122,15 @@ export const getCategories = async () => {
 };
 
 // send message to AI
-export const sendChatMessage = async (message) => {
+export const sendChatMessage = async (message, chatHistory = []) => {
   try {
     const response = await fetch(`${API_BASE_URL}/chat/message`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ message }),
+      // send the message and also the full conversation history
+      body: JSON.stringify({ message, history: chatHistory }),
     });
 
     // wait for the response

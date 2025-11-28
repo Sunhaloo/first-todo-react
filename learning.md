@@ -89,7 +89,8 @@ status: In-Progress
 
   - Create The Controller And Route For Chats
   - AI Front-End
-  - AI - Environement Files
+  - AI - Environment Files
+  - Update Services
 
 - ***
 
@@ -5237,6 +5238,72 @@ GEMINI_SYSTEM_PROMPT="
 > Asking Claude / AI to help another AI... _What the fuck has the world become to..._
 
 ### Update Chat Controller
+
+We need to modify the `server/controllers/chatController.js` file so that we are using the _data_ from the `.env` files are able to get sourced.
+
+```js
+// other codes above
+
+// import the 'dotenv' module to be able to read API key
+require("dotenv").config();
+
+// get the required information from the `.env` file
+const apiKey = process.env.GEMINI_API_KEY;
+const ai_model = process.env.GEMINI_MODEL;
+const temperature = process.env.GEMINI_TEMPERATURE;
+const prompt = process.env.GEMINI_SYSTEM_PROMPT;
+
+// other codes below
+
+// define the model and configuration
+const model = genAI.getGenerativeModel({
+  model: ai_model,
+  systemInstruction: prompt,
+  generationConfig: {
+    temperature: temperature,
+  },
+});
+
+// other codes here
+```
+
+## Update Services
+
+Now, we need to also update the `sendChatMessage` so that it sends the **full history** of the _chat_ that we did with the Assistant.
+
+> This is due to how Large Language Models works; that's the reason that we have to **all** the messages again.
+
+- Therefore update the `sendChatMessage` found in `client/src/services/api.js` file:
+
+```js
+// send message to AI
+export const sendChatMessage = async (message, chatHistory = []) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/chat/message`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // send the message and also the full conversation history
+      body: JSON.stringify({ message, history: chatHistory }),
+    });
+
+    // wait for the response
+    const data = await response.json();
+
+    // if the reponse failed
+    if (!response.ok) {
+      throw new Error(data.error || "Failed to send message");
+    }
+
+    // return the data to the front-end
+    return data;
+  } catch (error) {
+    console.error("Chat API Error:", error);
+    throw error;
+  }
+};
+```
 
 ---
 

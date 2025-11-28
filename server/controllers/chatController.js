@@ -31,7 +31,7 @@ const sendMessage = async (req, res) => {
       return res.status(400).json({ error: "Message is required" });
     }
 
-    // define the model
+    // define the model and configuration
     const model = genAI.getGenerativeModel({
       model: ai_model,
       systemInstruction: prompt,
