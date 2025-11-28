@@ -38,7 +38,7 @@ function ChatBot() {
 
   // function to handle the input of messages
   const handleUserMessageInput = async (e) => {
-    // Prevent default form submission behavior if form event is passed
+    // prevent default form submission behavior if form event is passed
     if (e && e.preventDefault) e.preventDefault();
 
     // check if the user is sending trying to send empty inputs --> "skip it"
@@ -61,8 +61,8 @@ function ChatBot() {
     setIsLoading(true);
 
     try {
-      // call the API / AI and wait for response
-      const response = await sendChatMessage(userMessage);
+      // call the API / AI and wait for response and also pass the conversation history
+      const response = await sendChatMessage(userMessage, chatHistory);
 
       // add AI responses to chat history --> to be able to get context
       const aiMessage = {

@@ -5307,6 +5307,48 @@ export const sendChatMessage = async (message, chatHistory = []) => {
 
 ---
 
+## Update Controller ( Again )
+
+We are now going to update the `chatController.js` so that instead of passing a _message_ and generating some **content** from that message. We instead are going to modify it so that it sends actual chat message instead.
+
+```js
+// other codes above
+
+// get the message from the requests --> user input + past chat history ( / input )
+const { message, history = [] } = req.body;
+
+// start a chat session with history
+const chat = model.startChat({
+  history: history.map((msg) => ({
+    // gemini is the "model"
+    role: msg.role === "assistant" ? "model" : "user",
+    parts: [{ text: msg.content }],
+  })),
+});
+
+// generate response based on the message from the chat ( sent )
+const result = await chat.sendMessage(message);
+const response = result.response;
+const text = response.text();
+
+// other codes below
+```
+
+## Update Our Chat Component
+
+- Modify our `client/src/components/ChatBot.jsx` file:
+
+```jsx
+// other codes above
+
+// call the API / AI and wait for response and also pass the conversation history
+const response = await sendChatMessage(userMessage, chatHistory);
+
+// other codes below
+```
+
+---
+
 # Socials
 
 - **Instagram**: <https://www.instagram.com/s.sunhaloo>

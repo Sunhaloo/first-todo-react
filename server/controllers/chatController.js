@@ -23,12 +23,12 @@ const genAI = new GoogleGenerativeAI(apiKey);
 // function to be able to send chat requests
 const sendMessage = async (req, res) => {
   try {
-    // get the message from the requests --> user input
-    const { message } = req.body;
+    // get the message from the requests --> user input + past chat history ( / input )
+    const { message, history = [] } = req.body;
 
     // check if the request actually has a message
     if (!message) {
-      return res.status(400).json({ error: "Message is required" });
+      return res.status(400).json({ error: "Message is required!" });
     }
 
     // define the model and configuration
@@ -40,8 +40,17 @@ const sendMessage = async (req, res) => {
       },
     });
 
-    // generate response / output message
-    const result = await model.generateContent(message);
+    // start a chat session with history
+    const chat = model.startChat({
+      history: history.map((msg) => ({
+        // gemini is the "model"
+        role: msg.role === "assistant" ? "model" : "user",
+        parts: [{ text: msg.content }],
+      })),
+    });
+
+    // generate response based on the message from the chat ( sent )
+    const result = await chat.sendMessage(message);
     const response = result.response;
     const text = response.text();
 
