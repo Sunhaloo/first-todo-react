@@ -4,8 +4,11 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 // import the 'dotenv' module to be able to read API key
 require("dotenv").config();
 
-// get the API key from the `.env` file
+// get the required information from the `.env` file
 const apiKey = process.env.GEMINI_API_KEY;
+const ai_model = process.env.GEMINI_MODEL;
+const temperature = process.env.GEMINI_TEMPERATURE;
+const prompt = process.env.GEMINI_SYSTEM_PROMPT;
 
 // check if the API key is present ( or not )
 if (!apiKey) {
@@ -30,7 +33,11 @@ const sendMessage = async (req, res) => {
 
     // define the model
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash-lite",
+      model: ai_model,
+      systemInstruction: prompt,
+      generationConfig: {
+        temperature: temperature,
+      },
     });
 
     // generate response / output message

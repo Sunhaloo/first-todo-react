@@ -87,6 +87,10 @@ status: In-Progress
   - Generate JSON Web Token Secret Key
 - AI ChatBot
 
+  - Create The Controller And Route For Chats
+  - AI Front-End
+  - AI - Environement Files
+
 - ***
 
 > [!NOTE] Resource(s)
@@ -225,7 +229,7 @@ node_modules/
 > npm run start
 > ```
 >
-> > [!SUCCESS]
+> > [!TIP]
 > > When you run the `npm` command above, you should see that you have the following output:
 > >
 > > ```console
@@ -453,7 +457,7 @@ Using environment: development
 Batch 1 run: 2 migrations
 ```
 
-> [!SUCCESS]
+> [!TIP]
 >
 > You should now see that we have our `db/app.db` SQLite database file!
 
@@ -983,7 +987,7 @@ if __name__ == "__main__":
 > 2|tester|tester@email.com|$2b$10$ivYImfJRsKdeqH.KAtnk5OqvRh3tU6d72k.2smk/1BTYqJL9NrKGK|male|2025-11-09 07:25:54|2025-11-09 07:25:54
 > ```
 >
-> > [!SUCCESS] Hence!
+> > [!TIP] Hence!
 > > We should expect to see an **error** for the `test_registration` function!
 > >
 > > And we should **not** see any errors from the `test_login` function!
@@ -1006,7 +1010,7 @@ if __name__ == "__main__":
 > }
 > ```
 >
-> > [!SUCCESS]
+> > [!TIP]
 > > Very nice!
 
 > [!NOTE] Delete `tester` User From Database
@@ -1584,7 +1588,7 @@ if __name__ == "__main__":
     main()
 ```
 
-> [!SUCCESS]
+> [!TIP]
 >
 > I do see all the **correct** 'JSON' output for the creation of 'TODO' items!
 >
@@ -1676,7 +1680,7 @@ export default App;
 npm run dev
 ```
 
-> [!SUCCESS]
+> [!TIP]
 >
 > You **should** see that you have the heading 'TODO Application' in the **middle** of your screen!
 
@@ -1722,7 +1726,7 @@ function App() {
 export default App;
 ```
 
-> [!SUCCESS]
+> [!TIP]
 >
 > Our `antd` is working correctly and I can see the **card** and **button** component on the page!
 
@@ -2267,7 +2271,7 @@ npm run dev
 >
 > Therefore the `message` and the `loading` ( _`<Button>` component_ ) attribute is **not** going to work.
 >
-> > [!SUCCESS]
+> > [!TIP]
 > > But looking at the actual data, i.e _credentials_ for **registration** and **login**.
 > >
 > > We are able to use the `AuthPages.jsx`!
@@ -3332,7 +3336,7 @@ return (
 );
 ```
 
-> [!SUCCESS]
+> [!TIP]
 >
 > Therefore you should see that there are some _greetings_ that are shown **before** the username and if you refresh the page.
 >
@@ -3610,7 +3614,7 @@ export const useMediaQuery = (query) => {
 >
 > Please refer to the actual `ProfileMenu.jsx` file in the code as there has been many _good_ changes.
 
-> [!SUCCESS]
+> [!TIP]
 >
 > Now the 'Toggle Width' button only shows when the user is on a big screen!
 
@@ -3867,11 +3871,12 @@ createRoot(document.getElementById("root")).render(
 );
 ```
 
-> [!SUCCESS]
+> [!TIP]
 >
 > Therefore, you should see that even the Ant Design components are going to switch to the _correct_ 'Dark Mode'.
 >
 > > [!NOTE]
+> >
 > > Now, I have gone and updates all of the places ( _mostly inside of `client/src/AuthPages.jsx`_ ) whereby I have hard coded some colours as our theme is currently "_per browser_".
 > >
 > > Meaning that if the user switches to 'Dark Mode'; then the `AuthPages.jsx` is also going to **switch** to the dark variant.
@@ -4153,7 +4158,7 @@ npx knex migrate:rollback --all
 > npx knex migrate:latest
 > ```
 >
-> > [!SUCCESS] Therefore!
+> > [!TIP] Therefore!
 > >
 > > > [!WARNING]
 > > > The output below is **not** good... Please keep scrolling!
@@ -4234,7 +4239,7 @@ Found 2 Completed Migration file/files.
 No Pending Migration files Found.
 ```
 
-> [!SUCCESS]
+> [!TIP]
 >
 > Going into the `app.db` database file using the `sqlite3` command; running the following command:
 >
@@ -4306,7 +4311,7 @@ Therefore, speaking with some of the developers here; as they use '[Postgresql](
 > - Region: AWS Asia Pacific 1 (Singapore)
 > - Enable Neon Auth: True
 
-> [!SUCCESS]
+> [!TIP]
 >
 > I have been able to **create** our first "_project_" and I have been redirected to this URL `https://console.neon.tech/app/projects/`!
 
@@ -4526,7 +4531,7 @@ const [updatedTodo] = await db("todo")
 // other codes here
 ```
 
-> [!SUCCESS]
+> [!TIP]
 >
 > I see that I have been able to successfully:
 >
@@ -4612,7 +4617,7 @@ Head over to the link '<https://vercel.com/dashboard>' to get started with the *
 >
 > After adding "_everything_", simply click on the 'Redeploy' button that appears in the bottom right corner of head over to the 'Deployment' tab above and redeploy!
 
-> [!SUCCESS]
+> [!TIP]
 >
 > Therefore, in my case, I get the following link, '<https://first-todo-react-one.vercel.app/>', whereby its going to output the _response_ like so:
 >
@@ -4701,7 +4706,7 @@ Head over to the link '<https://vercel.com/dashboard>' to get started with the *
 > - Click on the 'Deploy' button
 > - Add the required Environment Variables
 
-> [!SUCCESS]
+> [!TIP]
 >
 > I have now been able to deploy my web-app on Vercel and anyone can access it!
 
@@ -4789,7 +4794,7 @@ Found 2 Completed Migration file/files.
 No Pending Migration files Found.
 ```
 
-> [!SUCCESS]
+> [!TIP]
 >
 > I know see that the **all** the _tables_ has been created in 'production' branch!
 
@@ -4840,7 +4845,7 @@ a3f5d8e9c2b1a4f7e6d3c8b9a2f5e1d4c7b3a9f6e2d8c1b5a7f4e3d9c6b2a8f5
 
 > Therefore add the `JWT_SECRET` key-value pair to the back-end's environment variables!
 
-> [!SUCCESS]
+> [!TIP]
 >
 > Fuck!!! It was the `JWT_SECRET` key!
 >
@@ -4976,7 +4981,7 @@ import { Button, Modal } from "antd";
 // other codes here
 ```
 
-> [!SUCCESS]
+> [!TIP]
 >
 > We have now been able to implement the 'Delete Account' button / functionality to our web-app!
 
@@ -5177,12 +5182,61 @@ export default api;
 ## AI Front-End
 
 > [!NOTE]
+>
 > I have already created a `client/src/components/ChatBot.jsx` ( _and its asscociated `ChatBot.css` file_ ).
 >
 > I created a section whereby a user can use the 'Switch' component to toggle the chat ( _part_ ) on / off.
 >
->>Therefore, I am simply going to be modifying it
+> > Therefore, I am simply going to be modifying it
+
+> What I am trying to tell you is to basically refer to the actual code!
+
+## AI - Environement Files
+
+Currently, we simply have 'Gemini' inside our React-App; it does **not** know what it actually is and what it can do!
+
+> Think of it like accessing the 'https://gemini.google.com' chat!
+
+Therefore, we are going to have to tell that it's and AI assistant in our 'TODO' web-app.
+
+This can be done by manipulating the `SYSTEM_PROMPT` and also playing with some of the configuration like `temperature`.
+
+> [!NOTE]
 >
+> For more information on these; try 'Googling', 'AI'ing' or use the following link below:
+>
+> - https://www.ibm.com/think/topics/llm-temperature
+
+### Update Our Environment File
+
+- Modify the `server/.env` file by adding these lines:
+
+```bash
+GEMINI_MODEL=gemini-2.5-flash-lite
+GEMINI_TEMPERATURE=0.5
+
+GEMINI_SYSTEM_PROMPT="
+  You are 'Task Whisperer', a helpful AI assistant for managing TODO lists.
+  \n\nYour role:\n- Help users manage their tasks and stay organized\n- Suggest task prioritization and time management tips\n
+  - Break down large tasks into smaller, manageable steps\n
+  - Provide motivation and encouragement\n
+  - Answer questions about productivity and task management\n\nPersonality:\n
+  - Friendly and encouraging\n
+  - Concise but helpful (keep responses brief unless asked for details)\n
+  - Proactive in suggesting improvements\n
+  - Understanding and non-judgmental\n\n
+  Current capabilities:\n
+  - Answer questions about task management\n
+  - Provide productivity tips\n
+  - Help organize and prioritize tasks\n
+  - Offer motivational support\n\n
+  Note: You can currently discuss tasks, but you cannot directly create, edit, or delete tasks yet. That feature is coming soon!
+  "
+```
+
+> Asking Claude / AI to help another AI... _What the fuck has the world become to..._
+
+### Update Chat Controller
 
 ---
 
