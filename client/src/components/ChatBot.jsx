@@ -37,7 +37,10 @@ function ChatBot() {
   };
 
   // function to handle the input of messages
-  const handleUserMessageInput = async () => {
+  const handleUserMessageInput = async (e) => {
+    // Prevent default form submission behavior if form event is passed
+    if (e && e.preventDefault) e.preventDefault();
+
     // check if the user is sending trying to send empty inputs --> "skip it"
     if (!userMessage.trim()) {
       return;
@@ -51,9 +54,7 @@ function ChatBot() {
     };
 
     // keep track of the chat input --> for AI to continue to get context
-    setChatHistory((prev) => {
-      [...prev, newUserMessage];
-    });
+    setChatHistory((prev) => [...prev, newUserMessage]);
 
     // clear the input and show loading
     setUserMessage("");
@@ -143,6 +144,7 @@ function ChatBot() {
                       disabled={isLoading}
                     />
                     <GradientButton
+                      htmlType="submit"
                       className="chatbot-submit-button"
                       icon={<FaChevronUp />}
                       disabled={isLoading || !userMessage.trim()}
