@@ -5487,6 +5487,86 @@ const model = genAI.getGenerativeModel({
 });
 ```
 
+- The function that is going to be responsible for calling the actual 'CRUD' functions inside of `todoController.js` file:
+
+```js
+// wrapper function to execute TODO 'CRUD' operations
+const executeTodoFunction = async (functionName, args, userId) => {
+  console.log(`AI calling function: ${functionName}`, args);
+
+  // create mock req and res objects to receive whatever controller is sending in 'JSON'
+  const createMockReqRes = (body = {}, params = {}) => {
+    const req = {
+      body,
+      params,
+      user: { userId: userId },
+    };
+
+    let responseData = null;
+
+    const res = {
+      status: (code) => res,
+      json: (data) => {
+        responseData = data;
+        return res;
+      },
+    };
+
+    return { req, res, getResponse: () => responseData };
+  };
+
+  try {
+    // `switch` statement to decide what function to call based on controller
+    switch (functionName) {
+      case "getTodos": {
+        const { req, res, getResponse } = createMockReqRes();
+        await getTodos(req, res);
+        return getResponse();
+      }
+
+      case "createTodo": {
+        const { req, res, getResponse } = createMockReqRes({
+          title: args.title,
+          category: args.category || "Miscellaneous",
+        });
+        await createTodo(req, res);
+        return getResponse();
+      }
+
+      case "updateTodo": {
+        const body = {};
+        if (args.title !== undefined) body.title = args.title;
+        if (args.completed !== undefined) body.completed = args.completed;
+
+        const { req, res, getResponse } = createMockReqRes(body, {
+          id: args.id,
+        });
+        await updateTodo(req, res);
+        return getResponse();
+      }
+
+      case "deleteTodo": {
+        const { req, res, getResponse } = createMockReqRes({}, { id: args.id });
+        await deleteTodo(req, res);
+        return getResponse();
+      }
+
+      case "getCategories": {
+        const { req, res, getResponse } = createMockReqRes();
+        await getCategories(req, res);
+        return getResponse();
+      }
+
+      default:
+        return { error: `Unknown function: ${functionName}` };
+    }
+  } catch (error) {
+    console.error(`Error executing ${functionName}:`, error);
+    return { error: error.message || "Function execution failed" };
+  }
+};
+```
+
 - Update responses that are send back to the user:
 
 ```js
@@ -5543,6 +5623,59 @@ router.post("/message", authenticateToken, chatController.sendMessage);
 // export the actual routes
 module.exports = router;
 ```
+
+- Update the `client/src/components/ChatBot.jsx` file:
+
+```jsx
+// other codes above
+
+const response = await sendChatMessage(userMessage, [
+  ...chatHistory,
+  newUserMessage,
+]);
+
+// other codes below
+```
+
+- Ohh, nearly forgot to mention but one of the crucial thing is to update the prompt in the `server/.env` file:
+
+```bash
+GEMINI_SYSTEM_PROMPT="
+You are 'Task Whisperer', a helpful AI assistant for managing TODO lists.\n
+\n
+Your role:\n
+- Help users manage their tasks and stay organized\n
+- Suggest task prioritization and time management tips\n
+- Break down large tasks into smaller, manageable steps\n
+- Provide motivation and encouragement\n
+- Answer questions about productivity and task management\n
+\n
+Personality:\n
+- Friendly and encouraging\n
+- Concise but helpful (keep responses brief unless asked for details)\n
+- Proactive in suggesting improvements\n
+- Understanding and non-judgmental\n
+\n
+Capabilities:\n
+- You can CREATE new TODO tasks for users\n
+- You can VIEW all their existing tasks\n
+- You can UPDATE tasks (mark as complete, change titles)\n
+- You can DELETE tasks\n
+- You can VIEW available categories\n
+\n
+IMPORTANT INSTRUCTIONS FOR WORKING WITH TASKS:\n
+- When a user asks to delete, update, or complete a task by NAME/TITLE (not by ID), you MUST first call getTodos to see all their tasks, find the matching task by title, then use that task's ID for the operation.\n
+- When finding tasks by title, be flexible with matching (case-insensitive, partial matches are okay).\n
+- If multiple tasks match, ask the user which one they meant.\n
+- Always provide a confirmation message for each function call / action and provide friendly feedback about what you did!\n
+- Remove ( markdown ) formatting such as bold ( **text here** ).\n
+- When displaying TODOs, display them on separate lines and use '-' character to signify a bullet point.
+"
+```
+
+> [!TIP] Success
+>
+> Therefore, if you were to go and _play_ around with 'Task Whisperer'... You are going to see that its able to
 
 ---
 
