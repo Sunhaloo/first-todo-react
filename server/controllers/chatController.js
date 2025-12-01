@@ -1,6 +1,15 @@
 // import the module responsible for AI calls
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
+// import the required function / end-points from the 'todoController.js' file
+const {
+  getTodos,
+  createTodo,
+  updateTodo,
+  deleteTodo,
+  getCategories,
+} = require("./todoController");
+
 // import the 'dotenv' module to be able to read API key
 require("dotenv").config();
 
@@ -9,6 +18,92 @@ const apiKey = process.env.GEMINI_API_KEY;
 const ai_model = process.env.GEMINI_MODEL;
 const temperature = process.env.GEMINI_TEMPERATURE;
 const prompt = process.env.GEMINI_SYSTEM_PROMPT;
+
+// define the tools that the AI is going to have access to
+const tools = [
+  {
+    functionDeclarations: [
+      {
+        name: "getTodos",
+        description:
+          "Get all the TODO items / tasks for the current logged in user; use this to see what 'TODO' items / tasks the user currently has!",
+        parameters: {
+          type: "object",
+          properties: {},
+          required: [],
+        },
+      },
+      {
+        name: "createTodo",
+        description: "Create a new TODO item / task for the user.",
+        parameters: {
+          type: "object",
+          properties: {
+            title: {
+              type: "string",
+              description:
+                "The title ( TODO item itself ) / description of the TODO item / task.",
+            },
+            category: {
+              type: "string",
+              description:
+                "The category in which the TODO item / tasks falls into ( e.g: Coding, Planning, Refactoring, etc )... If not defined; defaults to 'Miscellaneous' category!!!",
+            },
+          },
+          // NOTE: no need to add 'category' has required as it defaults to 'Miscellaneous'
+          required: ["title"],
+        },
+      },
+      {
+        name: "updateTodo",
+        description: "Update an already existing TODO item / task",
+        parameters: {
+          type: "object",
+          properties: {
+            id: {
+              type: "string",
+              description: "The id of the TODO item / task.",
+            },
+            title: {
+              type: "string",
+              description:
+                "The title ( TODO item itself ) / description of the new TODO item / task [ OPTIONAL ].",
+            },
+            completed: {
+              type: "boolean",
+              description:
+                "Whether the TODO item / task is completed or not [ OPTIONAL ].",
+            },
+          },
+          required: ["id"],
+        },
+      },
+      {
+        name: "deleteTodo",
+        description: "Delete a TODO item / task permanently from the database.",
+        parameters: {
+          type: "object",
+          properties: {
+            id: {
+              type: "string",
+              description: "The id of the TODO item / task.",
+            },
+          },
+          required: ["id"],
+        },
+      },
+      {
+        name: "getCategories",
+        description: "Get all available categories for a TODO item / task.",
+        parameters: {
+          type: "object",
+          properties: {},
+          required: [],
+        },
+      },
+    ],
+  },
+];
 
 // check if the API key is present ( or not )
 if (!apiKey) {
