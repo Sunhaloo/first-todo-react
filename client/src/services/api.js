@@ -124,10 +124,14 @@ export const getCategories = async () => {
 // send message to AI
 export const sendChatMessage = async (message, chatHistory = []) => {
   try {
+    // get the token created when the user is logged in from the local storage
+    const token = localStorage.getItem("token");
+
     const response = await fetch(`${API_BASE_URL}/chat/message`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       // send the message and also the full conversation history
       body: JSON.stringify({ message, history: chatHistory }),

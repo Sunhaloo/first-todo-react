@@ -139,6 +139,39 @@ const executeTodoFunction = async (functionName, args, userId) => {
         return getResponse();
       }
 
+      case "createTodo": {
+        const { req, res, getResponse } = createMockReqRes({
+          title: args.title,
+          category: args.category || "Miscellaneous",
+        });
+        await createTodo(req, res);
+        return getResponse();
+      }
+
+      case "updateTodo": {
+        const body = {};
+        if (args.title !== undefined) body.title = args.title;
+        if (args.completed !== undefined) body.completed = args.completed;
+
+        const { req, res, getResponse } = createMockReqRes(body, {
+          id: args.id,
+        });
+        await updateTodo(req, res);
+        return getResponse();
+      }
+
+      case "deleteTodo": {
+        const { req, res, getResponse } = createMockReqRes({}, { id: args.id });
+        await deleteTodo(req, res);
+        return getResponse();
+      }
+
+      case "getCategories": {
+        const { req, res, getResponse } = createMockReqRes();
+        await getCategories(req, res);
+        return getResponse();
+      }
+
       default:
         return { error: `Unknown function: ${functionName}` };
     }
