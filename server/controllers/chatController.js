@@ -42,7 +42,7 @@ const ai_tools = [
             title: {
               type: "string",
               description:
-                "The title ( TODO item itself ) / description of the TODO item / task.",
+                "The TODO item / task text. Example: 'Write code', 'Buy groceries', 'Write documentation', 'Plan with the team'. This should be short, consise and direct!",
             },
             category: {
               type: "string",
@@ -151,7 +151,7 @@ const executeTodoFunction = async (functionName, args, userId) => {
 
       case "createTodo": {
         const { req, res, getResponse } = createMockReqRes({
-          title: args.title,
+          description: args.title,
           category: args.category || "Miscellaneous",
         });
         await createTodo(req, res);

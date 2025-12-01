@@ -5677,6 +5677,145 @@ IMPORTANT INSTRUCTIONS FOR WORKING WITH TASKS:\n
 >
 > Therefore, if you were to go and _play_ around with 'Task Whisperer'... You are going to see that its able to
 
+## Create TODO Tool Problem
+
+Below you are going to find a little conversationn that I had with 'Task Whisperer'.
+
+```console
+- Hello, are you able to create TODO items for me?
+
+>Yes, I can create TODO items for you! What would you like to add to your list?
+
+- Can you add a TODO for 'Washing the car'?
+
+>I noticed that the description for "Washing the car" is missing. Could you please provide it?
+
+- Wash the car
+
+>I'm sorry, but I encountered an error. It seems the description for "Wash the car" is still missing. Could you please provide it?
+
+- What do you mean by description?
+
+>By description, I mean the specific details of the task. For example, if the task is "Buy groceries," the description could be "Milk, eggs, bread, and cheese." In the case of "Washing the car," what specifically needs to be done? For example, is it just a general wash, or does it include waxing, interior cleaning, etc.?
+
+- General wash for the car
+
+>I'm sorry, but I encountered an error. It seems the description for "General wash for the car" is still missing. Could you please provide it?
+```
+
+> I have formatted it for your reading pleasure!
+
+Therefore, given that that I don't want to provide and description for inserting any 'TODO' item... I am going to **update** the `createTodo` tool in our `ai_tools` variable.
+
+- Update our `server/controller/chatController.js` file:
+
+```js
+      {
+        name: "createTodo",
+        description: "Create a new TODO item / task for the user.",
+        parameters: {
+          type: "object",
+          properties: {
+            title: {
+              type: "string",
+              description:
+                "The TODO item / task text. Example: 'Write code', 'Buy groceries', 'Write documentation', 'Plan with the team'. This should be short, consise and direct!",
+            },
+            category: {
+              type: "string",
+              description:
+                "The category in which the TODO item / tasks falls into ( e.g: Coding, Planning, Refactoring, etc )... If not defined; defaults to 'Miscellaneous' category!!!",
+            },
+          },
+          // NOTE: no need to add 'category' has required as it defaults to 'Miscellaneous'
+          required: ["title"],
+        },
+      },
+```
+
+- Do also update the prompt on our `server/.env` variable:
+
+```bash
+GEMINI_SYSTEM_PROMPT="
+You are 'Task Whisperer', a helpful AI assistant for managing TODO lists.\n
+\n
+Your role:\n
+- Help users manage their tasks and stay organized\n
+- Suggest task prioritization and time management tips\n
+- Break down large tasks into smaller, manageable steps\n
+- Provide motivation and encouragement\n
+- Answer questions about productivity and task management\n
+\n
+Personality:\n
+- Friendly and encouraging\n
+- Concise but helpful (keep responses brief unless asked for details)\n
+- Proactive in suggesting improvements\n
+- Understanding and non-judgmental\n
+\n
+Capabilities:\n
+- You can CREATE new TODO tasks for users \n\n\nWhen creating tasks:\n- Extract the task from what the user says (e.g., 'add a task to wash the car' → title: 'Wash the car')\n- Ask the user to confirm: 'I'll create a task: [title] in the [category] category. Should I proceed?'\n- Only call createTodo after the user confirms (e.g., 'yes', 'sure', 'ok', 'go ahead')
+- You can VIEW all their existing tasks\n
+- You can UPDATE tasks (mark as complete, change titles)\n
+- You can DELETE tasks\n
+- You can VIEW available categories\n
+IMPORTANT INSTRUCTIONS FOR WORKING WITH TASKS:\n
+- When a user asks to delete, update, or complete a task by NAME/TITLE (not by ID), you MUST first call getTodos to see all their tasks, find the matching task by title, then use that task's ID for the operation.\n
+- When finding tasks by title, be flexible with matching (case-insensitive, partial matches are okay).\n
+- If multiple tasks match, ask the user which one they meant.\n
+- Always provide a confirmation message for each function call / action and provide friendly feedback about what you did!\n
+- Remove ( markdown ) formatting such as bold ( **text here** ).\n
+"
+```
+
+> [!BUG]
+> Still the same thing problem...
+
+The actual problem comes from the way that I coded my things. If you take a look at my migration file itself for my 'TODO'; then you are going to see this:
+
+```js
+// use the `createTable` function to define - create table in database
+return knex.schema.createTable("todo", (table) => {
+  // our fields
+  table.increments("id").primary();
+  table.text("description").notNullable();
+  table.enu("category", TODO_CATEGORIES).defaultTo("Miscellaneous");
+  table.boolean("completed").defaultTo(false);
+
+  // add time stamps of when created / updated
+  table.timestamps(true, true);
+
+  // create the field for the foreign key here
+  table.integer("user_id").unsigned().notNullable();
+  // make the actual link using 'references'
+  table.foreign("user_id").references("user.id").onDelete("CASCADE");
+});
+```
+
+> That's on me!
+
+Instead of using `title`... I used `description` and just because of that, the AI assistant really wants an actual description instead of a simple 'title'.
+
+Hence, we are going to have to update it to tell it that we only required a simple title!
+
+- Modify the `server/controller/chatController.js` file:
+
+```js
+case "createTodo": {
+  const { req, res, getResponse } = createMockReqRes({
+    description: args.title,
+    category: args.category || "Miscellaneous",
+  });
+  await createTodo(req, res);
+  return getResponse();
+}
+```
+
+> We changed `title: args.title` to `description: args.title`.
+
+> [!TIP] Success ( I think )
+>
+> I see that it's working ( _for now_ )! 
+
 ---
 
 # Socials
