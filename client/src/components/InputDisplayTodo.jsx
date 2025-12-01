@@ -379,13 +379,6 @@ function InputDisplayTodo({ onTodoChange }) {
     }
   };
 
-  // expose refresh function to parent component ==> 'Homepage'
-  useEffect(() => {
-    // if there are any changes --> call the "refresh" function
-    if (onTodoChange) {
-      onTodoChange(refreshTodos);
-    }
-  }, [onTodoChange]);
 
   // function to open edit modal
   const openEditModal = (todo) => {

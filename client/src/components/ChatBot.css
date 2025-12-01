@@ -25,6 +25,22 @@
   animation: move-up-down 1s ease-in-out infinite;
 }
 
+/* RGB animation when switch is on and in dark mode */
+:root.dark .chatbot-heading-text.rgb-effect {
+  background: linear-gradient(
+    -45deg,
+    hsl(var(--hue), 100%, 60%),
+    hsl(calc(var(--hue) + 60deg), 100%, 60%),
+    hsl(calc(var(--hue) + 120deg), 100%, 60%),
+    hsl(calc(var(--hue) + 180deg), 100%, 60%)
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rgb-cycle 3s linear infinite, move-up-down 1s ease-in-out infinite;
+}
+
 .chatbot-top-heading .chatbot-heading-right-section {
   justify-self: end;
   align-items: center;

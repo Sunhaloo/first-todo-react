@@ -7,6 +7,9 @@ import { sendChatMessage } from "../services/api.js";
 // import the required components from 'antd'
 import { Form, Input, Typography, Switch } from "antd";
 
+// import theme context to determine current theme
+import { useTheme } from "../contexts/ThemeContext";
+
 // import the required icons from 'react-icons'
 import { CiChat1 } from "react-icons/ci";
 import { FaChevronUp } from "react-icons/fa6";
@@ -17,11 +20,17 @@ import GradientButton from "./GradientButton";
 // add the required styling to style input and display
 import "./ChatBot.css";
 
-function ChatBot({ onTodoUpdate }) {
+function ChatBot({ onTodoChange }) {
   // declare variable for toggling heading animation
   const [isHeadingAnimating, setHeadingAnimating] = useState(false);
   // declare variable for toggling chat app visibility
   const [isChatVisible, setIsChatVisible] = useState(false);
+
+  // get the current theme
+  const { theme } = useTheme();
+
+  // determine if both switch is on and theme is dark
+  const isRgbEffectActive = isHeadingAnimating && theme === "dark";
 
   // declare variables for the actual chat implmentation
   const [userMessage, setUserMessage] = useState("");
@@ -76,6 +85,21 @@ function ChatBot({ onTodoUpdate }) {
 
       // keep track of the chat input --> for AI to continue to get context
       setChatHistory((prev) => [...prev, aiMessage]);
+
+      // check if function / tool calls were executed and trigger refresh if "CUD" operation / tool used
+      if (response.functionCalls && response.functionCalls.length > 0) {
+        console.log("Function calls executed:", response.functionCalls);
+        // trigger todo refresh if "CUD"" operations were performed
+        const cudOperations = ["create_todo", "update_todo", "delete_todo"];
+        const hasCudOperation = response.functionCalls.some((func) =>
+          cudOperations.includes(func.toLowerCase()),
+        );
+
+        if (hasCudOperation && onTodoChange) {
+          // make the refresh actually occur
+          onTodoChange();
+        }
+      }
     } catch (error) {
       // NOTE: do also add the `message` component here
       console.error("Failed to send message:", error);
@@ -101,7 +125,7 @@ function ChatBot({ onTodoUpdate }) {
           <div className="chatbot-heading-left-section">
             <Typography.Title
               level={4}
-              className={`chatbot-heading-text ${isHeadingAnimating ? "heading-move-up-down" : ""}`}
+              className={`chatbot-heading-text ${isHeadingAnimating ? "heading-move-up-down" : ""} ${isRgbEffectActive ? "rgb-effect" : ""}`}
             >
               Task Whisperer
             </Typography.Title>

@@ -25,7 +25,7 @@ function Homepage() {
   const [todos, setTodos] = useState([]);
   const [todoFetchLoading, setTodoFetchLoading] = useState(false);
   const [form] = Form.useForm();
-  const [refreshTodoList, setRefreshTodoList] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   // function that is going to fetch / get TODOs from the database
   const fetchTodos = async () => {
@@ -51,66 +51,11 @@ function Homepage() {
   // fetch the TODOs when the components loads up ( from the database )
   useEffect(() => {
     fetchTodos();
-  }, []);
+  }, [refreshTrigger]);
 
-  const handleCreateTodo = async (values) => {
-    try {
-      // wait for the database to finish writing TODO items
-      const response = await createTodo(values);
-
-      // display a little message inside the console
-      console.log("Todo Created");
-
-      // add the new TODO item to the list ==> to be rendered out
-      setTodos([response.todo, ...todos]);
-
-      // create the form for new input of TODO item
-      form.resetFields();
-
-      // if there was any errors while creation of TODO item
-    } catch (error) {
-      console.error(`Error while creating TODOs: ${error}`);
-    }
-  };
-
-  // function to "check-off" TODO items
-  const handleToggleComplete = async (todoId, currentStatus) => {
-    try {
-      // run the `updateTodo` function and "inverse" the current `completed` status
-      const response = await updateTodo(todoId, {
-        completed: !currentStatus,
-      });
-
-      // update "that" TODO item in the list using its `id`
-      setTodos(
-        todos.map((todo) => (todo.id === todoId ? response.todo : todo)),
-      );
-
-      // display a little message
-      console.log("Todo Updated ( Check Off Function )");
-
-      // if any error happends when "checking-off" a TODO item
-    } catch (error) {
-      console.error(`Error updating todo: ${error}`);
-    }
-  };
-
-  // function to delete TODO items
-  const handleDeleteTodo = async (todoId) => {
-    try {
-      // run the `deleteTodo` function on a specific TODO item
-      await deleteTodo(todoId);
-
-      // Remove todo from the list
-      setTodos(todos.filter((todo) => todo.id !== todoId));
-
-      // display a little message
-      console.log("Todo deleted!");
-
-      // if there are any errors that occurs during deletion
-    } catch (error) {
-      console.error(`Error deleting todo: ${error}`);
-    }
+  // Function to trigger refresh of todos
+  const triggerRefresh = () => {
+    setRefreshTrigger((prev) => prev + 1); // Increment to trigger re-render
   };
 
   return (
@@ -134,9 +79,9 @@ function Homepage() {
       </header>
 
       {/* component that will be responsible to input and display of TODO */}
-      <InputDisplayTodo onTodoChange={setRefreshTodoList} />
+      <InputDisplayTodo onTodoChange={triggerRefresh} />
 
-      <ChatBot onTodoChange={setRefreshTodoList} />
+      <ChatBot onTodoChange={triggerRefresh} />
     </div>
   );
 }
