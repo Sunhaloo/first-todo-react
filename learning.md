@@ -5814,7 +5814,21 @@ case "createTodo": {
 
 > [!TIP] Success ( I think )
 >
-> I see that it's working ( _for now_ )! 
+> I see that it's working ( _for now_ )!
+
+### Front-End Updates After AI Assistant Function Calls
+
+Currently, if the user is going to ask the user to perform some 'CUD' ( _Yes! Not 'CRUD'_ ) operations. The _front-end_ is **not** going to update!
+
+> We have to refresh the whole page and lose our chat history to be able to see any 'CUD' changes!
+
+Therefore, we are going to have to write a function in our `client/src/components/InputDisplayTodo.jsx` file so that it refresh when the AI performs a 'CUD' operation.
+
+- Add the following _refresh_ function to our `InputDisplayTodo.jsx` file:
+
+```jsx
+
+```
 
 ---
 

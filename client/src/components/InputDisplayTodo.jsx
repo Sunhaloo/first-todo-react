@@ -351,6 +351,34 @@ function InputDisplayTodo() {
     }
   };
 
+  // function to refresh all todos when AI assistant does its thing
+  const refreshTodos = async () => {
+    setTodoFetchLoading(true);
+
+    try {
+      const response = await getTodos();
+      const allTodosFromServer = response.todos || [];
+
+      // set all the todos again
+      setAllTodos(allTodosFromServer);
+      const initialTodos = allTodosFromServer.slice(0, pageSize);
+      setTodos(initialTodos);
+      setHasMore(allTodosFromServer.length > pageSize);
+
+      // INFO: the important bit here ==> refresh to the first page
+      setPage(1);
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: "Error refreshing todos.",
+        duration: 1,
+      });
+      console.error(`Error refreshing TODOs: ${error}`);
+    } finally {
+      setTodoFetchLoading(false);
+    }
+  };
+
   // function to open edit modal
   const openEditModal = (todo) => {
     setEditingTodo(todo);
