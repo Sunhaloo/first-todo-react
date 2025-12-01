@@ -5827,7 +5827,96 @@ Therefore, we are going to have to write a function in our `client/src/component
 - Add the following _refresh_ function to our `InputDisplayTodo.jsx` file:
 
 ```jsx
+// function to refresh all todos when AI assistant does its thing
+const refreshTodos = async () => {
+  setTodoFetchLoading(true);
 
+  try {
+    const response = await getTodos();
+    const allTodosFromServer = response.todos || [];
+
+    // set all the todos again
+    setAllTodos(allTodosFromServer);
+    const initialTodos = allTodosFromServer.slice(0, pageSize);
+    setTodos(initialTodos);
+    setHasMore(allTodosFromServer.length > pageSize);
+
+    // INFO: the important bit here ==> refresh to the first page
+    setPage(1);
+  } catch (error) {
+    messageApi.open({
+      type: "error",
+      content: "Error refreshing todos.",
+      duration: 1,
+    });
+    console.error(`Error refreshing TODOs: ${error}`);
+  } finally {
+    setTodoFetchLoading(false);
+  }
+};
+
+// expose refresh function to parent component ==> 'Homepage'
+useEffect(() => {
+  // if there are any changes --> call the "refresh" function
+  if (onTodoChange) {
+    onTodoChange(refreshTodos);
+  }
+}, [onTodoChange]);
+```
+
+- Therefore we need to modify our `client/src/pages/Homepage.jsx` to pass the _state_:
+
+```jsx
+// other codes above
+
+// states for our TODO items
+const [todos, setTodos] = useState([]);
+const [todoFetchLoading, setTodoFetchLoading] = useState(false);
+const [form] = Form.useForm();
+const [refreshTodoList, setRefreshTodoList] = useState(null);
+
+// other codes above
+
+return (
+  <div className="homepage-container">
+    <header className="homepage-header">
+      <nav className="homepage-navbar">
+        <div className="left-section">
+          <h1>
+            <Username className="username" />
+          </h1>
+        </div>
+        <div className="center-logo">
+          <RiTodoLine className="auth-logo" />
+          <h2>Act Don't React</h2>
+        </div>
+        <div className="right-section">
+          <ToggleThemeBtn />
+          <ProfileMenu className="custom-profile-menu" />
+        </div>
+      </nav>
+    </header>
+
+    {/* component that will be responsible to input and display of TODO */}
+    <InputDisplayTodo onTodoChange={setRefreshTodoList} />
+
+    <ChatBot onTodoChange={setRefreshTodoList} />
+  </div>
+);
+
+// other codes below
+```
+
+- Similarly, we need to update the actual Chatbot `client/src/components/ChatBot.jsx` component itself:
+
+```jsx
+// other codes above
+
+function ChatBot({ onTodoUpdate }) {
+  // ...
+}
+
+// other codes below
 ```
 
 ---

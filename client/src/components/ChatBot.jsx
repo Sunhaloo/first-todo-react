@@ -17,7 +17,7 @@ import GradientButton from "./GradientButton";
 // add the required styling to style input and display
 import "./ChatBot.css";
 
-function ChatBot() {
+function ChatBot({ onTodoUpdate }) {
   // declare variable for toggling heading animation
   const [isHeadingAnimating, setHeadingAnimating] = useState(false);
   // declare variable for toggling chat app visibility

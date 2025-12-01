@@ -43,7 +43,7 @@ import { FiPlus, FiCheck } from "react-icons/fi";
 // add the required styling to style input and display
 import "./InputDisplayTodo.css";
 
-function InputDisplayTodo() {
+function InputDisplayTodo({ onTodoChange }) {
   // states for our TODO items
   const [todos, setTodos] = useState([]);
   const [allTodos, setAllTodos] = useState([]);
@@ -378,6 +378,14 @@ function InputDisplayTodo() {
       setTodoFetchLoading(false);
     }
   };
+
+  // expose refresh function to parent component ==> 'Homepage'
+  useEffect(() => {
+    // if there are any changes --> call the "refresh" function
+    if (onTodoChange) {
+      onTodoChange(refreshTodos);
+    }
+  }, [onTodoChange]);
 
   // function to open edit modal
   const openEditModal = (todo) => {

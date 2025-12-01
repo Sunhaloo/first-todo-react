@@ -25,6 +25,7 @@ function Homepage() {
   const [todos, setTodos] = useState([]);
   const [todoFetchLoading, setTodoFetchLoading] = useState(false);
   const [form] = Form.useForm();
+  const [refreshTodoList, setRefreshTodoList] = useState(null);
 
   // function that is going to fetch / get TODOs from the database
   const fetchTodos = async () => {
@@ -133,9 +134,9 @@ function Homepage() {
       </header>
 
       {/* component that will be responsible to input and display of TODO */}
-      <InputDisplayTodo />
+      <InputDisplayTodo onTodoChange={setRefreshTodoList} />
 
-      <ChatBot />
+      <ChatBot onTodoChange={setRefreshTodoList} />
     </div>
   );
 }
