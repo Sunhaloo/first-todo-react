@@ -105,6 +105,16 @@ const ai_tools = [
   },
 ];
 
+// check if the API key is present ( or not )
+if (!apiKey) {
+  console.error("GEMINI_API_KEY environment variable is not set");
+
+  process.exit(1);
+}
+
+// create a new Google Gemini AI object
+const genAI = new GoogleGenerativeAI(apiKey);
+
 // wrapper function to execute TODO 'CRUD' operations
 const executeTodoFunction = async (functionName, args, userId) => {
   console.log(`AI calling function: ${functionName}`, args);
@@ -180,16 +190,6 @@ const executeTodoFunction = async (functionName, args, userId) => {
     return { error: error.message || "Function execution failed" };
   }
 };
-
-// check if the API key is present ( or not )
-if (!apiKey) {
-  console.error("GEMINI_API_KEY environment variable is not set");
-
-  process.exit(1);
-}
-
-// create a new Google Gemini AI object
-const genAI = new GoogleGenerativeAI(apiKey);
 
 // function to be able to send chat requests
 const sendMessage = async (req, res) => {

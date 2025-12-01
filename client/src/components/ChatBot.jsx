@@ -62,7 +62,10 @@ function ChatBot() {
 
     try {
       // call the API / AI and wait for response and also pass the conversation history
-      const response = await sendChatMessage(userMessage, chatHistory);
+      const response = await sendChatMessage(userMessage, [
+        ...chatHistory,
+        newUserMessage,
+      ]);
 
       // add AI responses to chat history --> to be able to get context
       const aiMessage = {
