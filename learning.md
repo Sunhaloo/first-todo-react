@@ -5370,7 +5370,7 @@ const {
 
 ```js
 // define the tools that the AI is going to have access to
-const tools = [
+const ai_tools = [
   {
     functionDeclarations: [
       {
@@ -5454,6 +5454,94 @@ const tools = [
     ],
   },
 ];
+```
+
+- Make simple wrapper functions that are going to "_fetch_" functions from `todoController.js`:
+
+```js
+// wrapper function to execute TODO 'CRUD' operations
+
+// check if the API key is present ( or not )
+if (!apiKey) {
+  console.error("GEMINI_API_KEY environment variable is not set");
+
+  process.exit(1);
+}
+```
+
+> [!NOTE]
+>
+> Because of authentication, we are going to have to create a "fake" request just to be able to use the functions from the controller.
+
+- Update the model configuration to add the `tools` that will be used by the AI assistant:
+
+```js
+// define the model and configuration
+const model = genAI.getGenerativeModel({
+  model: ai_model,
+  systemInstruction: prompt + `${new Date()}`,
+  tools: ai_tools,
+  generationConfig: {
+    temperature: temperature,
+  },
+});
+```
+
+- Update responses that are send back to the user:
+
+```js
+// generate response based on the message from the chat ( sent )
+let result = await chat.sendMessage(message);
+let response = result.response;
+
+// check if AI wants to call a function
+const functionCalls = response.functionCalls();
+
+if (functionCalls && functionCalls.length > 0) {
+  console.log("AI wants to call functions:", functionCalls);
+
+  // get user ID from authentication
+  const userId = req.user.userId;
+
+  // execute the required function
+  const functionResponses = await Promise.all(
+    functionCalls.map(async (call) => {
+      const result = await executeTodoFunction(call.name, call.args, userId);
+
+      return {
+        functionResponse: {
+          name: call.name,
+          response: result,
+        },
+      };
+    })
+  );
+
+  // send function results back to AI assistant
+  result = await chat.sendMessage(functionResponses);
+  response = result.response;
+}
+
+// create the AI assistant's response
+const text = response.text();
+```
+
+- Modify the chat's router to add for authentication ( in our `server/routers/chatRouter.js` file ):
+
+```js
+// import the 'express' library and the endpoint's function for 'register' and 'login'
+const express = require("express");
+const router = express.Router();
+const chatController = require("../controllers/chatController");
+
+// NOTE: get the 'Authentication Token' as 'TODO' items are "private" to each user
+const { authenticateToken } = require("../middleware/authMiddleware");
+
+// 'POST' route ==> /api/chat/message
+router.post("/message", authenticateToken, chatController.sendMessage);
+
+// export the actual routes
+module.exports = router;
 ```
 
 ---

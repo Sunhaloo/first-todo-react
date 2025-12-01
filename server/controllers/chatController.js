@@ -20,7 +20,7 @@ const temperature = process.env.GEMINI_TEMPERATURE;
 const prompt = process.env.GEMINI_SYSTEM_PROMPT;
 
 // define the tools that the AI is going to have access to
-const tools = [
+const ai_tools = [
   {
     functionDeclarations: [
       {
@@ -105,6 +105,49 @@ const tools = [
   },
 ];
 
+// wrapper function to execute TODO 'CRUD' operations
+const executeTodoFunction = async (functionName, args, userId) => {
+  console.log(`AI calling function: ${functionName}`, args);
+
+  // create mock req and res objects to receive whatever controller is sending in 'JSON'
+  const createMockReqRes = (body = {}, params = {}) => {
+    const req = {
+      body,
+      params,
+      user: { userId: userId },
+    };
+
+    let responseData = null;
+
+    const res = {
+      status: (code) => res,
+      json: (data) => {
+        responseData = data;
+        return res;
+      },
+    };
+
+    return { req, res, getResponse: () => responseData };
+  };
+
+  try {
+    // `switch` statement to decide what function to call based on controller
+    switch (functionName) {
+      case "getTodos": {
+        const { req, res, getResponse } = createMockReqRes();
+        await getTodos(req, res);
+        return getResponse();
+      }
+
+      default:
+        return { error: `Unknown function: ${functionName}` };
+    }
+  } catch (error) {
+    console.error(`Error executing ${functionName}:`, error);
+    return { error: error.message || "Function execution failed" };
+  }
+};
+
 // check if the API key is present ( or not )
 if (!apiKey) {
   console.error("GEMINI_API_KEY environment variable is not set");
@@ -129,7 +172,8 @@ const sendMessage = async (req, res) => {
     // define the model and configuration
     const model = genAI.getGenerativeModel({
       model: ai_model,
-      systemInstruction: prompt,
+      systemInstruction: prompt + `${new Date()}`,
+      tools: ai_tools,
       generationConfig: {
         temperature: temperature,
       },
@@ -145,8 +189,42 @@ const sendMessage = async (req, res) => {
     });
 
     // generate response based on the message from the chat ( sent )
-    const result = await chat.sendMessage(message);
-    const response = result.response;
+    let result = await chat.sendMessage(message);
+    let response = result.response;
+
+    // check if AI wants to call a function
+    const functionCalls = response.functionCalls();
+
+    if (functionCalls && functionCalls.length > 0) {
+      console.log("AI wants to call functions:", functionCalls);
+
+      // get user ID from authentication
+      const userId = req.user.userId;
+
+      // execute the required function
+      const functionResponses = await Promise.all(
+        functionCalls.map(async (call) => {
+          const result = await executeTodoFunction(
+            call.name,
+            call.args,
+            userId,
+          );
+
+          return {
+            functionResponse: {
+              name: call.name,
+              response: result,
+            },
+          };
+        }),
+      );
+
+      // send function results back to AI assistant
+      result = await chat.sendMessage(functionResponses);
+      response = result.response;
+    }
+
+    // create the AI assistant's response
     const text = response.text();
 
     // send response back to frontend
