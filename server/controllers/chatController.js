@@ -93,6 +93,20 @@ const ai_tools = [
         },
       },
       {
+        name: "findTodoByDescription",
+        description: "Find a TODO item / task by its description. Use this when you need to locate a specific TODO to update or delete it based on its description.",
+        parameters: {
+          type: "object",
+          properties: {
+            description: {
+              type: "string",
+              description: "The description/text of the TODO item to find.",
+            },
+          },
+          required: ["description"],
+        },
+      },
+      {
         name: "getCategories",
         description: "Get all available categories for a TODO item / task.",
         parameters: {
@@ -174,6 +188,26 @@ const executeTodoFunction = async (functionName, args, userId) => {
         const { req, res, getResponse } = createMockReqRes({}, { id: args.id });
         await deleteTodo(req, res);
         return getResponse();
+      }
+
+      case "findTodoByDescription": {
+        // First get all todos
+        const { req: getReq, res: getRes, getResponse: getTodosResponse } = createMockReqRes();
+        await getTodos(getReq, getRes);
+        const todosResult = getTodosResponse();
+        
+        // Find the todo that matches the description (case-insensitive partial match)
+        const todos = todosResult.todos || [];
+        const matchedTodo = todos.find(todo => 
+          todo.description && 
+          todo.description.toLowerCase().includes(args.description.toLowerCase())
+        );
+        
+        if (matchedTodo) {
+          return { todo: matchedTodo };
+        } else {
+          return { error: `No todo found with description containing: ${args.description}` };
+        }
       }
 
       case "getCategories": {
@@ -259,12 +293,20 @@ const sendMessage = async (req, res) => {
 
     // create the AI assistant's response
     const text = response.text();
-
-    // send response back to frontend
-    res.status(200).json({
+    
+    // Prepare the response including function calls for frontend refresh handling
+    const responseObj = {
       success: true,
       message: text,
-    });
+    };
+
+    // If function calls were made, include them in the response for frontend refresh
+    if (functionCalls && functionCalls.length > 0) {
+      responseObj.functionCalls = functionCalls.map(call => call.name);
+    }
+
+    // send response back to frontend
+    res.status(200).json(responseObj);
 
     // if message could not be send to "server"
     // NOTE: status code = '500' ==> internal server error
