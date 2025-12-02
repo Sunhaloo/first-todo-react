@@ -21,6 +21,8 @@ function ToggleTheme({ className }) {
   const handleToggleTheme = () => {
     // call the `toggleTheme` function
     toggleTheme();
+
+    console.log("[TOGGLE THEME] Theme has been toggled!");
   };
 
   // the actual component that is going to be returned

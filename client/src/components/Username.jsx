@@ -38,7 +38,9 @@ function Username({ className }) {
 
       // if the user profile / username could not be fetch from database
     } catch (error) {
-      console.error(`Failed to fetch user's username: ${error}`);
+      console.error(
+        `[USERNAME](Get) Failed to fetch user's username: ${error}`,
+      );
 
       // if the data could not be retrieved
     } finally {

@@ -47,7 +47,7 @@ function AuthPages() {
       login(response.token);
 
       // display a little 'success' message to the user
-      console.log("Registered user:", response.user);
+      console.log("[AUTH](Register) Registered user:", response.user);
 
       // navigate to the dashboard route
       navigate("/homepage");
@@ -56,14 +56,18 @@ function AuthPages() {
       if (error.response) {
         // server side errors
         if (error.response.status === 400) {
+          console.error("[AUTH](Register) Registration failed!");
+
           messageApi.open({
             type: "error",
             content:
               error.response.data.error ||
-              "Registration failed - Please check your information",
+              "Registration failed! - Please check your information",
             duration: 1,
           });
         } else {
+          console.error("[AUTH](Register) Error occurred!");
+
           messageApi.open({
             type: "error",
             content: "An error occurred during registration",
@@ -73,14 +77,18 @@ function AuthPages() {
 
         // requests sent but no response
       } else if (error.request) {
+        console.error("[AUTH](Register) Network error!");
+
         messageApi.open({
           type: "error",
-          content: "Network error - please check your connection",
+          content: "Network error! Please check your connection",
           duration: 1,
         });
 
         // if anything else happened
       } else {
+        console.error("[AUTH](Register) Unexpected error during registration!");
+
         messageApi.open({
           type: "error",
           content: "An unexpected error occurred",
@@ -89,7 +97,7 @@ function AuthPages() {
       }
 
       // log the error to the console
-      console.error("Registration error:", error);
+      console.error("[AUTH](Register) Registration error:", error);
 
       // change the loading status back to `false`
     } finally {
@@ -106,10 +114,9 @@ function AuthPages() {
 
       // Use context method to set authentication state
       login(response.token);
-      console.log(`Values = ${values}`);
 
       // display a little 'success' message to the user
-      console.log("Logged in user:", response.user);
+      console.log("[AUTH](Login) Logged in user:", response.user);
 
       // navigate to the dashboard route
       navigate("/homepage");
@@ -118,6 +125,8 @@ function AuthPages() {
       if (error.response) {
         // server side errors
         if (error.response.status === 401) {
+          console.error("[AUTH](Login) Invalid credentials!");
+
           messageApi.open({
             type: "error",
             content: "Invalid credentials",
@@ -126,6 +135,8 @@ function AuthPages() {
 
           // if user did not fill the form correctly
         } else if (error.response.status === 400) {
+          console.error("[AUTH](Login) Fill in all required fields!");
+
           messageApi.open({
             type: "error",
             content: "Please fill in all required fields",
@@ -133,6 +144,8 @@ function AuthPages() {
           });
         } else {
           // if anything else happened
+          console.error("[AUTH](Login) Unexpected error!");
+
           messageApi.open({
             type: "error",
             content: "An error occurred during login",
@@ -142,19 +155,24 @@ function AuthPages() {
 
         // requests sent but no response
       } else if (error.request) {
+        console.error("[AUTH](Login) Network error!");
+
         messageApi.open({
           type: "error",
-          content: "Network error - please check your connection",
+          content: "Network error! please check your connection",
           duration: 1,
         });
         // if anything else happened
       } else {
+        console.error("[AUTH](Login) Invalid Credentials!");
+
         messageApi.open({
           type: "error",
           content: "Invalid Credentials",
           duration: 1,
         });
       }
+
       console.error("Login error:", error);
 
       // change the loading status back to `false`

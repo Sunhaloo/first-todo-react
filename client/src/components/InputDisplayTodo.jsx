@@ -73,7 +73,10 @@ function InputDisplayTodo() {
       const response = await getCategories();
       setCategories(response.categories || []);
     } catch (error) {
-      console.error(`Error while fetching categories: ${error}`);
+      console.error(
+        `[CATEGORIES](Get) Error while fetching categories: ${error}`,
+      );
+
       // Fallback to default categories if API fails
       setCategories([
         "Code Review",
@@ -114,12 +117,13 @@ function InputDisplayTodo() {
 
         // if some error while fetching TODOs occurs
       } catch (error) {
+        console.error(`[TODO](Get) Error while fetching TODOs: ${error}`);
+
         messageApi.open({
           type: "error",
-          content: "Error fetching todos. Please refresh the page.",
+          content: "Error fetching TODOs. Please refresh the page.",
           duration: 1,
         });
-        console.error(`Error while fetching TODOs: ${error}`);
 
         // change the loading status back to `false`
       } finally {
@@ -187,15 +191,14 @@ function InputDisplayTodo() {
       // wait for the database to finish writing TODO items
       const response = await createTodo(values);
 
+      console.log("[TODO](Create) TODO created successfully!");
+
       // display a success message to the user
       messageApi.open({
         type: "success",
-        content: "Todo created successfully!",
+        content: "TODO created successfully",
         duration: 1,
       });
-
-      // log the creation of TODO to the console
-      console.log("Todo created successfully!");
 
       // add the new TODO item to the end of the lists ==> oldest first
       setTodos([...todos, response.todo]);
@@ -209,12 +212,13 @@ function InputDisplayTodo() {
 
       // if there was any errors while creation of TODO item
     } catch (error) {
+      console.error(`[TODO](Create) Error while creating TODOs: ${error}`);
+
       messageApi.open({
         type: "error",
-        content: "Error creating todo. Please try again.",
+        content: "Error creating TODO. Please try again.",
         duration: 1,
       });
-      console.error(`Error while creating TODOs: ${error}`);
     } finally {
       setTodoCreateLoading(false);
     }
@@ -236,25 +240,26 @@ function InputDisplayTodo() {
         allTodos.map((todo) => (todo.id === todoId ? response.todo : todo)),
       );
 
-      // display a success message to the user
       const statusText = !currentStatus ? "completed" : "marked as incomplete";
+
+      console.log(`[TODO](Toggle) TODO ${statusText} successfully!`);
+
+      // display a success message to the user
       messageApi.open({
         type: "success",
-        content: `Todo ${statusText} successfully!`,
+        content: `TODO ${statusText} successfully`,
         duration: 1,
       });
-
-      // log the checking-off of TODO to the console
-      console.log(`Todo ${statusText} successfully!`);
 
       // if any error happends when "checking-off" a TODO item
     } catch (error) {
+      console.error(`[TODO](Toggle) Error updating TODO: ${error}`);
+
       messageApi.open({
         type: "error",
-        content: "Error updating todo. Please try again.",
+        content: "Error updating TODO. Please try again.",
         duration: 1,
       });
-      console.error(`Error updating todo: ${error}`);
     }
   };
 
@@ -281,24 +286,24 @@ function InputDisplayTodo() {
       setEditingTodo(null);
       editingForm.resetFields();
 
+      console.log("[UPDATE](Put) TODO updated successfully!");
+
       // display a success message to the user
       messageApi.open({
         type: "success",
-        content: "Todo updated successfully!",
+        content: "TODO updated successfully",
         duration: 1,
       });
-
-      // log the update of TODO to the console
-      console.log("Todo updated successfully!");
 
       // if there are any errors that occurs during update
     } catch (error) {
+      console.error(`[UPDATE](Put) Error updating TODO: ${error}`);
+
       messageApi.open({
         type: "error",
-        content: "Error updating todo. Please try again.",
+        content: "Error updating TODO. Please try again.",
         duration: 1,
       });
-      console.error(`Error updating todo: ${error}`);
     }
   };
 
@@ -320,24 +325,24 @@ function InputDisplayTodo() {
         setPage(page - 1);
       }
 
+      console.log("[DELETE](Post) TODO deleted successfully!");
+
       // display a success message to the user
       messageApi.open({
         type: "success",
-        content: "Todo deleted successfully!",
+        content: "TODO deleted successfully!",
         duration: 1,
       });
-
-      // log the deletion of TODO to the console
-      console.log("Todo deleted successfully!");
 
       // if there are any errors that occurs during deletion
     } catch (error) {
+      console.error(`[DELETE](Post) Error deleting todo: ${error}`);
+
       messageApi.open({
         type: "error",
-        content: "Error deleting todo. Please try again.",
+        content: "Error deleting TODO. Please try again.",
         duration: 1,
       });
-      console.error(`Error deleting todo: ${error}`);
     }
   };
 
@@ -380,7 +385,7 @@ function InputDisplayTodo() {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter a description / title",
+                    message: "Please enter a TODO!",
                   },
                 ]}
               >
@@ -390,9 +395,7 @@ function InputDisplayTodo() {
                   rows={1}
                   maxLength={maxLengthInput}
                   variant="filled"
-                  rules={[
-                    { required: true, message: "Please enter a description" },
-                  ]}
+                  rules={[{ required: true, message: "Please enter a TODO!" }]}
                   onPressEnter={() => {
                     if (!todoCreateLoading) {
                       form.submit();
@@ -406,7 +409,7 @@ function InputDisplayTodo() {
                 name="category"
                 label="Category"
                 rules={[
-                  { required: true, message: "Please select a category" },
+                  { required: true, message: "Please select a category!" },
                 ]}
               >
                 <Select placeholder="Select category">
@@ -553,9 +556,7 @@ function InputDisplayTodo() {
                 <Form.Item
                   name="description"
                   label="Description"
-                  rules={[
-                    { required: true, message: "Please enter a description" },
-                  ]}
+                  rules={[{ required: true, message: "Please update TODO!" }]}
                 >
                   <Input maxLength={maxLengthInput} />
                 </Form.Item>
@@ -564,7 +565,7 @@ function InputDisplayTodo() {
                   name="category"
                   label="Category"
                   rules={[
-                    { required: true, message: "Please select a category" },
+                    { required: true, message: "Please select a category!" },
                   ]}
                 >
                   <Select>
@@ -583,7 +584,7 @@ function InputDisplayTodo() {
                       onClick={() => {
                         messageApi.open({
                           type: "warning",
-                          content: "Todo updated cancelled!",
+                          content: "TODO updated cancelled!",
                           duration: 1,
                         });
                         setIsModalVisible(false);
