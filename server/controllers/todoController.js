@@ -16,10 +16,10 @@ const createTodo = async (req, res) => {
     // if user did not add any description for the TODO item
     // NOTE: status code = '400' ==> cannot / will not process client request due to client-side error
     if (!description) {
-      console.log("[BACKEND](Create) Description is required!");
+      console.log("[TODO API](Create) Description is required!");
 
       return res.status(400).json({
-        error: "[BACKEND](Create) Description is required!",
+        error: "[TODO API](Create) Description is required",
       });
     }
 
@@ -35,21 +35,21 @@ const createTodo = async (req, res) => {
       })
       .returning("*");
 
-    console.log("[BACKEND](Create) TODO created successfully.");
+    console.log("[TODO API](Create) TODO created successfully.");
 
     // NOTE: status code = '201' ==> creation of a new resource on server
     res.status(201).json({
-      message: "[BACKEND](Create) TODO created successfully.",
+      message: "[TODO API](Create) TODO created successfully.",
       todo: newTodo,
     });
 
     // if the TODO item could not be inserted
     // NOTE: status code = '500' ==> internal server error
   } catch (error) {
-    console.error("[BACKEND](Create) Create TODO server error:", error);
+    console.error("[TODO API](Create) Create TODO server error:", error);
 
     res.status(500).json({
-      error: "[BACKEND](Create) Server error while creating TODO",
+      error: "[TODO API](Create) Server error while creating TODO",
     });
   }
 };
@@ -65,20 +65,20 @@ const getTodos = async (req, res) => {
       .where({ user_id: userId })
       .orderBy("created_at", "asc");
 
-    console.log("[BACKEND](Get) TODO retrieved successfully");
+    console.log("[TODO API](Get) TODO retrieved successfully");
 
     res.json({
-      message: "[BACKEND](Get) TODO retrieved successfully",
+      message: "[TODO API](Get) TODO retrieved successfully",
       count: todos.length,
       todos,
     });
 
     // if the TODO item could not be fetched
   } catch (error) {
-    console.error("[BACKEND](Get) Fetch TODO server error:", error);
+    console.error("[TODO API](Get) Fetch TODO server error:", error);
 
     res.status(500).json({
-      error: "[BACKEND](Get) Server error while fetching todos",
+      error: "[TODO API](Get) Server error while fetching todos",
     });
   }
 };
@@ -100,10 +100,12 @@ const updateTodo = async (req, res) => {
 
     // if the TODO item has not been found ==> "Invoke" the famous famous '404' status code
     if (!todo) {
-      console.log("[BACKEND](Update) TODO not found / does not belong to you!");
+      console.log(
+        "[TODO API](Update) TODO not found / does not belong to you!",
+      );
 
       return res.status(404).json({
-        error: "[BACKEND](Update) TODO not found / does not belong to you!",
+        error: "[TODO API](Update) TODO not found / does not belong to you",
       });
     }
 
@@ -122,20 +124,20 @@ const updateTodo = async (req, res) => {
       .update(updateData)
       .returning("*");
 
-    console.log("[BACKEND](Update) TODO updated successfully");
+    console.log("[TODO API](Update) TODO updated successfully");
 
     res.json({
-      message: "[BACKEND](Update) TODO updated successfully",
+      message: "[TODO API](Update) TODO updated successfully",
       todo: updatedTodo,
     });
 
     // if the TODO item could not be updated
     // NOTE: status code = '500' ==> internal server error
   } catch (error) {
-    console.error("[BACKEND](Update) Update TODO server error:", error);
+    console.error("[TODO API](Update) Update TODO server error:", error);
 
     res.status(500).json({
-      error: "[BACKEND](Update) Server error while updating todo",
+      error: "[TODO API](Update) Server error while updating todo",
     });
   }
 };
@@ -155,30 +157,32 @@ const deleteTodo = async (req, res) => {
 
     // if the TODO item has not been found ==> "Invoke" the famous famous '404' status code
     if (!todo) {
-      console.log("[BACKEND](Delete) TODO not found / does not belong to you!");
+      console.log(
+        "[TODO API](Delete) TODO not found / does not belong to you!",
+      );
 
       return res.status(404).json({
-        error: "[BACKEND](Delete) TODO not found / does not belong to you!",
+        error: "[TODO API](Delete) TODO not found / does not belong to you",
       });
     }
 
     // delete the TODO item from the database
     await db("todo").where({ id: todoId }).delete();
 
-    console.log("[BACKEND](Delete) TODO deleted successfully");
+    console.log("[TODO API](Delete) TODO deleted successfully");
 
     res.json({
-      message: "[BACKEND](Delete) TODO deleted successfully",
+      message: "[TODO API](Delete) TODO deleted successfully",
       deletedTodo: todo,
     });
 
     // if the TODO item could not be updated
     // NOTE: status code = '500' ==> internal server error
   } catch (error) {
-    console.error("[BACKEND](Delete) Delete TODO server error:", error);
+    console.error("[TODO API](Delete) Delete TODO server error:", error);
 
     res.status(500).json({
-      error: "[BACKEND](Delete) Server error while deleting TODO",
+      error: "[TODO API](Delete) Server error while deleting TODO",
     });
   }
 };
@@ -190,21 +194,21 @@ const getCategories = async (req, res) => {
     // this matches the categories defined in the migration file
     const categories = TODO_CATEGORIES;
 
-    console.log("[BACKEND](Get Categories) Categories retrieved successfully");
+    console.log("[TODO API](Get Categories) Categories retrieved successfully");
 
     res.json({
-      message: "[BACKEND](Get Categories) Categories retrieved successfully",
+      message: "[TODO API](Get Categories) Categories retrieved successfully",
       categories,
     });
   } catch (error) {
     console.error(
-      "[BACKEND](Get Categories) Get categories server error:",
+      "[TODO API](Get Categories) Get categories server error:",
       error,
     );
 
     res.status(500).json({
       error:
-        "[BACKEND](Get Categories) Server error while fetching categories!",
+        "[TODO API](Get Categories) Server error while fetching categories",
     });
   }
 };

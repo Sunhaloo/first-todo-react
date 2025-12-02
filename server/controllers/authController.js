@@ -13,8 +13,10 @@ const register = async (req, res) => {
 
     // if the credentials are not valid
     if (!username || !email || !password) {
+      console.log("[AUTH API](Register) All fields are required!");
+
       return res.status(400).json({
-        error: "All fields are required",
+        error: "[AUTH API](Register) All fields are required",
       });
     }
 
@@ -26,8 +28,10 @@ const register = async (req, res) => {
 
     // if an already existing user tries to register again
     if (existingUser) {
+      console.log("[AUTH API](Register) Username or email already exists!");
+
       return res.status(400).json({
-        error: "Username or email already exists",
+        error: "[AUTH API](Register) Username or email already exists",
       });
     }
 
@@ -51,10 +55,11 @@ const register = async (req, res) => {
       expiresIn: "7d",
     });
 
-    // if everything has been created successfully ==> return a 'JSON' output
+    console.log("[AUTH API](Register) User registered successfully");
+
     // NOTE: status code = '201' ==> successful creation of a new resource on server
     res.status(201).json({
-      message: "User registered successfully",
+      message: "[AUTH API](Register) User registered successfully",
       token,
       user: {
         id: userId,
@@ -66,9 +71,10 @@ const register = async (req, res) => {
     // if the user could not be registered
     // NOTE: status code = '500' ==> internal server error
   } catch (error) {
-    console.error("Registration error:", error);
+    console.error("[AUTH API](Register) Registration error:", error);
+
     res.status(500).json({
-      error: "Server error during registration",
+      error: "[AUTH API](Register) Server error during registration",
     });
   }
 };
@@ -81,8 +87,10 @@ const login = async (req, res) => {
 
     // if the credentials are not valid
     if (!username || !password) {
+      console.log("[AUTH API](Login) Username and password are required!");
+
       return res.status(400).json({
-        error: "Username and password are required",
+        error: "[AUTH API](Login) Username and password are required",
       });
     }
 
@@ -91,8 +99,10 @@ const login = async (req, res) => {
 
     // if user does not exists
     if (!user) {
+      console.log("[AUTH API](Login) Invalid credentials!");
+
       return res.status(401).json({
-        error: "Invalid credentials",
+        error: "[AUTH API](Login) Invalid credentials",
       });
     }
 
@@ -100,11 +110,13 @@ const login = async (req, res) => {
     // NOTE: need to user the `bycrypt.compare` function as password in DB is hashed
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
+    console.log("[AUTH API](Login) Invalid credentials!");
+
     // if the password is not correct
     // NOTE: status code = '401' ==> missing / invalid / failed authentication details
     if (!isPasswordValid) {
       return res.status(401).json({
-        error: "Invalid credentials",
+        error: "[AUTH API](Login) Invalid credentials",
       });
     }
 
@@ -115,9 +127,11 @@ const login = async (req, res) => {
       { expiresIn: "7d" },
     );
 
+    console.log("[AUTH API](Login) Login successful");
+
     // if user is able to login ==> return a 'JSON' output
     res.json({
-      message: "Login successful",
+      message: "[AUTH API](Login) Login successful",
       token,
       user: {
         id: user.id,
@@ -126,12 +140,11 @@ const login = async (req, res) => {
       },
     });
 
-    // if the user could not be logged in
     // NOTE: status code = '500' ==> internal server error
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("[AUTH API](Login) Login error:", error);
     res.status(500).json({
-      error: "Server error during login",
+      error: "[AUTH API](Login) Server error during login",
     });
   }
 };

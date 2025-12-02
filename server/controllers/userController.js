@@ -15,15 +15,17 @@ const getUserProfile = async (req, res) => {
 
     // if the user has not been found ( on the database )
     if (!userProfile) {
-      // send the famous, famous '404' error
+      console.log("[USER API](Get Profile) User not found!");
+
       return res.status(404).json({
-        error: "User not found",
+        error: "[USER API](Get Profile) User not found",
       });
     }
 
-    // send the whole user ( profile ) data as the response
+    console.log("[USER API](Get Profile) User profile successfully retrieved");
+
     res.json({
-      message: "User profile successfully retrieved",
+      message: "[USER API](Get Profile) User profile successfully retrieved",
       user: {
         id: userProfile.id,
         username: userProfile.username,
@@ -35,9 +37,10 @@ const getUserProfile = async (req, res) => {
     // if the user could not be authenticated
     // NOTE: status code = '500' ==> internal server error
   } catch (error) {
-    console.error("Get Profile Error:", error);
+    console.error("[USER API](Get Profile) Get profile server error:", error);
+
     res.status(500).json({
-      error: "Server error during login",
+      error: "[USER API](Get Profile) Server error during login",
     });
   }
 };
@@ -52,8 +55,12 @@ const deleteAccount = async (req, res) => {
     const existingUser = await db("user").where({ id: userId }).first();
 
     if (!existingUser) {
+      console.log(
+        "[USER API](Delete Account) Username or email does not exists!",
+      );
+
       return res.status(400).json({
-        error: "Username or email does not exists",
+        error: "[USER API](Delete Account) Username or email does not exists",
       });
     }
 
@@ -61,12 +68,13 @@ const deleteAccount = async (req, res) => {
     await db("user").where({ id: userId }).del();
 
     res.json({
-      message: "User profile successfully deleted",
+      message: "[USER API](Delete Account) User profile successfully deleted",
     });
   } catch (error) {
-    console.error("Deletion error:", error);
+    console.error("[USER API](Delete Account) Deletion server error:", error);
+
     res.status(500).json({
-      error: "Server error during deletion",
+      error: "[USER API](Delete Account) Server error during deletion",
     });
   }
 };
