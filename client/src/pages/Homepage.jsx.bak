@@ -55,7 +55,6 @@ function Homepage() {
 
   // Function to trigger refresh of todos
   const triggerRefresh = () => {
-    console.log("Triggering refresh, incrementing counter"); // Debug log
     setRefreshTrigger((prev) => prev + 1); // Increment to trigger re-render
   };
 
@@ -79,10 +78,10 @@ function Homepage() {
         </nav>
       </header>
 
-      <ChatBot onTodoChange={triggerRefresh} />
-
       {/* component that will be responsible to input and display of TODO */}
-      <InputDisplayTodo refreshTrigger={refreshTrigger} />
+      <InputDisplayTodo onTodoChange={triggerRefresh} />
+
+      <ChatBot onTodoChange={triggerRefresh} />
     </div>
   );
 }

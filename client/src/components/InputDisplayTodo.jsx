@@ -43,7 +43,7 @@ import { FiPlus, FiCheck } from "react-icons/fi";
 // add the required styling to style input and display
 import "./InputDisplayTodo.css";
 
-function InputDisplayTodo({ onTodoChange }) {
+function InputDisplayTodo({ onTodoChange, refreshTrigger }) {
   // states for our TODO items
   const [todos, setTodos] = useState([]);
   const [allTodos, setAllTodos] = useState([]);
@@ -134,6 +134,13 @@ function InputDisplayTodo({ onTodoChange }) {
     fetchAllTodos();
     fetchCategories();
   }, []);
+
+  // refresh todos when refreshTrigger changes (for AI updates)
+  useEffect(() => {
+    if (typeof refreshTrigger !== "undefined") {
+      refreshTodos();
+    }
+  }, [refreshTrigger]);
 
   // set default category to 'Miscellaneous' after categories are loaded
   useEffect(() => {
@@ -353,10 +360,12 @@ function InputDisplayTodo({ onTodoChange }) {
 
   // function to refresh all todos when AI assistant does its thing
   const refreshTodos = async () => {
+    console.log("Refreshing todos from server..."); // Debug log
     setTodoFetchLoading(true);
 
     try {
       const response = await getTodos();
+      console.log("GET request to fetch todos completed:", response); // Debug log
       const allTodosFromServer = response.todos || [];
 
       // set all the todos again
@@ -378,7 +387,6 @@ function InputDisplayTodo({ onTodoChange }) {
       setTodoFetchLoading(false);
     }
   };
-
 
   // function to open edit modal
   const openEditModal = (todo) => {

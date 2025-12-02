@@ -75,6 +75,8 @@ function ChatBot({ onTodoChange }) {
         ...chatHistory,
         newUserMessage,
       ]);
+      
+      console.log("Chat API response:", response); // Debug log
 
       // add AI responses to chat history --> to be able to get context
       const aiMessage = {
@@ -90,14 +92,37 @@ function ChatBot({ onTodoChange }) {
       if (response.functionCalls && response.functionCalls.length > 0) {
         console.log("Function calls executed:", response.functionCalls);
         // trigger todo refresh if "CUD"" operations were performed
-        const cudOperations = ["create_todo", "update_todo", "delete_todo"];
+        const cudOperations = ["createTodo", "updateTodo", "deleteTodo"];
         const hasCudOperation = response.functionCalls.some((func) =>
-          cudOperations.includes(func.toLowerCase()),
+          cudOperations.includes(func),
         );
 
         if (hasCudOperation && onTodoChange) {
+          console.log("Triggering refresh after CUD operation from functionCalls"); // Debug log
           // make the refresh actually occur
           onTodoChange();
+        }
+      } 
+      // Alternative: check if the message indicates a CRUD operation was performed
+      else {
+        const message = response.message ? response.message.toLowerCase() : "";
+        const crudKeywords = ["created", "updated", "deleted", "task", "todo"];
+        const hasCrudOperation = crudKeywords.some(keyword => 
+          message.includes(keyword)
+        );
+        
+        // Check if the message specifically indicates a todo was created, updated, or deleted
+        const hasCudOperation = 
+          message.includes("created the task") || 
+          message.includes("updated the task") || 
+          message.includes("deleted the task") ||
+          message.includes("created a task");
+        
+        if (hasCudOperation && onTodoChange) {
+          console.log("Triggering refresh after CUD operation from message content"); // Debug log
+          onTodoChange();
+        } else {
+          console.log("No CUD operations detected in response"); // Debug log
         }
       }
     } catch (error) {
