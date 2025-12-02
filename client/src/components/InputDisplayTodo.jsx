@@ -378,7 +378,10 @@ function InputDisplayTodo() {
                 name="description"
                 label="What do you need to do?"
                 rules={[
-                  { required: true, message: "Please enter a description" },
+                  {
+                    required: true,
+                    message: "Please enter a description / title",
+                  },
                 ]}
               >
                 {/* the actual input tag */}

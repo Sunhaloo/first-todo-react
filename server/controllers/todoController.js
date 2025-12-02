@@ -16,8 +16,10 @@ const createTodo = async (req, res) => {
     // if user did not add any description for the TODO item
     // NOTE: status code = '400' ==> cannot / will not process client request due to client-side error
     if (!description) {
+      console.log("[BACKEND](Create) Description is required!");
+
       return res.status(400).json({
-        error: "Description is required",
+        error: "[BACKEND](Create) Description is required!",
       });
     }
 
@@ -33,19 +35,21 @@ const createTodo = async (req, res) => {
       })
       .returning("*");
 
-    // if user has been able to successfully create / 'POST' TODO item on server
+    console.log("[BACKEND](Create) TODO created successfully.");
+
     // NOTE: status code = '201' ==> creation of a new resource on server
     res.status(201).json({
-      message: "Todo created successfully",
+      message: "[BACKEND](Create) TODO created successfully.",
       todo: newTodo,
     });
 
     // if the TODO item could not be inserted
     // NOTE: status code = '500' ==> internal server error
   } catch (error) {
-    console.error("Create todo error:", error);
+    console.error("[BACKEND](Create) Create TODO server error:", error);
+
     res.status(500).json({
-      error: "Server error while creating todo",
+      error: "[BACKEND](Create) Server error while creating TODO",
     });
   }
 };
@@ -61,18 +65,20 @@ const getTodos = async (req, res) => {
       .where({ user_id: userId })
       .orderBy("created_at", "asc");
 
-    // get the data to the user with / using 'JSON'
+    console.log("[BACKEND](Get) TODO retrieved successfully");
+
     res.json({
-      message: "Todos retrieved successfully",
+      message: "[BACKEND](Get) TODO retrieved successfully",
       count: todos.length,
       todos,
     });
 
     // if the TODO item could not be fetched
   } catch (error) {
-    console.error("Get todos error:", error);
+    console.error("[BACKEND](Get) Fetch TODO server error:", error);
+
     res.status(500).json({
-      error: "Server error while fetching todos",
+      error: "[BACKEND](Get) Server error while fetching todos",
     });
   }
 };
@@ -94,8 +100,10 @@ const updateTodo = async (req, res) => {
 
     // if the TODO item has not been found ==> "Invoke" the famous famous '404' status code
     if (!todo) {
+      console.log("[BACKEND](Update) TODO not found / does not belong to you!");
+
       return res.status(404).json({
-        error: "Todo not found or does not belong to you",
+        error: "[BACKEND](Update) TODO not found / does not belong to you!",
       });
     }
 
@@ -114,18 +122,20 @@ const updateTodo = async (req, res) => {
       .update(updateData)
       .returning("*");
 
-    // simply return a little success message
+    console.log("[BACKEND](Update) TODO updated successfully");
+
     res.json({
-      message: "Todo updated successfully",
+      message: "[BACKEND](Update) TODO updated successfully",
       todo: updatedTodo,
     });
 
     // if the TODO item could not be updated
     // NOTE: status code = '500' ==> internal server error
   } catch (error) {
-    console.error("Update todo error:", error);
+    console.error("[BACKEND](Update) Update TODO server error:", error);
+
     res.status(500).json({
-      error: "Server error while updating todo",
+      error: "[BACKEND](Update) Server error while updating todo",
     });
   }
 };
@@ -145,26 +155,30 @@ const deleteTodo = async (req, res) => {
 
     // if the TODO item has not been found ==> "Invoke" the famous famous '404' status code
     if (!todo) {
+      console.log("[BACKEND](Delete) TODO not found / does not belong to you!");
+
       return res.status(404).json({
-        error: "Todo not found or does not belong to you",
+        error: "[BACKEND](Delete) TODO not found / does not belong to you!",
       });
     }
 
     // delete the TODO item from the database
     await db("todo").where({ id: todoId }).delete();
 
-    // simply return a little success message
+    console.log("[BACKEND](Delete) TODO deleted successfully");
+
     res.json({
-      message: "Todo deleted successfully",
+      message: "[BACKEND](Delete) TODO deleted successfully",
       deletedTodo: todo,
     });
 
     // if the TODO item could not be updated
     // NOTE: status code = '500' ==> internal server error
   } catch (error) {
-    console.error("Delete todo error:", error);
+    console.error("[BACKEND](Delete) Delete TODO server error:", error);
+
     res.status(500).json({
-      error: "Server error while deleting todo",
+      error: "[BACKEND](Delete) Server error while deleting TODO",
     });
   }
 };
@@ -176,14 +190,21 @@ const getCategories = async (req, res) => {
     // this matches the categories defined in the migration file
     const categories = TODO_CATEGORIES;
 
+    console.log("[BACKEND](Get Categories) Categories retrieved successfully");
+
     res.json({
-      message: "Categories retrieved successfully",
+      message: "[BACKEND](Get Categories) Categories retrieved successfully",
       categories,
     });
   } catch (error) {
-    console.error("Get categories error:", error);
+    console.error(
+      "[BACKEND](Get Categories) Get categories server error:",
+      error,
+    );
+
     res.status(500).json({
-      error: "Server error while fetching categories",
+      error:
+        "[BACKEND](Get Categories) Server error while fetching categories!",
     });
   }
 };
