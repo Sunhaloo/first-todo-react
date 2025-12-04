@@ -90,6 +90,8 @@ status: In-Progress
   - Fixing Category Disappearing
 - AI Chatbot
   - Langchain
+  - Installation
+  - Implementation
 
 > [!NOTE] Resource(s)
 >
@@ -5193,6 +5195,7 @@ const handleCreateTodo = async (values) => {
 > [!NOTE] Resource(s)
 >
 > - http://langchain.com
+> - https://docs.langchain.com
 
 We are now going to implement an AI assistant in the form of a 'Chatbot' whereby the user will be able to _message_ it and in turn perform the required 'CRUD' operation on a TODO item based on that input message.
 
@@ -5211,9 +5214,54 @@ We are now going to implement an AI assistant in the form of a 'Chatbot' whereby
 
 ## Langchain
 
-> [!NOTE] What is Langchain?
+> What is Langchain? Read more on the Wiki: https://en.wikipedia.org/wiki/LangChain
+
+From what I can understand in my / our case; its going to be acting _like_ wrapper function for any models from and provider!
+
+Additionally, it should **fix** the bug whereby when the user is requests to do a 'DELETE' request... It should now **not** get stuck on the `getTodo` function call and should actually call the `deleteTodo` function.
+
+## Langchain Installation
+
+> [!WARNING] Head over to the back-end ( `server/` ) directory first!
+
+- Use the following command to install the actual **core** of Langchain:
+
+```bash
+# instal the core tools provided by langchain
+npm install langchain @langchain/core
+```
+
+> [!NOTE] Gemini Model From Google!
 >
-> Arrived here!
+> Given that I am going to be using the 'google/gemini-2.5-flash-lite' ( _for development_ ) and 'google/gemini-2.5-flash' ( _for production_ ).
+>
+> I am going to have to install the intregration between Google ( _SDK_ ) and langchain using the following command below.
+>
+> > But if you are using from other providers, do head over to the following link: https://docs.langchain.com/oss/javascript/integrations/providers/overview ( _this one is for Javascript / Typescript_ )
+
+- Install the Google 'Gemini' - Langchain integration:
+
+```bash
+# install the package to integrate langchain with google's SDK
+npm install	@langchain/google-genai
+```
+
+> In my case, I am going to be referring to this documentation: https://docs.langchain.com/oss/javascript/integrations/chat/google_generative_ai
+
+> [!TIP] Given that we are already installing things...
+>
+> - Use the following command to install 'zod':
+>
+> ```bash
+> # install the 'zod' data handling schema thing
+> npm install zod
+> ```
+>
+> This is basically a standalone `npm` package that is going to offer us schema validation and static type inference. We are going to be **needing** this when we are going to perform our _tool calls_
+>
+> > Refer to the official documentation: https://zod.dev/
+
+## Langchain Implementation
 
 ---
 

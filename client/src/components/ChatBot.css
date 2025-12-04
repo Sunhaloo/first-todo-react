@@ -25,7 +25,6 @@
   animation: move-up-down 1s ease-in-out infinite;
 }
 
-/* RGB animation when switch is on and in dark mode */
 :root.dark .chatbot-heading-text.rgb-effect {
   background: linear-gradient(
     -45deg,
@@ -120,12 +119,12 @@
 
 .chat-message.user .message-content {
   background-color: var(--white);
-  color: var(--black);
+  color: var(--selection-foreground);
   border-top-right-radius: 0;
 }
 
 .chat-message.ai .message-content {
   background-color: var(--light-bg);
-  color: var(--foreground);
+  color: var(--selection-foreground);
   border-top-left-radius: 0;
 }

@@ -116,6 +116,8 @@ function InputDisplayTodo() {
       setHasMore(response.pagination.hasMore);
       setPage(response.pagination.page + 1); // Next page to fetch
 
+      console.log("[TODO](Get) TODOs fetched successfully ( initial fetch )");
+
       // if some error while fetching TODOs occurs
     } catch (error) {
       console.error(`[TODO](Get) Error while fetching TODOs: ${error}`);
@@ -173,6 +175,8 @@ function InputDisplayTodo() {
       setTotalTodoCount(response.pagination.total);
       setHasMore(response.pagination.hasMore);
       setPage((prev) => prev + 1);
+
+      console.log("[TODO](Get) TODOs fetched successfully ( more fetch )");
     } catch (error) {
       console.error("Error fetching todos:", error);
     } finally {
