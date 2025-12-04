@@ -1,6 +1,3 @@
-// import the required hooks from 'react'
-// import {  useState } from "react";
-
 // import icons from 'react-icons' ( "ri" ) library
 import { RiTodoLine } from "react-icons/ri";
 
@@ -9,6 +6,7 @@ import Username from "../components/Username";
 import ProfileMenu from "../components/ProfileMenu";
 import ToggleThemeBtn from "../components/ToggleTheme";
 import InputDisplayTodo from "../components/InputDisplayTodo";
+import ChatBot from "../components/ChatBot";
 
 // import the styling the for our homepage component
 import "./Homepage.css";
@@ -38,6 +36,8 @@ function Homepage() {
 
       {/* component that will be responsible to input and display of TODO */}
       <InputDisplayTodo />
+
+      <ChatBot />
     </div>
   );
 }

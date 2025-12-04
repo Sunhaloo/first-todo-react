@@ -1,0 +1,93 @@
+.chatbot {
+  margin-top: 1.25rem;
+}
+
+.chatbot-background {
+  padding: 1.5rem 1rem 1rem 1rem;
+  background-color: var(--background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+}
+
+.chatbot-top-heading {
+  display: grid;
+  grid-template-columns: 1fr auto 0fr;
+  align-items: center;
+}
+
+.chatbot-top-heading .chatbot-heading-left-section {
+  justify-self: start;
+  align-items: center;
+  margin-left: 1rem;
+}
+
+.chatbot-heading-text.heading-move-up-down {
+  animation: move-up-down 1s ease-in-out infinite;
+}
+
+/* RGB animation when switch is on and in dark mode */
+:root.dark .chatbot-heading-text.rgb-effect {
+  background: linear-gradient(
+    -45deg,
+    hsl(var(--hue), 100%, 60%),
+    hsl(calc(var(--hue) + 60deg), 100%, 60%),
+    hsl(calc(var(--hue) + 120deg), 100%, 60%),
+    hsl(calc(var(--hue) + 180deg), 100%, 60%)
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation:
+    rgb-cycle 3s linear infinite,
+    move-up-down 1s ease-in-out infinite;
+}
+
+.chatbot-top-heading .chatbot-heading-right-section {
+  justify-self: end;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.chatbot-main-chat {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  padding: 1.5rem 1rem 1rem 1rem;
+  background-color: var(--background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  min-height: 28.125rem;
+}
+
+.chatbot-display-container {
+  padding: 1rem 1rem 1rem 1rem;
+  margin-bottom: 0.7rem;
+  background-color: var(--background);
+  border-radius: var(--border-radius);
+  border: 0.1rem solid #d9d9d9;
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 12.5rem;
+}
+
+.chatbot-input-container {
+  margin-bottom: 0;
+}
+
+.chatbot-inputs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chatbot-input-component {
+  flex: 1;
+}
+
+.chatbot-submit-button {
+  height: 2.5rem;
+}
+
+.chatbot-input-form {
+  margin-bottom: 0;
+}
