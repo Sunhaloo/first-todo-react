@@ -31,6 +31,7 @@ import {
   List,
   Input,
   Select,
+  Skeleton,
   Typography,
   Modal,
   message,
@@ -439,15 +440,14 @@ function InputDisplayTodo() {
                 next={fetchMoreTodos}
                 hasMore={hasMore}
                 loader={
-                  loading ? (
-                    <p className="display-todos-loader">
-                      Loading more todos...
-                    </p>
-                  ) : null
+                  loading ? <Skeleton paragraph={{ rows: 1 }} active /> : null
                 }
                 scrollableTarget="display-todos-card"
               >
-                {todos.length === 0 ? (
+                {loading ? (
+                  // display skeleton when loading
+                  <Skeleton paragraph={{ rows: 5 }} active />
+                ) : todos.length === 0 ? (
                   <p className="display-todos-completed-message">
                     You completed all your TODO items!
                   </p>

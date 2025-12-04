@@ -1,6 +1,9 @@
 // import the `useState` and `useEffect` function from 'react' library
 import { useEffect, useState } from "react";
 
+// import required components from antd
+import { Skeleton } from "antd";
+
 // import the API function that will talk to back-end
 import { getUserProfile } from "../services/api";
 
@@ -56,7 +59,7 @@ function Username({ className }) {
   // conditional way to display the username
   if (userFetchLoading) {
     // if the username has been NOT retrieved
-    return <span className={className}>Loading...</span>;
+    return <Skeleton.Button className={className} active />;
   }
 
   // else if the username HAS been retrieved from the database
