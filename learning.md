@@ -5076,6 +5076,112 @@ const getTodos = async (req, res) => {
 >
 > This is due to the fact that we have to update everything from getting the TODOs to updating them.
 
+## Fixing Category Disappearing
+
+So the problem that we have right now is the issue whereby the 'Miscellaneous' category disappearing after entering a TODO item.
+
+- This is what the current implmentation of the "_fetch_" looks like:
+
+```js
+// helper function to find the Miscellaneous category if it exists
+const getMiscellaneousCategory = () => {
+  return categories.find((cat) => cat === "Miscellaneous");
+};
+
+// function that is going to fetch available categories from the server
+const fetchCategories = async () => {
+  try {
+    const response = await getCategories();
+    setCategories(response.categories || []);
+  } catch (error) {
+    console.error(
+      `[CATEGORIES](Get) Error while fetching categories: ${error}`
+    );
+
+    // Fallback to default categories if API fails
+    setCategories([
+      "Code Review",
+      "Coding",
+      "Debugging",
+      "Deployment",
+      "Documentation",
+      "Learning",
+      "Meeting",
+      "Miscellaneous",
+      "Planning",
+      "Refactoring",
+      "Testing",
+    ]);
+  }
+};
+
+// fetch the TODOs and categories when the component loads up ( from the database )
+useEffect(() => {
+  fetchInitialTodos();
+  fetchCategories();
+}, []);
+```
+
+As you can clearly see above, we are only calling the `getMiscellaneousCategory` function only **once** on the _first_ request when the database loads up!
+
+Well, to fix this we have to re-initialise the `<Select>` component from Ant Design so that it sets the value for the category again.
+
+- Therefore add the following code to our `handeCreateTodo` function in `client/src/components/InputDisplayTodo.jsx`:
+
+```jsx
+const handleCreateTodo = async (values) => {
+  // Prevent duplicate submissions
+  if (todoCreateLoading) return;
+
+  setTodoCreateLoading(true);
+
+  try {
+    // wait for the database to finish writing TODO items
+    await createTodo(values);
+
+    console.log("[TODO](Create) TODO created successfully!");
+
+    // display a success message to the user
+    messageApi.open({
+      type: "success",
+      content: "TODO created successfully",
+      duration: 1,
+    });
+
+    // increment the total count
+    setTotalTodoCount((prev) => prev + 1);
+
+    // refetch the initial todos to maintain proper chronological order
+    await fetchInitialTodos();
+
+    // create the form for new input of TODO item
+    form.resetFields();
+
+    // INFO: set the value for the 'select' component again after reseting the fields
+
+    // reset the category field to 'Miscellaneous' after form reset
+    const miscellaneousCategory = getMiscellaneousCategory();
+    if (miscellaneousCategory) {
+      form.setFieldsValue({ category: miscellaneousCategory });
+    } else {
+      form.setFieldsValue({ category: categories[0] || "Miscellaneous" });
+    }
+
+    // if there was any errors while creation of TODO item
+  } catch (error) {
+    console.error(`[TODO](Create) Error while creating TODOs: ${error}`);
+
+    messageApi.open({
+      type: "error",
+      content: "Error creating TODO. Please try again.",
+      duration: 1,
+    });
+  } finally {
+    setTodoCreateLoading(false);
+  }
+};
+```
+
 ---
 
 # Socials

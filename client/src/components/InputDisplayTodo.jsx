@@ -61,7 +61,7 @@ function InputDisplayTodo() {
   // declare variable to hold the maximum length of TODO "input"
   const maxLengthInput = 75;
 
-  // Helper function to find the Miscellaneous category if it exists
+  // helper function to find the Miscellaneous category if it exists
   const getMiscellaneousCategory = () => {
     return categories.find((cat) => cat === "Miscellaneous");
   };
@@ -92,6 +92,12 @@ function InputDisplayTodo() {
       ]);
     }
   };
+
+  // fetch the TODOs and categories when the component loads up ( from the database )
+  useEffect(() => {
+    fetchInitialTodos();
+    fetchCategories();
+  }, []);
 
   // Initial load function for the first page
   const fetchInitialTodos = async () => {
@@ -125,12 +131,6 @@ function InputDisplayTodo() {
       setLoading(false);
     }
   };
-
-  // fetch the TODOs and categories when the component loads up ( from the database )
-  useEffect(() => {
-    fetchInitialTodos();
-    fetchCategories();
-  }, []);
 
   // set default category to 'Miscellaneous' after categories are loaded
   useEffect(() => {
@@ -207,6 +207,15 @@ function InputDisplayTodo() {
 
       // create the form for new input of TODO item
       form.resetFields();
+
+      // reset the category field to 'Miscellaneous' after form reset
+      const miscellaneousCategory = getMiscellaneousCategory();
+
+      if (miscellaneousCategory) {
+        form.setFieldsValue({ category: miscellaneousCategory });
+      } else {
+        form.setFieldsValue({ category: categories[0] || "Miscellaneous" });
+      }
 
       // if there was any errors while creation of TODO item
     } catch (error) {
