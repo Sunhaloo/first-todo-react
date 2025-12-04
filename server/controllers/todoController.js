@@ -131,10 +131,7 @@ const updateTodo = async (req, res) => {
     if (category !== undefined) updateData.category = category;
     if (completed !== undefined) updateData.completed = completed;
 
-    // update the TODO item in the database
-    await db("todo").where({ id: todoId }).update(updateData);
-
-    // get the update and return query in one object
+    // update the TODO item in the database and return the updated record
     const [updatedTodo] = await db("todo")
       .where({ id: todoId })
       .update(updateData)

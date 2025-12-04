@@ -29,7 +29,6 @@ const getUserProfile = async (req, res) => {
       user: {
         id: userProfile.id,
         username: userProfile.username,
-        gender: userProfile.gender,
         createdAt: userProfile.created_at,
       },
     });

@@ -1,3 +1,8 @@
+// WARNING: remove in production
+console.log(
+  `\n\n\t-- Server Started At: ${new Date().toLocaleTimeString()} --\n\n`,
+);
+
 // add the 'express', 'cors' and 'dotenv' libraries
 const express = require("express");
 const cors = require("cors");

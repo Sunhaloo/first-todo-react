@@ -20,11 +20,6 @@ const register = async (req, res) => {
       });
     }
 
-    // password validation --> check if the 2 passwords match
-    if (password !== confirmPassword) {
-      return res.status(400).json({ error: "Passwords do not match!" });
-    }
-
     // check if the user already exists
     const existingUser = await db("user")
       .where({ email })
@@ -115,11 +110,11 @@ const login = async (req, res) => {
     // NOTE: need to user the `bycrypt.compare` function as password in DB is hashed
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    console.log("[AUTH API](Login) Invalid credentials!");
-
     // if the password is not correct
     // NOTE: status code = '401' ==> missing / invalid / failed authentication details
     if (!isPasswordValid) {
+      console.log("[AUTH API](Login) Invalid credentials!");
+
       return res.status(401).json({
         error: "[AUTH API](Login) Invalid credentials",
       });
