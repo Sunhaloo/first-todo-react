@@ -33,7 +33,11 @@ function ChatBot({ onTodoChange }) {
 
   // declare variables for the actual chat implmentation
   const [userMessage, setUserMessage] = useState("");
-  const [chatHistory, setChatHistory] = useState([]);
+  const [chatHistory, setChatHistory] = useState([
+    { role: 'ai', content: 'Hello! I\'m your Task Whisperer. How can I help you with your TODOs today?' },
+    { role: 'user', content: 'I need to add a new task to buy groceries' },
+    { role: 'ai', content: 'Sure, I can help with that. What category would you like to assign to this task?' }
+  ]);
   const [isLoading, setIsLoading] = useState(false);
 
   // function to "enable" / run when the switch is on
