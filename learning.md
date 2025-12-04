@@ -15,77 +15,81 @@ status: In-Progress
 
 ## List of Contents
 
-- #Planning
-- #Setup Project
-- #Configure The Knex
-  - #Write The Schema For Tables
-  - #Run The Migrations
-- #Configure The Main Express.JS Server
-  - #Setup Connection Between Database And Server
-  - #Create / Configure The Main Server File
-- #Security and Authentication
-  - #Creation Of Authentication Controller
-  - #Creation Of Routing For Authentication
-    - #Make The URL ( For Authentication )
-    - #Test The URL ( For Authentication )
-  - #Create Authentication Middleware
-- #TODO Related Tasks
-  - #Creation Of TODO Controller
-  - #Creation Of Routing For TODO
-    - #Make The URL ( For TODO )
-    - #Test The URL ( For TODO )
-- #React Development Setup
-  - #Download Required Dependencies
-    - #Setup React Project To Use Ant Design
-  - #Creation Of Folders
-    - #Testing Ant Design
-- #Registration - Login Page
-  - #Create Main 'Registration - Login' Page
-    - #Install React Icons
-    - #Example Usage
-  - #RGB Colour Shifting
-    - #Implementation In React
-  - #Logo Animation
-- #Axios API Connection
-  - #Create API Service
-  - #Connect React - Forms To API
-    - #Testing Front-End And Back-End Connection ( Register / Login )
-  - #Creation Of Main Page
-    - #Routes!!!
-    - #Create The Actual Dashboard File
-    - #Add The Routings
-- #Main Pages Components
-  - #Creating The MVP
-    - #Our Main ( Home ) Page
-- #Learn How To Use Postman
-  - #Login Post Requests
-  - #TODO Get Requests
-- #Create Username Component
-  - #Back-End / Express.JS
-  - #Front-End / React
-- #Create Profile Picture - Drop Down Menu Component
-  - #Make It Behave Like Ant Design's Component
-  - #Making The Card
-- #Toggle Theme ( Button / Toggle )
-  - #Theme Context
-  - #Create Actual Toggle Theme Component
-  - #The Select Component And Back-End Category
-- #Create TODO Form Component
-  - #But Before Ant Design!!!
-  - #The Select Component And Back-End Category
-- #Back-end Issue - Migration File
-  - #Start Clean - Revert / Rollback Everything
-    - #No Data In Database
-- #Migrating To Neon DB
-  - #Setup Neon
-- #Vercel
-  - #Deploying On Vercel
-    - #Back-End Deployment
-    - #Front-End Deployment
-- #Registration / Login Issues
-  - #Update Vercel Back-End's Environment Variables
-  - #Generate JSON Web Token Secret Key
-- ***
+- Planning
+- Setup Project
+- Configure The Knex
+  - Write The Schema For Tables
+  - Run The Migrations
+- Configure The Main Express.JS Server
+  - Setup Connection Between Database And Server
+  - Create / Configure The Main Server File
+- Security and Authentication
+  - Creation Of Authentication Controller
+  - Creation Of Routing For Authentication
+    - Make The URL ( For Authentication )
+    - Test The URL ( For Authentication )
+  - Create Authentication Middleware
+- TODO Related Tasks
+  - Creation Of TODO Controller
+  - Creation Of Routing For TODO
+    - Make The URL ( For TODO )
+    - Test The URL ( For TODO )
+- React Development Setup
+  - Download Required Dependencies
+    - Setup React Project To Use Ant Design
+  - Creation Of Folders
+    - Testing Ant Design
+- Registration - Login Page
+  - Create Main 'Registration - Login' Page
+    - Install React Icons
+    - Example Usage
+  - RGB Colour Shifting
+    - Implementation In React
+  - Logo Animation
+- Axios API Connection
+  - Create API Service
+  - Connect React - Forms To API
+    - Testing Front-End And Back-End Connection ( Register / Login )
+  - Creation Of Main Page
+    - Routes!!!
+    - Create The Actual Dashboard File
+    - Add The Routings
+- Main Pages Components
+  - Creating The MVP
+    - Our Main ( Home ) Page
+- Learn How To Use Postman
+  - Login Post Requests
+  - TODO Get Requests
+- Create Username Component
+  - Back-End / Express.JS
+  - Front-End / React
+- Create Profile Picture - Drop Down Menu Component
+  - Make It Behave Like Ant Design's Component
+  - Making The Card
+- Toggle Theme ( Button / Toggle )
+  - Theme Context
+  - Create Actual Toggle Theme Component
+  - The Select Component And Back-End Category
+- Create TODO Form Component
+  - But Before Ant Design!!!
+  - The Select Component And Back-End Category
+- Back-end Issue - Migration File
+  - Start Clean - Revert / Rollback Everything
+    - No Data In Database
+- Migrating To Neon DB
+  - Setup Neon
+- Vercel
+  - Deploying On Vercel
+    - Back-End Deployment
+    - Front-End Deployment
+- Registration / Login Issues
+  - Update Vercel Back-End's Environment Variables
+  - Generate JSON Web Token Secret Key
+- Project Improvements
+  - Fetching Required TODOs
+  - Fixing Category Disappearing
+- AI Chatbot
+  - Langchain
 
 > [!NOTE] Resource(s)
 >
@@ -5181,6 +5185,35 @@ const handleCreateTodo = async (values) => {
   }
 };
 ```
+
+---
+
+# AI Chatbot
+
+> [!NOTE] Resource(s)
+>
+> - http://langchain.com
+
+We are now going to implement an AI assistant in the form of a 'Chatbot' whereby the user will be able to _message_ it and in turn perform the required 'CRUD' operation on a TODO item based on that input message.
+
+> [!WARNING] Second Time Implementing AI Chatbot!
+>
+> This is the not first time that I am implementing this Chatbot!
+>
+> If you look at the 'test' branch, you are going to see that we have a 65% working AI chatbot.
+> The main reason that I abandon it was that there were to many things to fix...
+>
+> > I would rather **delete** the _noodle_ **instead** of untangling the _noodle_!
+>
+> Hence, this is going to be me, trying to implement a better version of what I had in 'test' because I know what mistakes and bugs that was present in the app. And now I have fixed it and therefore should be better off.
+
+> We are going to be using Langchain ( _and maybe langraph_! )
+
+## Langchain
+
+> [!NOTE] What is Langchain?
+>
+> Arrived here!
 
 ---
 
