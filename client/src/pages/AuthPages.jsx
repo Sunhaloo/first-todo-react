@@ -116,7 +116,7 @@ function AuthPages() {
       login(response.token);
 
       // display a little 'success' message to the user
-      console.log("[AUTH](Login) Logged in user:", response.user);
+      console.log("[AUTH](Login) Logged in user:", response.user.username);
 
       // navigate to the dashboard route
       navigate("/homepage");

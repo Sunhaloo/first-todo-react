@@ -20,6 +20,11 @@ const register = async (req, res) => {
       });
     }
 
+    // password validation --> check if the 2 passwords match
+    if (password !== confirmPassword) {
+      return res.status(400).json({ error: "Passwords do not match!" });
+    }
+
     // check if the user already exists
     const existingUser = await db("user")
       .where({ email })

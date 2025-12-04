@@ -6,6 +6,9 @@ const todoController = require("../controllers/todoController");
 // NOTE: get the 'Authentication Token' as 'TODO' items are "private" to each user
 const { authenticateToken } = require("../middleware/authMiddleware");
 
+// get available categories ( 'GET method on `/api/todos/categories`' )
+router.get("/categories", authenticateToken, todoController.getCategories);
+
 // get all TODO items for logged-in and authenticated user ( 'GET method on `/api/todos`' )
 router.get("/", authenticateToken, todoController.getTodos);
 
@@ -17,9 +20,6 @@ router.put("/:id", authenticateToken, todoController.updateTodo);
 
 // delete TODO item for logged-in and authenticated user ( 'DELETE method on `/api/todos`' )
 router.delete("/:id", authenticateToken, todoController.deleteTodo);
-
-// get available categories ( 'GET method on `/api/todos/categories`' )
-router.get("/categories", authenticateToken, todoController.getCategories);
 
 // export the actual routes ( `/api/todos/{functionName}` )
 module.exports = router;
