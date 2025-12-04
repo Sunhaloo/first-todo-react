@@ -60,9 +60,9 @@ export const deleteUser = async () => {
 };
 
 // get all TODOs for logged-in user ( endpoint )
-export const getTodos = async () => {
+export const getTodos = async (page = 1, limit = 10) => {
   try {
-    const response = await api.get("/todos");
+    const response = await api.get(`/todos?page=${page}&limit=${limit}`);
     return response.data;
   } catch (error) {
     throw error.response?.data || { error: "Failed to fetch todos" };

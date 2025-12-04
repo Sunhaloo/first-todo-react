@@ -769,7 +769,7 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { userId: user.id, username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" },
+      { expiresIn: "7d" }
     );
 
     // if user is able to login ==> return a 'JSON' output
@@ -2032,7 +2032,7 @@ api.interceptors.request.use(
   // if the token has not been found --> reject the user's request
   (error) => {
     return Promise.reject(error);
-  },
+  }
 );
 
 // register a new user ( endpoint )
@@ -2133,7 +2133,7 @@ createRoot(document.getElementById("root")).render(
     <ConfigProvider>
       <App />
     </ConfigProvider>
-  </StrictMode>,
+  </StrictMode>
 );
 ```
 
@@ -2451,7 +2451,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   // declare variables that is going to check if `token` key exists in local storage
   const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem("token"),
+    !!localStorage.getItem("token")
   );
 
   // get the value of the `token` from the local storage
@@ -2597,7 +2597,7 @@ const handleRegister = async (values) => {
       if (error.response.status === 400) {
         setErrorMessage(
           error.response.data.error ||
-            "Registration failed - Please check your information",
+            "Registration failed - Please check your information"
         );
       } else {
         setErrorMessage("An error occurred during registration");
@@ -3071,6 +3071,7 @@ Follow the steps below to be able to achieve this:
 - Endpoint URL: `http://localhost:5000/api/todos`
 - Change the `Content-Type` from `text/plain` to `application/json` ( _simply create another key pair value_ )
 - Change the 'Authorization' **type** to be 'Bearer Token'
+
   - Then simply paste the user's _token_ value there!
 
 - Therefore in my case, I see this as output:
@@ -3711,7 +3712,7 @@ createRoot(document.getElementById("root")).render(
         <App />
       </ThemeProvider>
     </ConfigProvider>
-  </StrictMode>,
+  </StrictMode>
 );
 ```
 
@@ -3860,7 +3861,7 @@ import AppWithProviders from "./AppWithProviders.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AppWithProviders />
-  </StrictMode>,
+  </StrictMode>
 );
 ```
 
@@ -4814,7 +4815,7 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  }),
+  })
 );
 
 // other codes here
@@ -4976,6 +4977,104 @@ import { Button, Modal } from "antd";
 > [!SUCCESS]
 >
 > We have now been able to implement the 'Delete Account' button / functionality in our web-app!
+
+---
+
+# Project Improvements
+
+## Fetching Required TODOs
+
+Currently, in our back-end over at `server/controller/todoController.js` file, we are fetching **all** the TODO items _all at once_.
+
+But this fine when we are dealing will little amounts of TODOs; but what's going to happen if the user has a million TODO items?
+
+Therefore, the _startup time_ / loading time for the website when the user is going to load into the hompage is going to be terribly slow!
+
+Therefore, as we have the scrolling effect in our front-end we are going to use it to out advantage.
+
+> We are going to use pagination!
+
+Instead of doing a 'GET' resquest **all at once**, we are going to only _fetch_ the ones that should be shown!
+
+- Currently we have the following `getTodos` function in our `todoController.js` file:
+
+```js
+// function to get all the TODO items for the logged-in user
+const getTodos = async (req, res) => {
+  try {
+    // get the `userId` from the authentication token
+    const userId = req.user.userId;
+
+    // get all of the TODO items from the database for that user in descending order of creation date
+    const todos = await db("todo")
+      .where({ user_id: userId })
+      .orderBy("created_at", "asc");
+
+    console.log("[TODO API](Get) TODO retrieved successfully");
+
+    res.json({
+      message: "[TODO API](Get) TODO retrieved successfully",
+      count: todos.length,
+      todos,
+    });
+
+    // if the TODO item could not be fetched
+  } catch (error) {
+    console.error("[TODO API](Get) Fetch TODO server error:", error);
+
+    res.status(500).json({
+      error: "[TODO API](Get) Server error while fetching todos",
+    });
+  }
+};
+```
+
+- Modify the `getTodos` function to something like this:
+
+```js
+// function to get all the TODO items for the logged-in user ==> based on what's shown
+const getTodos = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const todos = await db("todo")
+      .where({ user_id: userId })
+      .orderBy("created_at", "asc")
+      .limit(limit)
+      .offset(offset);
+
+    const totalCount = await db("todo")
+      .where({ user_id: userId })
+      .count("* as count")
+      .first();
+
+    res.json({
+      message: "Todos retrieved successfully",
+      todos,
+      pagination: {
+        page,
+        limit,
+        total: parseInt(totalCount.count),
+        hasMore: offset + todos.length < parseInt(totalCount.count),
+      },
+    });
+  } catch (error) {
+    console.error("Get todos error:", error);
+    res.status(500).json({ error: "Server error while fetching todos" });
+  }
+};
+```
+
+> Hence, we are going to have to modify our front-end to make use of the new `getTodos` function
+
+> [!NOTE]
+>
+> Please do refer to the `client/src/components/InputDisplayTodo.jsx` file / component itself.
+>
+> This is due to the fact that we have to update everything from getting the TODOs to updating them.
 
 ---
 

@@ -54,32 +54,48 @@ const createTodo = async (req, res) => {
   }
 };
 
-// function to get all the TODO items for the logged-in user
+// function to get all the TODO items for the logged-in user ==> based on what's shown
 const getTodos = async (req, res) => {
   try {
-    // get the `userId` from the authentication token
+    // get the `userId` from the token
     const userId = req.user.userId;
 
-    // get all of the TODO items from the database for that user in descending order of creation date
+    // for pagination --> how much to fetch on scroll wheel
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    // get the TODO item based on the "pagination" - front-end scroll
     const todos = await db("todo")
       .where({ user_id: userId })
-      .orderBy("created_at", "asc");
+      .orderBy("created_at", "asc")
+      .limit(limit)
+      .offset(offset);
+
+    // get the total count of TODOs for the heading count
+    const totalCount = await db("todo")
+      .where({ user_id: userId })
+      .count("* as count")
+      .first();
 
     console.log("[TODO API](Get) TODO retrieved successfully");
 
     res.json({
-      message: "[TODO API](Get) TODO retrieved successfully",
-      count: todos.length,
+      message: "Todos retrieved successfully",
       todos,
+      pagination: {
+        page,
+        limit,
+        total: parseInt(totalCount.count),
+        hasMore: offset + todos.length < parseInt(totalCount.count),
+      },
     });
-
-    // if the TODO item could not be fetched
   } catch (error) {
-    console.error("[TODO API](Get) Fetch TODO server error:", error);
+    console.error("[TODO API](Get) Get TODOs server error:", error);
 
-    res.status(500).json({
-      error: "[TODO API](Get) Server error while fetching todos",
-    });
+    res
+      .status(500)
+      .json({ error: "[TODO API](Get) Server error while fetching todos" });
   }
 };
 

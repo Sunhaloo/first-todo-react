@@ -45,19 +45,17 @@ import "./InputDisplayTodo.css";
 function InputDisplayTodo() {
   // states for our TODO items
   const [todos, setTodos] = useState([]);
-  const [allTodos, setAllTodos] = useState([]);
-  const [todoFetchLoading, setTodoFetchLoading] = useState(false);
-  const [todoCreateLoading, setTodoCreateLoading] = useState(false);
+  const [totalTodoCount, setTotalTodoCount] = useState(0); // Track total count
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [todoCreateLoading, setTodoCreateLoading] = useState(false);
   const [form] = Form.useForm();
   const [editingForm] = Form.useForm();
   const [editingTodo, setEditingTodo] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [categories, setCategories] = useState([]);
-  const [categoriesLoading, setCategoriesLoading] = useState(true);
-  const pageSize = 10;
 
   // declare variable to hold the maximum length of TODO "input"
   const maxLengthInput = 75;
@@ -91,50 +89,45 @@ function InputDisplayTodo() {
         "Refactoring",
         "Testing",
       ]);
-    } finally {
-      setCategoriesLoading(false);
     }
   };
 
-  // function that is going to fetch / get TODOs from the database once
-  const fetchAllTodos = async () => {
-    if (allTodos.length === 0) {
-      // Only fetch if we haven't fetched yet
-      setTodoFetchLoading(true);
+  // Initial load function for the first page
+  const fetchInitialTodos = async () => {
+    setLoading(true);
 
-      try {
-        // get the response / TODO ( `id` ) from the database
-        const response = await getTodos();
+    try {
+      // get the response / TODO ( `id` ) from the database
+      const response = await getTodos(1, 10);
 
-        // get the user's TODOs if not present return an empty list
-        const allTodosFromServer = response.todos || [];
+      // get the user's TODOs if not present return an empty list
+      const initialTodos = response.todos || [];
 
-        // for initial load, set all todos and show first page
-        setAllTodos(allTodosFromServer);
-        const initialTodos = allTodosFromServer.slice(0, pageSize);
-        setTodos(initialTodos);
-        setHasMore(allTodosFromServer.length > pageSize);
+      // set initial todos, total count and pagination state
+      setTodos(initialTodos);
+      setTotalTodoCount(response.pagination.total);
+      setHasMore(response.pagination.hasMore);
+      setPage(response.pagination.page + 1); // Next page to fetch
 
-        // if some error while fetching TODOs occurs
-      } catch (error) {
-        console.error(`[TODO](Get) Error while fetching TODOs: ${error}`);
+      // if some error while fetching TODOs occurs
+    } catch (error) {
+      console.error(`[TODO](Get) Error while fetching TODOs: ${error}`);
 
-        messageApi.open({
-          type: "error",
-          content: "Error fetching TODOs. Please refresh the page.",
-          duration: 1,
-        });
+      messageApi.open({
+        type: "error",
+        content: "Error fetching TODOs. Please refresh the page.",
+        duration: 1,
+      });
 
-        // change the loading status back to `false`
-      } finally {
-        setTodoFetchLoading(false);
-      }
+      // change the loading status back to `false`
+    } finally {
+      setLoading(false);
     }
   };
 
   // fetch the TODOs and categories when the component loads up ( from the database )
   useEffect(() => {
-    fetchAllTodos();
+    fetchInitialTodos();
     fetchCategories();
   }, []);
 
@@ -165,19 +158,24 @@ function InputDisplayTodo() {
   }, [editingTodo, editingForm]);
 
   // function to load more data when user scrolls
-  const fetchMoreData = () => {
-    if (!todoFetchLoading && hasMore) {
-      setTodoFetchLoading(true);
-      setTimeout(() => {
-        // simulate network request
-        const nextPage = page + 1;
-        const newTodos = allTodos.slice(0, nextPage * pageSize);
-        setTodos(newTodos);
-        setHasMore(newTodos.length < allTodos.length);
-        setPage(nextPage);
-        // add a small delay to simulate API call
-        setTodoFetchLoading(false);
-      }, 500);
+  const fetchMoreTodos = async () => {
+    if (loading || !hasMore) return;
+
+    setLoading(true);
+    try {
+      const response = await getTodos(page, 10); // Pass page number
+
+      // add new todos to existing ones
+      setTodos((prev) => [...prev, ...response.todos]);
+
+      // update pagination / scrolling - preserve total count if it changes
+      setTotalTodoCount(response.pagination.total);
+      setHasMore(response.pagination.hasMore);
+      setPage((prev) => prev + 1);
+    } catch (error) {
+      console.error("Error fetching todos:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -189,7 +187,7 @@ function InputDisplayTodo() {
 
     try {
       // wait for the database to finish writing TODO items
-      const response = await createTodo(values);
+      await createTodo(values);
 
       console.log("[TODO](Create) TODO created successfully!");
 
@@ -200,12 +198,11 @@ function InputDisplayTodo() {
         duration: 1,
       });
 
-      // add the new TODO item to the end of the lists ==> oldest first
-      setTodos([...todos, response.todo]);
-      setAllTodos([...allTodos, response.todo]);
+      // increment the total count
+      setTotalTodoCount((prev) => prev + 1);
 
-      // Reset page to 1 to ensure the new todo is visible
-      setPage(1);
+      // refetch the initial todos to maintain proper chronological order
+      await fetchInitialTodos();
 
       // create the form for new input of TODO item
       form.resetFields();
@@ -235,9 +232,6 @@ function InputDisplayTodo() {
       // update "that" TODO item in the list using its `id`
       setTodos(
         todos.map((todo) => (todo.id === todoId ? response.todo : todo)),
-      );
-      setAllTodos(
-        allTodos.map((todo) => (todo.id === todoId ? response.todo : todo)),
       );
 
       const statusText = !currentStatus ? "completed" : "marked as incomplete";
@@ -275,11 +269,6 @@ function InputDisplayTodo() {
           todo.id === editingTodo.id ? response.todo : todo,
         ),
       );
-      setAllTodos(
-        allTodos.map((todo) =>
-          todo.id === editingTodo.id ? response.todo : todo,
-        ),
-      );
 
       // close the modal
       setIsModalVisible(false);
@@ -313,17 +302,13 @@ function InputDisplayTodo() {
       // run the `deleteTodo` function on a specific TODO item
       await deleteTodo(todoId);
 
-      // remove todo from the lists
+      // remove todo from the list
       const updatedTodos = todos.filter((todo) => todo.id !== todoId);
-      const updatedAllTodos = allTodos.filter((todo) => todo.id !== todoId);
 
       setTodos(updatedTodos);
-      setAllTodos(updatedAllTodos);
 
-      // if we're on a page where the last item was just deleted, go back a page
-      if (updatedTodos.length === 0 && page > 1) {
-        setPage(page - 1);
-      }
+      // decrement the total count
+      setTotalTodoCount((prev) => Math.max(prev - 1, 0));
 
       console.log("[DELETE](Post) TODO deleted successfully!");
 
@@ -440,7 +425,7 @@ function InputDisplayTodo() {
         <div className="display-todos-main">
           <div className="display-todo-background">
             <Typography.Title level={4} className="display-todos-counter">
-              {`Todo Count: ${todos.length}`}
+              {`Todo Count: ${totalTodoCount}`}
             </Typography.Title>
 
             {/* TODO list with infinite scroll */}
@@ -451,10 +436,10 @@ function InputDisplayTodo() {
             >
               <InfiniteScroll
                 dataLength={todos.length}
-                next={fetchMoreData}
+                next={fetchMoreTodos}
                 hasMore={hasMore}
                 loader={
-                  todoFetchLoading && todos.length < allTodos.length ? (
+                  loading ? (
                     <p className="display-todos-loader">
                       Loading more todos...
                     </p>
