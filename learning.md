@@ -5212,6 +5212,10 @@ We are now going to implement an AI assistant in the form of a 'Chatbot' whereby
 
 > We are going to be using Langchain ( _and maybe langraph_! )
 
+Therefore, I already have the "_front-end_" setup and I given that I am not too much interest in the front-end side... Simply refer to the actual `client/src/components/ChatBot.jsx` file.
+
+> I am going to be modifying it again after we implement Langchain!
+
 ## Langchain
 
 > What is Langchain? Read more on the Wiki: https://en.wikipedia.org/wiki/LangChain
@@ -5227,7 +5231,7 @@ Additionally, it should **fix** the bug whereby when the user is requests to do 
 - Use the following command to install the actual **core** of Langchain:
 
 ```bash
-# instal the core tools provided by langchain
+# install the core tools provided by langchain
 npm install langchain @langchain/core
 ```
 
@@ -5262,6 +5266,161 @@ npm install	@langchain/google-genai
 > > Refer to the official documentation: https://zod.dev/
 
 ## Langchain Implementation
+
+- Create a new folder `services` inside of the `server/` directory:
+
+```bash
+# create 'services' folder for our back-end
+# NOTE: make sure that you are already in 'server/' directory
+mkdir services
+```
+
+- Create the `server/services/todoService.js` file:
+
+```js
+const db = require("../db/knex");
+
+// global TODO service file that is going to be used by langchain
+const todoService = {
+  // asynchronous function to create TODO item
+  async createTodo(userId, todoData) {
+    const { description, category } = todoData;
+
+    if (!description) {
+      console.log("[TODO SERVICE](Create) Description is required!");
+
+      throw new Error("Description is required");
+    }
+
+    const [newTodo] = await db("todo")
+      .insert({
+        user_id: userId,
+        description,
+        category: category || "Miscellaneous",
+        completed: false,
+      })
+      .returning("*");
+
+    console.log("[TODO SERVICE](Create) TODO successfully created!");
+
+    return newTodo;
+  },
+
+  // asynchronous function to get all TODO item(s)
+  async getTodos(userId) {
+    const todos = await db("todo")
+      .where({ user_id: userId })
+      .orderBy("created_at", "asc");
+
+    console.log("[TODO SERVICE](Create) TODO successfully fetched!");
+
+    return todos;
+  },
+
+  // asynchronous function to update a TODO item
+  async updateTodo(userId, todoId, updates) {
+    const { description, category, completed } = updates;
+
+    // check if TODO item belongs to that specific user
+    const todo = await db("todo")
+      .where({ id: todoId, user_id: userId })
+      .first();
+
+    if (!todo) {
+      console.log(
+        "[TODO SERVICE](Create) TODO not found or does not belong to you!"
+      );
+
+      throw new Error("Todo not found or does not belong to you");
+    }
+
+    // create the update object - data
+    const updateData = {};
+    if (description !== undefined) updateData.description = description;
+    if (category !== undefined) updateData.category = category;
+    if (completed !== undefined) updateData.completed = completed;
+
+    const [updatedTodo] = await db("todo")
+      .where({ id: todoId })
+      .update(updateData)
+      .returning("*");
+
+    console.log("[TODO SERVICE](Create) TODO successfully updated");
+
+    return updatedTodo;
+  },
+
+  // asynchronous function to delete a TODO item
+  async deleteTodo(userId, todoId) {
+    // check if TODO item belongs to that specific user
+    const todo = await db("todo")
+      .where({ id: todoId, user_id: userId })
+      .first();
+
+    if (!todo) {
+      console.log(
+        "[TODO SERVICE](Create) TODO not found or does not belong to you!"
+      );
+
+      throw new Error("Todo not found or does not belong to you");
+    }
+
+    await db("todo").where({ id: todoId }).delete();
+
+    console.log("[TODO SERVICE](Create) TODO successfully deleted");
+
+    return todo;
+  },
+
+  // function to get all categories for a TODO item
+  getCategories() {
+    const { TODO_CATEGORIES } = require("../config/categories");
+    return TODO_CATEGORIES;
+  },
+};
+
+// export all functions
+module.exports = todoService;
+```
+
+Given that Langchain's "_tool_" function / method, needs just a **simple** function **without** sending _requests_ or getting back any _response_.
+
+Therefore, this is the reasonn as to why we have to do that, else we are going to have to duplicate everything if we were to only use the `todoController.js` file!
+
+- Create a new folder `tools` inside of the `server/` directory:
+
+```bash
+# create 'tools' folder for our back-end
+# NOTE: make sure that you are already in 'server/' directory
+mkdir tools
+```
+
+> [!NOTE] Refer to the actual files in repository
+>
+> We are going to have to create these `.js` file inside our `tools/` folder.
+>
+> > Basically, it should look like this:
+>
+> ```console
+>  .
+> ├──  createTodoTool.js
+> ├──  deleteTodoTool.js
+> ├──  getTodosTool.js
+> ├──  index.js
+> └──  updateTodoTool.js
+> ```
+
+- Create the `server/controllers/chatController.js` file:
+
+```js
+
+```
+
+- Create the `server/routers/chatRouters.js` file:
+
+```js
+
+```
 
 ---
 
