@@ -16,7 +16,7 @@ const createTodo = async (req, res) => {
     // if user did not add any description for the TODO item
     // NOTE: status code = '400' ==> cannot / will not process client request due to client-side error
     if (!description) {
-      console.log("[TODO API](Create) Description is required!");
+      console.error("[TODO API](Create) Description is required!");
 
       return res.status(400).json({
         error: "[TODO API](Create) Description is required",

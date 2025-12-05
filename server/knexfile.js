@@ -1,4 +1,4 @@
-// knexfile.js
+// simply import the data found in our `.env` file
 require("dotenv").config();
 
 module.exports = {
