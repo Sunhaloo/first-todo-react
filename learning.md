@@ -5410,6 +5410,27 @@ mkdir tools
 > └──  updateTodoTool.js
 > ```
 
+> [!TIP]
+>
+> After creating the files ( _with the codes inside obviously_ ), run the following command below:
+>
+> ```bash
+> # check if all our tools are defined correctly
+> node -e "const tools = require('./tools'); console.log(Object.keys(tools));"
+> ```
+>
+> - Therefore, you should see that you have the following output:
+>
+> ```console
+> [dotenv@17.2.3] injecting env (10) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+> [
+>   'createTodoTool',
+>   'getTodosTool',
+>   'updateTodoTool',
+>   'deleteTodoTool'
+> ]
+> ```
+
 - Create the `server/controllers/chatController.js` file:
 
 ```js
