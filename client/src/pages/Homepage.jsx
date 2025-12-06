@@ -1,3 +1,6 @@
+// import required hooks from React
+import { useRef } from "react";
+
 // import icons from 'react-icons' ( "ri" ) library
 import { RiTodoLine } from "react-icons/ri";
 
@@ -12,7 +15,15 @@ import ChatBot from "../components/ChatBot";
 import "./Homepage.css";
 
 function Homepage() {
-  // states for our TODO items ==> to add later on when working with AI
+  // create 'ref' to access InputDisplayTodo's refresh method
+  const inputDisplayRef = useRef();
+
+  // function to refresh todos when AI performs "CUD" operations
+  const handleTodoChange = () => {
+    console.log("[HOMEPAGE](Refresh) AI tool used... Refreshing todo list");
+
+    inputDisplayRef.current?.refresh();
+  };
 
   return (
     <div className="homepage-container">
@@ -35,9 +46,9 @@ function Homepage() {
       </header>
 
       {/* component that will be responsible to input and display of TODO */}
-      <InputDisplayTodo />
+      <InputDisplayTodo ref={inputDisplayRef} />
 
-      <ChatBot />
+      <ChatBot onTodoChange={handleTodoChange} />
     </div>
   );
 }

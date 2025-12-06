@@ -1,5 +1,5 @@
 // import the required hooks
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 
 // import the API function that will talk to back-end
 import {
@@ -43,7 +43,7 @@ import { FiPlus, FiCheck } from "react-icons/fi";
 // add the required styling to style input and display
 import "./InputDisplayTodo.css";
 
-function InputDisplayTodo() {
+const InputDisplayTodo = forwardRef((props, ref) => {
   // states for our TODO items
   const [todos, setTodos] = useState([]);
   const [totalTodoCount, setTotalTodoCount] = useState(0); // Track total count
@@ -57,6 +57,11 @@ function InputDisplayTodo() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [categories, setCategories] = useState([]);
+
+  // expose the refresh method to parent components via `ref`
+  useImperativeHandle(ref, () => ({
+    refresh: fetchInitialTodos,
+  }));
 
   // declare variable to hold the maximum length of TODO "input"
   const maxLengthInput = 75;
@@ -607,6 +612,9 @@ function InputDisplayTodo() {
       </div>
     </>
   );
-}
+});
 
+InputDisplayTodo.displayName = "InputDisplayTodo";
+
+// export as reusable component
 export default InputDisplayTodo;
