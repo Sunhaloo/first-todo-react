@@ -1,5 +1,11 @@
 // import the required hooks
-import { useEffect, useState, forwardRef, useImperativeHandle } from "react";
+import {
+  useEffect,
+  useState,
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 
 // import the API function that will talk to back-end
 import {
@@ -57,6 +63,11 @@ const InputDisplayTodo = forwardRef((props, ref) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [categories, setCategories] = useState([]);
+
+  // ref for the description input to refocus after category selection
+  const descriptionInputRef = useRef(null);
+  // ref for the editing modal description input
+  const editingDescriptionInputRef = useRef(null);
 
   // expose the refresh method to parent components via `ref`
   useImperativeHandle(ref, () => ({
@@ -395,6 +406,7 @@ const InputDisplayTodo = forwardRef((props, ref) => {
               >
                 {/* the actual input tag */}
                 <Input
+                  ref={descriptionInputRef}
                   placeholder={`Enter TODO item ( Max Length: ${maxLengthInput} )`}
                   rows={1}
                   maxLength={maxLengthInput}
@@ -416,7 +428,15 @@ const InputDisplayTodo = forwardRef((props, ref) => {
                   { required: true, message: "Please select a category!" },
                 ]}
               >
-                <Select placeholder="Select category">
+                <Select
+                  placeholder="Select category"
+                  onChange={() => {
+                    // focus on the description / title again after changing category --> allowing 'Enter' press
+                    if (descriptionInputRef.current) {
+                      descriptionInputRef.current.focus();
+                    }
+                  }}
+                >
                   {categories.map((category) => (
                     <Select.Option key={category} value={category}>
                       {category}
@@ -561,7 +581,13 @@ const InputDisplayTodo = forwardRef((props, ref) => {
                   label="Description"
                   rules={[{ required: true, message: "Please update TODO!" }]}
                 >
-                  <Input maxLength={maxLengthInput} />
+                  <Input
+                    ref={editingDescriptionInputRef}
+                    maxLength={maxLengthInput}
+                    onPressEnter={() => {
+                      editingForm.submit();
+                    }}
+                  />
                 </Form.Item>
 
                 <Form.Item
@@ -571,7 +597,14 @@ const InputDisplayTodo = forwardRef((props, ref) => {
                     { required: true, message: "Please select a category!" },
                   ]}
                 >
-                  <Select>
+                  <Select
+                    onChange={() => {
+                      // focus on the description / title again after changing category --> allowing 'Enter' press
+                      if (editingDescriptionInputRef.current) {
+                        editingDescriptionInputRef.current.focus();
+                      }
+                    }}
+                  >
                     {categories.map((category) => (
                       <Select.Option key={category} value={category}>
                         {category}
