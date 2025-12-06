@@ -121,5 +121,18 @@ export const getCategories = async () => {
   }
 };
 
+// send message to AI chatbot ( endpoint )
+export const sendChatMessage = async (message, history = []) => {
+  try {
+    const response = await api.post("/chat", {
+      message,
+      history,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Failed to send message" };
+  }
+};
+
 // export the actual connection
 export default api;

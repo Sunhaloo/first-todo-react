@@ -4,6 +4,9 @@ import { useState, useRef, useEffect } from "react";
 // import the required components from 'antd'
 import { Form, Input, message, Typography, Switch } from "antd";
 
+// import the API function that will talk to back-end
+import { sendChatMessage } from "../services/api";
+
 // import theme context to determine current theme
 import { useTheme } from "../contexts/ThemeContext";
 
@@ -64,9 +67,7 @@ function ChatBot({ onTodoChange }) {
   };
 
   // function to send message to the AI backend
-  const handleSendMessage = async (e) => {
-    e?.preventDefault();
-
+  const handleSendMessage = async () => {
     // validate message
     if (!userMessage.trim()) {
       return;
@@ -84,60 +85,31 @@ function ChatBot({ onTodoChange }) {
     setChatHistory(updatedHistory);
 
     try {
-      // get the auth token from localStorage (adjust based on your auth implementation)
-      const token = localStorage.getItem("token");
+      // call the `sendChatMessage` function / end-point
+      const data = await sendChatMessage(currentMessage, chatHistory);
 
-      // send message to backend with conversation history
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          message: currentMessage,
-          history: chatHistory,
-        }),
-      });
+      // update chat history with AI response
+      setChatHistory([
+        ...updatedHistory,
+        { role: "assistant", content: data.message },
+      ]);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        // add AI response to chat history
-        setChatHistory([
-          ...updatedHistory,
-          { role: "assistant", content: data.message },
-        ]);
-
-        // refresh the page to show the changes when AI does "CUD" operation
-        if (onTodoChange) {
-          onTodoChange();
-        }
-
-        console.log("[ChatBot](Send) Message sent and response received");
-      } else {
-        console.error("[ChatBot](Send) Error:", data.error);
-
-        // handle error response
-        messageApi.open({
-          type: "error",
-          content: data.error || "Failed to get AI response",
-          duration: 3,
-        });
-
-        // remove the user message from history since it failed
-        setChatHistory(chatHistory);
+      // trigger the page fresh on "CUD" operation
+      if (data.toolsUsed && onTodoChange) {
+        onTodoChange();
       }
+
+      console.log("[ChatBot](Send) Message sent and response received");
     } catch (error) {
-      console.error("[ChatBot](Send) Network error:", error);
+      console.error("[ChatBot](Send) Error:", error);
 
       messageApi.open({
         type: "error",
-        content: "Failed to connect to AI. Please try again.",
+        content: error.error || "Failed to get AI response",
         duration: 3,
       });
 
-      // remove the user message from history since it failed
+      // Revert to previous history since request failed
       setChatHistory(chatHistory);
     } finally {
       setIsLoading(false);
