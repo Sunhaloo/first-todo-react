@@ -5433,9 +5433,19 @@ mkdir tools
 
 - Create the `server/controllers/chatController.js` file:
 
-```js
-
-```
+> [!NOTE]
+>
+> Similarly, because the file is too long ( _that's what she said_ ); I recommend you to actually look at the code itself.
+>
+> > Nevertheless, here is a breakdown of it!
+>
+> - The actual asynchronous `chat` function
+> - Get the message and also "_instantiate_" empty `history` array variable
+> - Create the actual model / `llm` using the `ChatGoogleGenerativeAI` provided by '@langchain/google-genai'
+>   - Configure the model with the required configuration like `apiKey` and `temperature`
+>   - Add / Bind the tools created in our `server/tools/` folder to the 'model' created
+>   - Create an array to hold AI's messages + history manipulation
+>   - Tool calling in a loop
 
 - Create the `server/routers/chatRouters.js` file:
 
