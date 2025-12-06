@@ -3,6 +3,11 @@ require("dotenv").config();
 
 // class that will be used to create and instance of an 'LLM'
 const { ChatGoogleGenerativeAI } = require("@langchain/google-genai");
+const {
+  HumanMessage,
+  AIMessage,
+  SystemMessage,
+} = require("@langchain/core/messages");
 
 // import the tools created from the 'tools' directory
 const {
@@ -21,10 +26,10 @@ const prompt = process.env.GEMINI_SYSTEM_PROMPT;
 // asynchronous function that will be the whole chat function / end-point
 const chat = async (req, res) => {
   try {
-    // get our message from the request
-    const { message } = req.body;
+    // get our message and history from the request
+    const { message, history = [] } = req.body;
 
-    // check if the message entered by use if valid
+    // check if the message entered by user is valid
     if (!message || message.trim() === "") {
       console.log("[CHAT API](Chat) Message by user required!");
 
@@ -36,7 +41,7 @@ const chat = async (req, res) => {
     // get the user ID from the token
     const userId = req.user.userId;
 
-    // intialise our large language model
+    // initialize our large language model
     const llm = new ChatGoogleGenerativeAI({
       model: model,
       apiKey: apiKey,
@@ -51,12 +56,32 @@ const chat = async (req, res) => {
       deleteTodoTool,
     ]);
 
-    // invoke / call the actual AI model with user's message and context - tools
-    const response = await modelWithTools.invoke(message, {
+    // build the messages array for the AI
+    const messages = [];
+
+    // add system prompt if it exists
+    if (prompt) {
+      messages.push(new SystemMessage(prompt));
+    }
+
+    // add conversation history
+    history.forEach((msg) => {
+      if (msg.role === "user") {
+        messages.push(new HumanMessage(msg.content));
+      } else if (msg.role === "assistant") {
+        messages.push(new AIMessage(msg.content));
+      }
+    });
+
+    // add the current user message
+    messages.push(new HumanMessage(message));
+
+    // invoke / call the actual AI model with the full conversation history
+    const response = await modelWithTools.invoke(messages, {
       userId,
     });
 
-    // INFO: need to get a way to setup the history for the current session's ( AI + user )
+    // extract the AI response
     let aiResponse = "";
 
     if (typeof response.content === "string") {
@@ -79,7 +104,7 @@ const chat = async (req, res) => {
   } catch (error) {
     console.log(`[CHAT API](Chat) server error: `, error);
 
-    return res.status(400).json({
+    return res.status(500).json({
       error: "[CHAT API](Chat) Failed to invoke LLM",
     });
   }
