@@ -34,9 +34,6 @@ const createTodoTool = tool(
       // get the 'userID' from the configuration from 'chatController'
       const userId = config.configurable.userId;
 
-      // WARNING: to be removed later on
-      console.log("[TOOL](Create) Received userId:", userId);
-
       // use the asynchronous function provided by todo service
       const newTodo = await todoService.createTodo(userId, {
         description,
@@ -49,10 +46,6 @@ const createTodoTool = tool(
       return `Successfully created todo: "${newTodo.description}" in category [${newTodo.category}] with ID ${newTodo.id}`;
     } catch (error) {
       console.log("[TOOL](Create) TODO creation error!");
-
-      // WARNING: to be removed later on
-      console.error("[TOOL](Create) Error details:", error);
-      console.error("[TOOL](Create) Error message:", error.message);
 
       return `Error creating todo: ${error.message}`;
     }

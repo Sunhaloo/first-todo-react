@@ -41,6 +41,9 @@ const updateTodoTool = tool(
     try {
       const userId = config.configurable.userId;
 
+      // convert id to string if your database uses string IDs
+      const todoId = String(id);
+
       // create the update object ==> include only details provided
       const updates = {};
       if (description !== undefined) updates.description = description;
@@ -48,7 +51,7 @@ const updateTodoTool = tool(
       if (completed !== undefined) updates.completed = completed;
 
       // use the asynchronous function provided by todo service
-      const updatedTodo = await todoService.updateTodo(userId, id, updates);
+      const updatedTodo = await todoService.updateTodo(userId, todoId, updates);
 
       // Build a nice response message
       const changes = [];
@@ -64,7 +67,7 @@ const updateTodoTool = tool(
 
       return `Successfully updated todo #${id}: Changed ${changes.join(", ")}`;
     } catch (error) {
-      console.log("[TOOL](Update) TODO update error!");
+      console.log("[TOOL](Update) TODO update error");
 
       return `Error updating todo: ${error.message}`;
     }
