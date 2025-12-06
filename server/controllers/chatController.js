@@ -21,6 +21,21 @@ const prompt = process.env.GEMINI_SYSTEM_PROMPT;
 // asynchronous function that will be the whole chat function / end-point
 const chat = async (req, res) => {
   try {
+    // get our message from the request
+    const { message } = req.body;
+
+    // check if the message entered by use if valid
+    if (!message || message.trim() === "") {
+      console.log("[CHAT API](Chat) Message by user required!");
+
+      return res.status(400).json({
+        error: "[CHAT API](Chat) Message by user required!",
+      });
+    }
+
+    // get the user ID from the token
+    const userId = req.user.userId;
+
     // intialise our large language model
     const llm = new ChatGoogleGenerativeAI({
       model: model,
@@ -36,8 +51,30 @@ const chat = async (req, res) => {
       deleteTodoTool,
     ]);
 
+    // invoke / call the actual AI model with user's message and context - tools
+    const response = await modelWithTools.invoke(message, {
+      userId,
+    });
+
+    // INFO: need to get a way to setup the history for the current session's ( AI + user )
+    let aiResponse = "";
+
+    if (typeof response.content === "string") {
+      aiResponse = response.content;
+    } else if (Array.isArray(response.content)) {
+      aiResponse = response.content
+        .map((item) => {
+          if (typeof item === "string") return item;
+          if (item.type === "text") return item.text;
+          return "";
+        })
+        .join(" ");
+    }
+
+    console.log("[CHAT API](Chat) AI invoked successfully");
+
     res.json({
-      message: "[CHAT API](Chat) AI invoked successfully",
+      message: aiResponse,
     });
   } catch (error) {
     console.log(`[CHAT API](Chat) server error: `, error);
@@ -47,3 +84,5 @@ const chat = async (req, res) => {
     });
   }
 };
+
+module.exports = { chat };
