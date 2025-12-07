@@ -5224,7 +5224,7 @@ From what I can understand in my / our case; its going to be acting _like_ wrapp
 
 Additionally, it should **fix** the bug whereby when the user is requests to do a 'DELETE' request... It should now **not** get stuck on the `getTodo` function call and should actually call the `deleteTodo` function.
 
-## Langchain Installation
+### Installation
 
 > [!WARNING] Head over to the back-end ( `server/` ) directory first!
 
@@ -5265,7 +5265,7 @@ npm install	@langchain/google-genai
 >
 > > Refer to the official documentation: https://zod.dev/
 
-## Langchain Implementation
+### Implementation
 
 - Create a new folder `services` inside of the `server/` directory:
 
@@ -5450,8 +5450,130 @@ mkdir tools
 - Create the `server/routers/chatRouters.js` file:
 
 ```js
+// import the 'express' library and function for chat at each endpoint
+const express = require("express");
+const router = express.Router();
+const chatController = require("../controllers/chatController");
 
+// NOTE: get the 'Authentication Token' as 'TODO' items are "private" to each user
+const { authenticateToken } = require("../middleware/authMiddleware");
+
+// create new AI chat for logged-in and authenticated user
+router.post("/", authenticateToken, chatController.chat);
+
+// export the actual routes ( `/api/todos/{functionName}` )
+module.exports = router;
 ```
+
+- Therefore, update the `server/server.js` file:
+
+```js
+// other codes above
+const chatRouter = require("./routers/chatRouters.js");
+
+// other codes here
+app.use("/api/chat", chatRouter);
+
+// other codes below
+```
+
+- Update the `client/src/components/ChatBot.jsx` file:
+
+```jsx
+// function to "enable" / run when the switch is on
+const handleSwitchChecked = (checked) => {
+  // change / set the animation for the heading
+  setHeadingAnimating(checked);
+  // change / set the visibility of the chat app
+  setIsChatVisible(checked);
+
+  // display a success message to the user
+  messageApi.open({
+    type: "success",
+    content: "AI Chatbot Successfully Toggled",
+    duration: 1,
+  });
+
+  console.log("[ChatBot](Toggle) AI Chatbot Successfully Toggled");
+};
+
+// function to send message to the AI backend
+const handleSendMessage = async () => {
+  // validate message
+  if (!userMessage.trim()) {
+    return;
+  }
+
+  const currentMessage = userMessage.trim();
+  setUserMessage(""); // clear input immediately
+  setIsLoading(true);
+
+  // add user message to chat history
+  const updatedHistory = [
+    ...chatHistory,
+    { role: "user", content: currentMessage },
+  ];
+  setChatHistory(updatedHistory);
+
+  try {
+    // call the `sendChatMessage` function / end-point
+    const data = await sendChatMessage(currentMessage, chatHistory);
+
+    // update chat history with AI response
+    setChatHistory([
+      ...updatedHistory,
+      { role: "assistant", content: data.message },
+    ]);
+
+    // trigger the page fresh on "CUD" operation
+    if (data.toolsUsed && onTodoChange) {
+      onTodoChange();
+    }
+
+    console.log("[ChatBot](Send) Message sent and response received");
+  } catch (error) {
+    console.error("[ChatBot](Send) Error:", error);
+
+    messageApi.open({
+      type: "error",
+      content: error.error || "Failed to get AI response",
+      duration: 3,
+    });
+
+    // Revert to previous history since request failed
+    setChatHistory(chatHistory);
+  } finally {
+    setIsLoading(false);
+    // refocus input after sending
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }
+};
+
+// handle `<Enter>` key press
+const handleKeyPress = (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    handleSendMessage();
+  }
+};
+```
+
+> Refer to the actual code / file for _usage_!
+
+> [!TIP] ...
+>
+> Now go ahead and test it out and you should see that you go get response back and also AI assistant is able to do 'CRUD' operations!
+>
+> But make sure you have the following **keys** inside the `server/.env` file:
+>
+> ```bash
+> GEMINI_API_KEY=your-api-key-here
+> GEMINI_MODEL=gemini-2.5-flash
+> GEMINI_TEMPERATURE=0.2
+> GEMINI_SYSTEM_PROMPT="Your AI Prompt Here"
+> ```
 
 ---
 
