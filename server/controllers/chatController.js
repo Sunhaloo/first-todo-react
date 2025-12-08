@@ -234,7 +234,7 @@ const greetingMessage = async (req, res) => {
         prompt || "You are Task Whisperer, a friendly TODO assistant.",
       ),
       new HumanMessage(
-        "Greet the user in a friendly manner (something along the lines of 'Hello, how can I assist you today!'), call the 'getTodos' function and display TODOs for user in a nice readable format (better if you display TODO items on a new line. If and only if NO items present, simply greet the user with something simple like 'Hello, how can I assist you?'.",
+        "Always greet the user in a friendly manner (something along the lines of 'Hello, how can I assist you today!') FIRSt, then, call the 'getTodos' function and display TODOs for user in a nice readable format (better if you display TODO items on a new line. If and only if NO items present, simply greet the user with something simple like 'Hello, how can I assist you?'.",
       ),
     ];
 
