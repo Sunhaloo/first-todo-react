@@ -4,8 +4,8 @@ import { useState, useRef, useEffect } from "react";
 // import the required components from 'antd'
 import { Form, Input, message, Typography, Switch } from "antd";
 
-// import the API function that will talk to back-end
-import { sendChatMessage } from "../services/api";
+// import the API functions that will talk to back-end
+import { sendChatMessage, getGreetingMessage } from "../services/api";
 
 // import theme context to determine current theme
 import { useTheme } from "../contexts/ThemeContext";
@@ -50,7 +50,7 @@ function ChatBot({ onTodoChange }) {
   }, [chatHistory, isLoading]);
 
   // function to "enable" / run when the switch is on
-  const handleSwitchChecked = (checked) => {
+  const handleSwitchChecked = async (checked) => {
     // change / set the animation for the heading
     setHeadingAnimating(checked);
     // change / set the visibility of the chat app
@@ -64,6 +64,28 @@ function ChatBot({ onTodoChange }) {
     });
 
     console.log("[ChatBot](Toggle) AI Chatbot Successfully Toggled");
+
+    // if toggled on and chat history is empty, fetch greeting message
+    if (checked && chatHistory.length === 0) {
+      setIsLoading(true);
+      try {
+        const data = await getGreetingMessage();
+
+        setChatHistory([{ role: "assistant", content: data.message }]);
+
+        console.log("[ChatBot](Greeting) Greeting message received");
+      } catch (error) {
+        console.error("[ChatBot](Greeting) Error:", error);
+
+        messageApi.open({
+          type: "error",
+          content: error.error || "Failed to get greeting message",
+          duration: 3,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
   // function to send message to the AI backend
@@ -155,15 +177,6 @@ function ChatBot({ onTodoChange }) {
           {isChatVisible && (
             <div className="chatbot-main-chat">
               <div className="chatbot-display-container" ref={chatDisplayRef}>
-                {chatHistory.length === 0 && !isLoading && (
-                  <div className="chat-empty-state">
-                    <Typography.Text type="secondary">
-                      👋 Hi! I'm your Task Whisperer. Ask me to create, view,
-                      update, or delete your todos!
-                    </Typography.Text>
-                  </div>
-                )}
-
                 {chatHistory.map((msg, index) => (
                   <div key={index} className={`chat-message ${msg.role}`}>
                     <div className="message-content">{msg.content}</div>

@@ -137,3 +137,17 @@ html {
     transform: translateY(0);
   }
 }
+
+/* define the custom animation called 'typing-bounce' */
+@keyframes typing-bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-0.5rem);
+    opacity: 1;
+  }
+}

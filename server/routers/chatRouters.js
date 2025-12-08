@@ -9,5 +9,8 @@ const { authenticateToken } = require("../middleware/authMiddleware");
 // create new AI chat for logged-in and authenticated user
 router.post("/", authenticateToken, chatController.chat);
 
+// create new AI greeting message for logged-in and authenticated user
+router.post("/greeting", authenticateToken, chatController.greetingMessage);
+
 // export the actual routes ( `/api/todos/{functionName}` )
 module.exports = router;

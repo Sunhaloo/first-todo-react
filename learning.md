@@ -5575,6 +5575,196 @@ const handleKeyPress = (e) => {
 > GEMINI_SYSTEM_PROMPT="Your AI Prompt Here"
 > ```
 
+### Greeting Message
+
+We are going to now make a _request_ instead of using some hardcoded `Typography` component for our greeting message.
+
+Therefore, go ahead and update our `server/controllers/chatController.js` file with this function:
+
+```js
+// function to provide a greeting message to the user
+const greetingMessage = async (req, res) => {
+  try {
+    // get the user ID from the token
+    const userId = req.user.userId;
+
+    // initialize our large language model
+    const llm = new ChatGoogleGenerativeAI({
+      model: model,
+      apiKey: apiKey,
+      temperature: temperature,
+    });
+
+    // add / bind the tools to the model --> so that it can make the actual tool call
+    const modelWithTools = llm.bindTools([getTodosTool]);
+
+    // build the messages array for the AI
+    const messages = [
+      new SystemMessage(
+        prompt || "You are Task Whisperer, a friendly TODO assistant."
+      ),
+      new HumanMessage(
+        "Greet the user warmly and show them their current todos. Keep it brief and friendly."
+      ),
+    ];
+
+    // invoke AI
+    let response = await modelWithTools.invoke(messages, {
+      configurable: { userId },
+    });
+
+    // tool execution loop ( in case AI wants to call getTodos )
+    let iterationCount = 0;
+    const maxIterations = 3;
+
+    while (response.tool_calls && response.tool_calls.length > 0) {
+      iterationCount++;
+
+      if (iterationCount > maxIterations) break;
+
+      messages.push(response);
+
+      for (const toolCall of response.tool_calls) {
+        const toolResult = await executeToolCall(toolCall, userId);
+
+        messages.push(
+          new ToolMessage({
+            content: JSON.stringify(toolResult),
+            tool_call_id: toolCall.id,
+          })
+        );
+      }
+
+      response = await modelWithTools.invoke(messages, {
+        configurable: { userId },
+      });
+    }
+
+    // extract greeting message
+    let greeting = "";
+
+    if (typeof response.content === "string") {
+      greeting = response.content;
+    } else if (Array.isArray(response.content)) {
+      greeting = response.content.map((item) => item.text || "").join(" ");
+    }
+
+    console.log("[CHAT API](Greeting) Greeting generated successfully");
+
+    res.json({
+      message: greeting,
+    });
+  } catch (error) {
+    console.error(`[CHAT API](Greeting) Server error:`, error);
+
+    return res.status(500).json({
+      error: "[CHAT API](Greeting) Failed to process request",
+      details: error.message,
+    });
+  }
+};
+
+// NOTE: do also do export the function
+module.exports = { chat, greetingMessage };
+```
+
+- Hence, update the router to add the new _end-point_ in our `server/routers/chatRouters.js` file:
+
+```js
+// import the 'express' library and function for chat at each endpoint
+const express = require("express");
+const router = express.Router();
+const chatController = require("../controllers/chatController");
+
+// NOTE: get the 'Authentication Token' as 'TODO' items are "private" to each user
+const { authenticateToken } = require("../middleware/authMiddleware");
+
+// create new AI chat for logged-in and authenticated user
+router.post("/", authenticateToken, chatController.chat);
+
+// create new AI greeting message for logged-in and authenticated user
+router.post("/greeting", authenticateToken, chatController.greetingMessage);
+
+// export the actual routes ( `/api/todos/{functionName}` )
+module.exports = router;
+```
+
+- Create another function in our `client/src/services/api.js` file:
+
+```js
+// get greeting message from AI chatbot ( endpoint )
+export const getGreetingMessage = async () => {
+  try {
+    const response = await api.post("/chat/greeting");
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Failed to get greeting message" };
+  }
+};
+```
+
+- Finally, update our `client/src/components/ChatBot.jsx`:
+
+```jsx
+// other codes above
+
+// import the API functions that will talk to back-end
+import { sendChatMessage, getGreetingMessage } from "../services/api";
+
+// other codes here
+
+// function to "enable" / run when the switch is on
+const handleSwitchChecked = async (checked) => {
+  // change / set the animation for the heading
+  setHeadingAnimating(checked);
+  // change / set the visibility of the chat app
+  setIsChatVisible(checked);
+
+  // display a success message to the user
+  messageApi.open({
+    type: "success",
+    content: "AI Chatbot Successfully Toggled",
+    duration: 1,
+  });
+
+  console.log("[ChatBot](Toggle) AI Chatbot Successfully Toggled");
+
+  // if toggled on and chat history is empty, fetch greeting message
+  if (checked && chatHistory.length === 0) {
+    setIsLoading(true);
+    try {
+      const data = await getGreetingMessage();
+
+      setChatHistory([{ role: "assistant", content: data.message }]);
+
+      console.log("[ChatBot](Greeting) Greeting message received");
+    } catch (error) {
+      console.error("[ChatBot](Greeting) Error:", error);
+
+      messageApi.open({
+        type: "error",
+        content: error.error || "Failed to get greeting message",
+        duration: 3,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+};
+
+// other codes below
+```
+
+> [!TIP] Success
+>
+> Therefore, you should see that ( _in the 'Network' tab_ ) its only when you to toggle **on** the 'Task Whisperer' and then you are going to see that its starting make the 'chat' requests.
+>
+> > Very Nice!
+
+> [!NOTE]
+>
+> Now, I am going to clean up the prompts and play with it so that we get better and more accurate / correct responses.
+
 ---
 
 # Socials

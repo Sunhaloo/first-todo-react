@@ -134,5 +134,15 @@ export const sendChatMessage = async (message, history = []) => {
   }
 };
 
+// get greeting message from AI chatbot ( endpoint )
+export const getGreetingMessage = async () => {
+  try {
+    const response = await api.post("/chat/greeting");
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Failed to get greeting message" };
+  }
+};
+
 // export the actual connection
 export default api;

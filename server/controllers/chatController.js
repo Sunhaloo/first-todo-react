@@ -73,6 +73,9 @@ const executeToolCall = async (toolCall, userId) => {
 // asynchronous function that will be the whole chat function / end-point
 const chat = async (req, res) => {
   try {
+    // get the user ID from the token
+    const userId = req.user.userId;
+
     // get our message and history from the request
     const { message, history = [] } = req.body;
 
@@ -84,9 +87,6 @@ const chat = async (req, res) => {
         error: "[CHAT API](Chat) Message by user required!",
       });
     }
-
-    // get the user ID from the token
-    const userId = req.user.userId;
 
     // initialize our large language model
     const llm = new ChatGoogleGenerativeAI({
@@ -212,4 +212,87 @@ const chat = async (req, res) => {
   }
 };
 
-module.exports = { chat };
+// function to provide a greeting message to the user
+const greetingMessage = async (req, res) => {
+  try {
+    // get the user ID from the token
+    const userId = req.user.userId;
+
+    // initialize our large language model
+    const llm = new ChatGoogleGenerativeAI({
+      model: model,
+      apiKey: apiKey,
+      temperature: temperature,
+    });
+
+    // add / bind the tools to the model --> so that it can make the actual tool call
+    const modelWithTools = llm.bindTools([getTodosTool]);
+
+    // build the messages array for the AI
+    const messages = [
+      new SystemMessage(
+        prompt || "You are Task Whisperer, a friendly TODO assistant.",
+      ),
+      new HumanMessage(
+        "Greet the user warmly and show them their current todos. Keep it brief and friendly.",
+      ),
+    ];
+
+    // invoke AI
+    let response = await modelWithTools.invoke(messages, {
+      configurable: { userId },
+    });
+
+    // tool execution loop ( in case AI wants to call getTodos )
+    let iterationCount = 0;
+    const maxIterations = 3;
+
+    while (response.tool_calls && response.tool_calls.length > 0) {
+      iterationCount++;
+
+      if (iterationCount > maxIterations) break;
+
+      messages.push(response);
+
+      for (const toolCall of response.tool_calls) {
+        const toolResult = await executeToolCall(toolCall, userId);
+
+        messages.push(
+          new ToolMessage({
+            content: JSON.stringify(toolResult),
+            tool_call_id: toolCall.id,
+          }),
+        );
+      }
+
+      response = await modelWithTools.invoke(messages, {
+        configurable: { userId },
+      });
+    }
+
+    // extract greeting message
+    let greeting = "";
+
+    if (typeof response.content === "string") {
+      greeting = response.content;
+    } else if (Array.isArray(response.content)) {
+      greeting = response.content.map((item) => item.text || "").join(" ");
+    }
+
+    console.log("[CHAT API](Greeting) Greeting generated successfully");
+
+    res.json({
+      message: greeting,
+    });
+  } catch (error) {
+    console.error(`[CHAT API](Greeting) Server error:`, error);
+
+    return res.status(500).json({
+      error: "[CHAT API](Greeting) Failed to process request",
+      details: error.message,
+    });
+  }
+};
+
+// export the functions that are going to be use for AI assistant
+module.exports = { chat, greetingMessage };
