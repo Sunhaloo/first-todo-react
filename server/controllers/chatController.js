@@ -233,8 +233,14 @@ const greetingMessage = async (req, res) => {
       new SystemMessage(
         prompt || "You are Task Whisperer, a friendly TODO assistant.",
       ),
+      // new HumanMessage(
+      //   "Always greet the user in a friendly manner (something along the lines of 'Hello, how can I assist you today!') FIRST, then, call the 'getTodos' function and display TODOs for user in a nice readable format (better if you display TODO items on a new line. If and only if NO items present, simply greet the user with something simple like 'Hello, how can I assist you?'.",
+      // ),
+      // new HumanMessage(
+      //   "Your response MUST follow this exact structure:\n1. FIRST: Start with a friendly greeting (e.g., 'Hello! How can I assist you today?')\n2. THEN: Call the getTodos tool to retrieve the user's tasks\n3. FINALLY: After the greeting, display the TODOs in a nice readable format with each item on a new line.\n\nIf there are no TODO items, just provide a simple greeting like 'Hello, how can I assist you today?'",
+      // ),
       new HumanMessage(
-        "Always greet the user in a friendly manner (something along the lines of 'Hello, how can I assist you today!') FIRSt, then, call the 'getTodos' function and display TODOs for user in a nice readable format (better if you display TODO items on a new line. If and only if NO items present, simply greet the user with something simple like 'Hello, how can I assist you?'.",
+        "Greet the user/me in a friendly manner (something along the lines of 'Hello I am Task Whisperer, how can I assist you today!').",
       ),
     ];
 
