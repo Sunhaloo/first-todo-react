@@ -53,7 +53,7 @@ const createTodoTool = tool(
   {
     name: "createTodo",
     description:
-      "Creates a new todo item for the user. Use this when the user wants to add a task, create a reminder, or add something to their todo list.",
+      "Creates a new todo item for the user. Use this whenever the user wants to add a task or add something to their todo list.",
     schema: createTodoSchema,
   },
 );

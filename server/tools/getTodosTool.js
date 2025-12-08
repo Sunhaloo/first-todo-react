@@ -43,7 +43,7 @@ const getTodosTool = tool(
   {
     name: "getTodos",
     description:
-      "Retrieves all todo items for the user. Use this when the user asks to see their todos, list their tasks, check what they need to do, or asks 'what's on my list'.",
+      "Retrieves all todo items for the user. Use this when the user asks to see their todos, list their tasks, check what they need to do, or asks something along the lines of 'what's on my list'.",
     schema: getTodosSchema,
   },
 );
