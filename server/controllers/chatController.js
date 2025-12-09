@@ -20,14 +20,18 @@ const {
   deleteTodoTool,
 } = require("../tools");
 
-// WARNING: testing open router ==> failed
-
 // get the required information from the `.env` file
+// const apiKey = process.env.GEMINI_API_KEY;
+// // const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+// const model = process.env.GEMINI_MODEL || "mistralai/mistral-7b-instruct:free";
+// const temperature = process.env.GEMINI_TEMPERATURE || 0.3;
+// const prompt = process.env.GEMINI_SYSTEM_PROMPT;
+
+// WARNING: testing open router
 const apiKey = process.env.OPENAI_API_KEY;
-// const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
-const model = process.env.GEMINI_MODEL || "mistralai/mistral-7b-instruct:free";
-const temperature = process.env.GEMINI_TEMPERATURE || 0.3;
-const prompt = process.env.GEMINI_SYSTEM_PROMPT;
+const model = process.env.OPENROUTER_MODEL;
+const temperature = process.env.MODEL_TEMPERATURE || 0.3;
+const prompt = process.env.SYSTEM_PROMPT;
 
 // helper function to execute tool calls
 const executeToolCall = async (toolCall, userId) => {
@@ -101,18 +105,16 @@ const chat = async (req, res) => {
     // });
 
     // WARNING: testing open router ==> failed
-
     const llm = new ChatOpenAI({
-      openAIApiKey: apiKey,
       modelName: model,
-      temperature: parseFloat(temperature),
       configuration: {
         baseURL: "https://openrouter.ai/api/v1",
         defaultHeaders: {
-          "HTTP-Referer": "http://localhost:5173",
+          "HTTP-Referer": process.env.FRONTEND_URL,
           "X-Title": "Act Don't React",
         },
       },
+      temperature: parseFloat(temperature),
     });
 
     // add / bind the tools to the model --> so that it can make the actual tool call
@@ -245,19 +247,17 @@ const greetingMessage = async (req, res) => {
     //   temperature: temperature,
     // });
 
-    // WARNING: testing open router ==> failed
-
+    // WARNING: testing open router
     const llm = new ChatOpenAI({
-      openAIApiKey: apiKey,
       modelName: model,
-      temperature: parseFloat(temperature),
       configuration: {
         baseURL: "https://openrouter.ai/api/v1",
         defaultHeaders: {
-          "HTTP-Referer": "http://localhost:5173",
+          "HTTP-Referer": process.env.FRONTEND_URL,
           "X-Title": "Act Don't React",
         },
       },
+      temperature: parseFloat(temperature),
     });
 
     // add / bind the tools to the model --> so that it can make the actual tool call
