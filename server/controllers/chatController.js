@@ -2,7 +2,7 @@
 require("dotenv").config();
 
 // class that will be used to create and instance of an 'LLM'
-// const { ChatGoogleGenerativeAI } = require("@langchain/google-genai");
+// NOTE: I am not using Openrouter / Openai for the 'main' branch
 const { ChatOpenAI } = require("@langchain/openai");
 
 const {
@@ -21,14 +21,8 @@ const {
 } = require("../tools");
 
 // get the required information from the `.env` file
-// const apiKey = process.env.GEMINI_API_KEY;
-// // const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
-// const model = process.env.GEMINI_MODEL || "mistralai/mistral-7b-instruct:free";
-// const temperature = process.env.GEMINI_TEMPERATURE || 0.3;
-// const prompt = process.env.GEMINI_SYSTEM_PROMPT;
-
-// WARNING: testing open router
-const apiKey = process.env.OPENAI_API_KEY;
+// NOTE: for 'openai' --> the API key is sourced automatically
+// WARNING: but you are going to use 'OPENAI_API_KEY' as environment variable
 const model = process.env.OPENROUTER_MODEL;
 const temperature = process.env.MODEL_TEMPERATURE || 0.3;
 const prompt = process.env.SYSTEM_PROMPT;
@@ -97,14 +91,6 @@ const chat = async (req, res) => {
       });
     }
 
-    // initialize our large language model
-    // const llm = new ChatGoogleGenerativeAI({
-    //   model: model,
-    //   apiKey: apiKey,
-    //   temperature: temperature,
-    // });
-
-    // WARNING: testing open router ==> failed
     const llm = new ChatOpenAI({
       modelName: model,
       configuration: {
@@ -240,14 +226,6 @@ const greetingMessage = async (req, res) => {
     // get the user ID from the token
     const userId = req.user.userId;
 
-    // initialize our large language model
-    // const llm = new ChatGoogleGenerativeAI({
-    //   model: model,
-    //   apiKey: apiKey,
-    //   temperature: temperature,
-    // });
-
-    // WARNING: testing open router
     const llm = new ChatOpenAI({
       modelName: model,
       configuration: {
