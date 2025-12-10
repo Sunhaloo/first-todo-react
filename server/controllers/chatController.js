@@ -2,9 +2,7 @@
 require("dotenv").config();
 
 // class that will be used to create and instance of an 'LLM'
-// NOTE: I am not using Openrouter / Openai for the 'main' branch
-const { ChatOpenAI } = require("@langchain/openai");
-
+const { ChatGoogleGenerativeAI } = require("@langchain/google-genai");
 const {
   HumanMessage,
   AIMessage,
@@ -21,10 +19,9 @@ const {
 } = require("../tools");
 
 // get the required information from the `.env` file
-// NOTE: for 'openai' --> the API key is sourced automatically
-// WARNING: but you are going to use 'OPENAI_API_KEY' as environment variable
-const model = process.env.OPENROUTER_MODEL;
-const temperature = process.env.MODEL_TEMPERATURE || 0.3;
+const apiKey = process.env.GEMINI_API_KEY;
+const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+const temperature = process.env.GEMINI_TEMPERATURE || 0.3;
 const prompt = process.env.SYSTEM_PROMPT;
 
 // helper function to execute tool calls
@@ -91,16 +88,11 @@ const chat = async (req, res) => {
       });
     }
 
-    const llm = new ChatOpenAI({
-      modelName: model,
-      configuration: {
-        baseURL: "https://openrouter.ai/api/v1",
-        defaultHeaders: {
-          "HTTP-Referer": process.env.FRONTEND_URL,
-          "X-Title": "Act Don't React",
-        },
-      },
-      temperature: parseFloat(temperature),
+    // initialize our large language model
+    const llm = new ChatGoogleGenerativeAI({
+      model: model,
+      apiKey: apiKey,
+      temperature: temperature,
     });
 
     // add / bind the tools to the model --> so that it can make the actual tool call
@@ -226,16 +218,11 @@ const greetingMessage = async (req, res) => {
     // get the user ID from the token
     const userId = req.user.userId;
 
-    const llm = new ChatOpenAI({
-      modelName: model,
-      configuration: {
-        baseURL: "https://openrouter.ai/api/v1",
-        defaultHeaders: {
-          "HTTP-Referer": process.env.FRONTEND_URL,
-          "X-Title": "Act Don't React",
-        },
-      },
-      temperature: parseFloat(temperature),
+    // initialize our large language model
+    const llm = new ChatGoogleGenerativeAI({
+      model: model,
+      apiKey: apiKey,
+      temperature: temperature,
     });
 
     // add / bind the tools to the model --> so that it can make the actual tool call
