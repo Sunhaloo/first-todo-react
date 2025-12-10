@@ -22,7 +22,7 @@ const {
 const apiKey = process.env.GEMINI_API_KEY;
 const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 const temperature = process.env.GEMINI_TEMPERATURE || 0.3;
-const prompt = process.env.GEMINI_SYSTEM_PROMPT;
+const prompt = process.env.SYSTEM_PROMPT;
 
 // helper function to execute tool calls
 const executeToolCall = async (toolCall, userId) => {
