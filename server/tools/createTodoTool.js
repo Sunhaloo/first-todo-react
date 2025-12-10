@@ -2,6 +2,9 @@ const { z } = require("zod");
 const { tool } = require("@langchain/core/tools");
 const todoService = require("../services/todoService");
 
+// import the 'categories' list
+const { TODO_CATEGORIES } = require("../config/categories");
+
 // define the schema ( using 'zod' ) ==> for AI to understand that parameters it can use
 const createTodoSchema = z.object({
   description: z
@@ -11,19 +14,7 @@ const createTodoSchema = z.object({
     .describe("The todo item description - what needs to be done"),
 
   category: z
-    .enum([
-      "Code Review",
-      "Coding",
-      "Debugging",
-      "Deployment",
-      "Documentation",
-      "Learning",
-      "Meeting",
-      "Miscellaneous",
-      "Planning",
-      "Refactoring",
-      "Testing",
-    ])
+    .enum(TODO_CATEGORIES)
     .describe("The category/type of the todo item"),
 });
 
