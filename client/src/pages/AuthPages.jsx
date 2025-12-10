@@ -223,7 +223,7 @@ function AuthPages() {
                   rules={[
                     {
                       required: true,
-                      message: "Please enter you your password.",
+                      message: "Please enter your password.",
                     },
                   ]}
                 >
@@ -292,6 +292,10 @@ function AuthPages() {
                       {
                         required: true,
                         message: "Please enter your password.",
+                      },
+                      {
+                        min: 8,
+                        message: "Password must be at least 8 characters long.",
                       },
                     ]}
                   >
